@@ -1,0 +1,93 @@
+
+        [[ University Portal ]] 
+
+[+] Educator's Dashboard
+[+] Student's Dashboard
+
+    [+] Educator's Actions
+        [+] Create Class/Module 
+        [+] Access All Student
+        [+] Instant Messaging
+        [+] Create a Post
+        [+] Comment
+        [+] Create Assignment
+        [+] Grade Student
+        [+] Video Conferencing
+        [+] Upload Lecture Documents and Assignments
+        [+] Create a WhiteBoard
+    
+    [+] Student's Actions
+        [+] Join/Register a Class/Module
+        [+] Create a Post
+        [+] See all Modules
+        [+] Comment
+        [+] Instant Messaging
+        [+] Take Quiz
+        [+] See Grade
+        [+] Download Lecture Documents and Assignments
+        [+] Create a WhiteBoard
+
+
+[+] Database Entites
+    [+] User => {user_id, username, email, password, role, created_on, last_modified}
+    [+] Module => {module_name, module_id, module_tutor}
+    [+] Class => {class_id, module_name, user_id }
+    [+] File Table => {file_id, file_name, file_type, file_size}
+    [+] WhiteBoard => {id, name}
+    [+] Post => {post_id, content, username, created_on}
+    [+] Comment => {comment_id, post_id, content, username, created_on}
+    [+] Notification => {Notification_id, type, created_on}
+
+
+
+[+] Front End Components
+    [+] Authentication Component
+        [+] Login Component
+        [+] Signup Component 
+    [+] Dashboard Component
+        [+] Profile Component
+        [+] List of Courses 
+        [+] Upcoming Events 
+        [+] Exams and Assignments
+        [+] Notification
+    [+] Instant Messaging
+        [+] Message User
+    [+] Class Component
+        [+] Module name
+        [+] Module Tutor 
+        [+] List of Student
+
+
+[+] Back End Components
+    [+] Authentication System
+        [+] Login
+        [+] Logout
+        [+] Signup
+        [+] Validate User
+        [+] Validate Role
+        [+] Delete Account
+        [+] Update Password
+        [+] Validate username
+    [+] File System
+        [+] Upload File
+        [+] Download File 
+        [+] Delete File
+    [+] Module System
+        [+] Create a Module
+        [+] Delete a Module
+        [+] Join a Module
+        [+] Add Students
+    [+] Assessment System
+        [+] Create Assessment
+        [+] Grade Assessment
+    [+] Grading System
+        [+] Create Grades
+        [+] View Grades
+    [+] Messaging System
+        [+] Send Message
+        [+] Receive Message
+        [+] Save 
+        [+] Open
+    [+] WhiteBoard
+        [+] Create WhiteBoard
+        [+] Join
