@@ -28,17 +28,6 @@
         [+] Create a WhiteBoard
 
 
-[+] Database Entites
-    [+] User => {user_id, username, email, password, role, created_on, last_modified}
-    [+] Module => {module_name, module_id, module_tutor}
-    [+] Class => {class_id, module_name, user_id }
-    [+] File Table => {file_id, file_name, file_type, file_size}
-    [+] WhiteBoard => {id, name}
-    [+] Post => {post_id, content, username, created_on}
-    [+] Comment => {comment_id, post_id, content, username, created_on}
-    [+] Notification => {Notification_id, type, created_on}
-
-
 
 [+] Front End Components
     [+] Authentication Component
@@ -91,3 +80,238 @@
     [+] WhiteBoard
         [+] Create WhiteBoard
         [+] Join
+
+
+    [+] General Website Design
+        This is the look and feel of the entire website... (a lot of css and html basically)
+        We might use google material design pattern for the design... open to other suggestions
+        [+] Pages
+            [+] Home
+                Home page with a description of the platform (this is the user's view before they login)
+                Possibly contian the login anfd signup form. 
+            [+] Dashboard
+                The Dashboard page is only accessible to Authenticated Users. The Dashboard view varies 
+                based on user roles (Student and Educator).
+                    [+] Student View
+                        The Student View should contain list of modules registed for, instant messaging
+                        section, preview on news and notifications and possibly a header with links to other 
+                        pages accessible to the student, calendar and reminders, Community post, upcoming events, 
+                        meetings, sneek peak of student's todo list...
+                    [+] Educator View
+                        The Educator view would contain list of modules created, instant messaging section,
+                        section for managing modules(crud functionalities on a module). Community posts, notifications,
+                        calendar and reminders, upcoming events, meetings, sneek peak of educators todo list...
+            [+] Module 
+                This is the view that contains the information about a module like; students registered, educator in charge, 
+                module name, credit, Assessments, 
+                [+] Module Community 
+                    A private community section for a particular module
+                [+] Assessment and Assignment section
+                    Information about the module Assessment, Assignments, Outcome/Result, Dead lines
+                [+] Sub section
+                    This can be a section dedicated to a days work, a topic, a weeks work...
+                [+] Module WhiteBoard
+                    Each module has a WhiteBoard accessible to students and educators
+            [+] more to come... 
+
+   
+
+
+
+    [+] Back End
+        The backend will take http request from the frontend through a route and allocate it to a specifi
+        method/class and after computation it returns a json response to the frontend for further computation...
+            
+        [+] Backend Authentication System
+            [+] Login
+                This function validates a submitted form that contain a username and password
+                After validating/authenticating the user, sets a logged cookie of that user in the browser
+                and finally renders the dashboard view of that user...
+            
+            [+] Signup
+                This function validates a submitted request to register a new user... 
+                It checks if such user does not exist atm in the system and if so it creates 
+                a user and sets the necessary information...
+            
+            [+] Logout
+                This function validates a user is logged in and if so delete the session and cookie information 
+                of that user, redirect the user to the home page
+            
+            [+] HasPermission
+                This function checks to see if a user is permitted to make an action and is so return True
+
+            [+] more to come...
+        
+        [+] Backend Module System 
+            [+] Create
+                This function create a module object and setup all necessary things like;
+                Module name, module leader, module code
+            [+] Add Student
+                This function takes a name or list of username/email and add them to a module
+                send a notification to the student about the module
+            [+] Remove Student
+                This function removes a student from a module
+            [+] Add Post
+                This function adds a post to the module community section
+            [+] more to come...
+
+        [+] Backend File System
+            [+] Upload 
+                Upload a file to the file system, give it a uuid name, save information about the file in
+                the file db Table
+            [+] Delete
+                Delete a file from the file system and remove all information about the file in the file db
+                Table
+            [+] Download
+                return a file to the user...
+            [+] Compress
+                Compress the file to save up space... (if we have time)
+            [+] more to come...
+        
+        [+] Backend Instant Messaging System
+            (have an abstract idea of websockets!!!!!!!)
+            [+] Create 
+                Open a new conversation...
+            [+] Send
+                Send a Message...
+            [+] Receive
+                Receive a Message...
+            [+] Broadcast
+                Broadcast a message...
+            [+] Delete
+                Delete a conversation
+            [+] more to come...
+        
+        [+] Backend WhiteBoard
+            by default all modules would have a WhiteBoard
+            [+] Create
+                Create a private WhiteBoard
+            [+] Delete 
+                Delete a WhiteBoard
+            [+] Send 
+                Send strokes to a WhiteBoard
+            [+] Receive 
+                Receive strokes to a WhiteBoard
+            [+] Share 
+                Share a WhiteBoard with a user
+            [+] Join
+                Join a WhiteBoard
+            [+] more to come...
+
+        [+] Backend Assessment System    
+            [+] Create 
+                Educator can create a Assessment, this includes Uploading a Assessment and Guide, 
+                dead line and more...
+            [+] Score
+                Educator can score each assement and leave a review either as a post or upload a 
+                document containing information about the assessment review
+            [+] Submit
+                Students can submit an assessment
+            [+] View Result
+                Student can view result for a module 
+                Educator can view results for all modules
+            [+] Print (Frontend guy should figure this out)
+
+        [+] Backend Post System
+            [+] Create
+            [+] Delete
+            [+] Comment
+            [+] like
+        
+        [+] Backend Comment System
+            [+] Create
+            [+] Delete
+            [+] Comment
+            [+] like
+        [+] We might need an abstract validation system...
+
+
+        [+] Backend Calendar / Reminder System
+            [+] Add
+                Add an event to your calnedar
+            [+] Remove
+                Remove an event from user's calendar
+            [+] Update
+                Update an event
+    [+] Front End
+        ...
+
+        
+
+                
+
+
+
+
+[+] Database Entites
+    [+] User => {
+        user_id : uuid,
+        username : str,
+        first_name : str,
+        last_name : str,
+        email : str,
+        password : hash(str), 
+        role : str(student or educator),
+        created_on : timestamp,
+        last_modified : timestamp
+        }
+
+    [+] Module => {
+        module_id : uuid,
+        module_name : str,
+        module_tutor : User.username,
+        created_on : timestamp,
+        last_modified : timestamp
+        }
+
+    [+] File => {
+        file_id : uuid,
+        file_name : str,
+        file_type : str,
+        file_size : int
+        created_on : timestamp,
+        last_modified : timestamp
+        } 
+
+    [+] WhiteBoard => {
+        board_id : uuid,
+        creator : str,
+        created_on : timestamp,
+        last_modified : timestamp
+        }
+    
+    [+] Post => {
+        post_id : uuid,
+        content : text,
+        file : File.file_id, // if you need to add more than one file in a post then just do it like twitter thread... (this is a shitty idea tho)
+        username : User.username,
+        created_on : timestamp,
+        last_modified : timestamp
+        }
+
+    [+] Comment => {
+        comment_id : uuid,
+        post_id : Post.uuid,
+        content : text,
+        username : User.username,
+        created_on : timestamp,
+        last_modified : timestamp
+        }
+
+    [+] Notification => {
+        notification_id : uuid,
+        type : str(event, message, meeting, general),
+        created_on : timestamp,
+        last_modified : timestamp
+        }
+
+    [+] Calendar => {
+        calendar_id : uuid,
+        username : User.username,
+        date : timestamp,
+        content : str,
+        link : str,
+        can_update : boolean,
+        created_on : timestamp,
+        last_modified : timestamp
+        }
