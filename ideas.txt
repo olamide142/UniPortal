@@ -12,7 +12,7 @@
         [+] Comment
         [+] Create Assignment
         [+] Grade Student
-        [+] Video Conferencing
+        [+] Video Conferencing (50/50 chance)
         [+] Upload Lecture Documents and Assignments
         [+] Create a WhiteBoard
     
