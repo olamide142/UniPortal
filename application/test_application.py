@@ -14,8 +14,6 @@ def client():
     app.config["TESTING"] = True
     app.testing = True
 
-    # This creates an in-memory sqlite db
-    # See https://martin-thoma.com/sql-connection-strings/
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
 
     client = app.test_client()
