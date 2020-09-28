@@ -1,5 +1,3 @@
-import application
-
 from application import db 
 from datetime import datetime
 import uuid

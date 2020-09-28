@@ -34,20 +34,16 @@ def index():
 
 
 # Set the route and accepted methods
-@mod_auth.route('/signup/', methods=['GET', 'POST'])
-def signup():
-    user = User(
-        username='olamide',
-        email='ola@uni.com', 
-        password='user1234',
-        )
+@mod_auth.route('/signin/', methods=['GET', 'POST'])
+def signin():
+    user = User(username='olamide', email="foo@portal.com", password="password")
     db.session.add(user)
     db.session.commit()
-    # return "Hello You Made it!!!"
     li = []
     for i in User.query.all():
-        li.append(i.user_id)
-    return jsonify(user=li)
+        li.append(i.email)
+    import json
+    return json.dumps({'user':li})
 
 @mod_auth.route('/login/', methods=['GET', 'POST'])
 def login():
