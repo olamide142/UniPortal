@@ -26,7 +26,7 @@ def index():
 
 
 # Set the route and accepted methods
-@mod_auth.route('/signup/', methods=['POST', 'GET'])
+@mod_auth.route('/signup/', methods=['POST'])
 def signup():
     '''
     Register a user onto the platform
