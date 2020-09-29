@@ -1,5 +1,5 @@
 # Import flask dependencies
-from flask import Blueprint, request, render_template,flash, g, session, redirect, url_for, jsonify, abort
+from flask import Blueprint, request, render_template,flash, g, session, redirect, url_for, jsonify, abort, url_for
 
 # Import password / encryption helper tools
 from werkzeug.security import check_password_hash
@@ -30,7 +30,7 @@ login_manager.login_view = "mod_auth.login"
 @mod_auth.route('/index/', methods=['GET'])
 @flask_login.login_required
 def index():
-    return render_template('index.html', a=a)
+    return render_template('index.html')
 
 
 # Set the route and accepted methods
