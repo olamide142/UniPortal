@@ -40,3 +40,18 @@ def test_signin(client):
     assert 'Form submitted was invalid' in str(res.data)
 
 
+
+def test_signout(client):
+    # when everything is done right
+    res = client.post('/auth/signin/', \
+        data={'username':'test', 'password':'123'})    
+    assert 'Logged in Successfully.' in str(res.data)
+    
+    res = client.get('/auth/signout/')  
+    assert 'Successfully Logged Out' in str(res.data)
+
+    # prevent an un-authenticated user from 
+    # login_required protected views 
+    res = client.get('/auth/see/', follow_redirects=True)  
+    assert 'Please log in to access this page' in str(res.data)
+

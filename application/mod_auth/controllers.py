@@ -17,7 +17,8 @@ def load_user(username):
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('mod_auth', __name__, url_prefix='/auth',\
      template_folder='templates/mod_auth')
-login_manager.login_view = "mod_auth.signin"
+login_manager.login_view = "mod_auth.index"
+login_manager.login_message = "Please log in to access this page"
 
 
 @mod_auth.route('/', methods=['GET'])
@@ -60,7 +61,7 @@ def signin():
         user = User.query.filter_by(username=form.username.data).first()
         if (user is not None) and \
             (check_password_hash(user.password, form.password.data)):
-            flask_login.login_user(user)
+            flask_login.login_user(user, remember=True)
             user.authenticated = True
             db.session.add(user)
             db.session.commit()
@@ -81,24 +82,27 @@ def signin():
 
 
 @flask_login.login_required
-@mod_auth.route('/signout/')
-def logout():
+@mod_auth.route('/signout/', methods=['GET'])
+def signout():
+    '''
+    Sign a user out from the platform 
+    returns: flask.render_template()
+    '''
     user = User.query.filter_by(username=\
         flask_login.current_user.username).first()
     user.authenticated = False
     db.session.add(user)
     db.session.commit()
     flask_login.logout_user()
-    flash('Successfully Logged Out')
+    flash('Successfully Logged Out.')
     return render_template('index.html')
 
 
 
-@flask_login.login_required
 @mod_auth.route('/see/', methods=['GET'])
+@flask_login.login_required
 def see():
-    return 'Done in see'
-    return redirect(url_for('mod_auth.index'))
+    return 'in here'
 
 
 def is_safe_url(target):
