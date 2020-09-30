@@ -3,3 +3,9 @@ venv
 __pycache__/
 
 .pytest_cache/
+
+app.db
+
+fake_postman.py
+
+

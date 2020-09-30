@@ -1,6 +1,7 @@
 from application import db 
 from datetime import datetime
 import uuid
+from json import JSONEncoder
 from werkzeug.security import check_password_hash, generate_password_hash
 
 # Define a User model
@@ -10,18 +11,17 @@ class User(db.Model):
 
     # User Name
     user_id    = db.Column(db.String(40),  nullable=False, primary_key=True)
-    username   = db.Column(db.String(15), nullable=False)
+    username   = db.Column(db.String(15), nullable=False, unique=True)
     first_name = db.Column(db.String(30), nullable=True)
     last_name = db.Column(db.String(30), nullable=True)
-    email    = db.Column(db.String(128),  nullable=False)
+    email    = db.Column(db.String(128),  nullable=False, unique=True)
     password = db.Column(db.String(192),  nullable=False)
-    role     = db.Column(db.String(10), nullable=False)
-    # authenticated = db.Column(db.Boolean, default=False)
+    authenticated = db.Column(db.Boolean, nullable=False, default=False)
     created_on = db.Column(db.DateTime, nullable=False)
 
 
     # New instance instantiation procedure
-    def __init__(self, username, email, password, first_name='', last_name='', role='Student'):
+    def __init__(self, username, email, password, first_name='', last_name=''):
 
         self.user_id        = str(uuid.uuid4()) 
         self.username       = username
@@ -29,11 +29,10 @@ class User(db.Model):
         self.last_name      = last_name
         self.email          = email
         self.password       = generate_password_hash(password)
-        self.role           = role
         self.created_on     = datetime.utcnow()
 
     def __repr__(self):
-        return '<User %r>' % (self.username)   
+        return f'{self.username}'  
 
     def get_id(self):
         return self.username
