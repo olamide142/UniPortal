@@ -32,7 +32,7 @@ class User(db.Model):
         self.created_on     = datetime.utcnow()
 
     def __repr__(self):
-        return '<User %r>' % (self.username)   
+        return f'{self.username}'  
 
     def get_id(self):
         return self.username
