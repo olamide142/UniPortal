@@ -95,6 +95,7 @@ def signout():
     db.session.commit()
     flask_login.logout_user()
     flash('Successfully Logged Out.')
+    
     return render_template('index.html')
 
 
