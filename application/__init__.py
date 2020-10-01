@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 # file configuration
 app.config['UPLOAD_PATH'] = 'application/file_bank/'
-app.config['UPLOAD_EXTENSIONS'] = ['.txt', '.pdf', '.png', '.jpg', '.jpeg', '.gif', '.doc', '.docx', '.zip', '.rar']
+app.config['UPLOAD_EXTENSIONS'] = ['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'zip', 'rar']
 
 # Define the database object which is imported
 # by modules and controllers
