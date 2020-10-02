@@ -45,7 +45,7 @@ class ClassRoom(db.Model):
     __tablename__ = 'classroom'
         
     id                  = db.Column(db.String(10),  nullable=False, primary_key=True)
-    module_name         = db.Column(db.String(250), nullable=True)
+    module_id           = db.Column(db.String(10), nullable=True)
     student_username    = db.Column(db.String(15), nullable=True)
     created_on          = db.Column(db.DateTime, nullable=False)
     
