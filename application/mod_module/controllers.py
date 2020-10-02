@@ -18,7 +18,7 @@ mod_module = Blueprint('mod_module', __name__, url_prefix='/module',\
 def index():
     return render_template('module_index.html')
 
-# @flask_login.login_required
+@flask_login.login_required
 @mod_module.route('/create/', methods=['POST'])
 def create():
     # form = CreateModuleForm(meta={'csrf_token':False})
