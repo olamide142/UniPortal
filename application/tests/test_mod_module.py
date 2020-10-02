@@ -33,19 +33,19 @@ def test_view_module(client):
     assert str(module.module_code) in str(res.data)
 
 
-# def test_add_student(client):
-#     import flask_login
-#     assert 'orange' in str(flask_login.current_user)
-#     # Create a student User Accounts
+def test_add_student(client):
+    # import flask_login
+    # assert 'orange' in str(flask_login.current_user)
+    # # Create a student User Accounts
     # student = User(username='test3', email='test3@portal.com', \
     #     first_name='test333', last_name = 'test33', password='123')
-#     db.session.add(student)
-#     db.session.commit()
+    # db.session.add(student)
+    # db.session.commit()
 
-#     url = 'http://127.0.0.1:8080/module/0sxczb6/add/'
-# payload = {'username':'testuser2'}
-# r = s.post(url, data=payload)
+    # url = 'http://127.0.0.1:8080/module/0sxczb6/add/'
+    # payload = {'username':'testuser2'}
+    # r = s.post(url, data=payload)
 
-#     assert 'Notification will be sent to the student' in str(res.data)
+    # assert 'Notification will be sent to the student' in str(res.data)
 
     pass 
