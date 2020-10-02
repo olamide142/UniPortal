@@ -1,7 +1,6 @@
 from application import db 
 from datetime import datetime
 import uuid
-from json import JSONEncoder
 from werkzeug.security import check_password_hash, generate_password_hash
 
 # Define a User model

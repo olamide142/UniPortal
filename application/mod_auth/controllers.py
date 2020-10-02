@@ -95,6 +95,7 @@ def signout():
     db.session.commit()
     flask_login.logout_user()
     flash('Successfully Logged Out.')
+    
     return render_template('index.html')
 
 
@@ -116,3 +117,12 @@ def is_safe_url(target):
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ('http', 'https') and \
            ref_url.netloc == test_url.netloc
+
+
+
+def get_user_object(username):
+    '''
+    Returns a user object
+    returns: User
+    '''
+    return User.query.filter_by(username=username).first()
