@@ -1,5 +1,5 @@
 # UniPortal
-[![UniPortal ](https://github.com/olamide142/UniPortal/workflows/python/badge.svg]
+![UniPortal](https://github.com/olamide142/UniPortal/workflows/UniPortal/badge.svg)
 
 
 ## Code

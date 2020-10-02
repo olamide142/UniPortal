@@ -4,8 +4,15 @@ __pycache__/
 
 .pytest_cache/
 
-app.db
+.db
 
 fake_postman.py
 
-
+.txt
+.pdf
+.png
+.jpg
+.jpeg
+.gif
+.doc
+.docx
