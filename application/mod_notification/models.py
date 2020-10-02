@@ -24,7 +24,7 @@ class Notification(db.Model):
         self.receiver           = receiver  
         self.notification_type  = notification_type
         self.content            = content
-        self.seen               = seen
+        self.seen               = False
         self.created_on         = datetime.utcnow()
 
     def __repr__(self):
