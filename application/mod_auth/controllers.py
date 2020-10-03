@@ -16,14 +16,14 @@ def load_user(username):
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('mod_auth', __name__, url_prefix='/auth',\
-     template_folder='templates/mod_auth')
+     template_folder='templates/auth')
 login_manager.login_view = "mod_auth.index"
 login_manager.login_message = "Please log in to access this page"
 
 
 @mod_auth.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('auth/auth.html')
 
 
 # Set the route and accepted methods
@@ -57,6 +57,7 @@ def signin():
     '''
     form = SigninForm(meta={'csrf': False})
     next,msg = None, ''
+
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if (user is not None) and \
@@ -98,12 +99,6 @@ def signout():
     
     return render_template('index.html')
 
-
-
-@mod_auth.route('/see/', methods=['GET'])
-@flask_login.login_required
-def see():
-    return 'in here'
 
 
 def is_safe_url(target):

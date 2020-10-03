@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash
 from application.mod_module.models import Module, ClassRoom
 from application.mod_auth.models import User
 from application.mod_auth.controllers import get_user_object
+from application.mod_notification.controllers import set_notification, NotificationType
 from application import db, app
 import flask_login
 from .forms import *
@@ -92,8 +93,13 @@ def add_student(module_id):
             # section of the student where they can accept 
 
             # TODO: call Notification system function to create
-            # 'Add module' notification in student's db 
-            return jsonify("Notification will be sent to the student")
+            # 'Add module' notification in student's db
+            if set_notification(user_making_the_addition.username, \
+                user_to_be_added.username, NotificationType.JoinModule):
+                return jsonify("Notification will be sent to the student")
+            else:
+                return jsonify("Something Went Wrong")
+
     else:
         return jsonify(msg='Error encountered')
 

@@ -7,9 +7,11 @@ import flask_login
 
 
 mod_main = Blueprint('mod_main', __name__, url_prefix='/',\
-     template_folder='templates/main')
+     template_folder='templates/')
 
 @mod_main.route('/', methods=['GET'])
 def index():
-    return "Main Page"
+    # return "Main Page"
+    return render_template('index.html')
+
 

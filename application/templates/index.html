@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Olowofeso Victor">
+    <title>UniPortal</title>
+
+
+    <!-- CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/w3.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+</head>
+
+<body class="w3-gray">
+
+
+
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="w3-text-teal">Welcome to UniPortal</h1>
+            <p class="lead text-muted w3-small">Description of the platform goes here, Lorem ipsum dolor sit amet,
+                consectetur adipisicing elit. Facilis minima, eaque eum libero sunt in! Incidunt dolor ipsam
+                suscipit architecto impedit consequatur accusamus natus nesciunt dicta, iure debitis odio aut</p>
+            <p class="w3-padding"> 
+                <a href="{{url_for('mod_auth.index')}}" class="w3-left w3-button w3-padding w3-small w3-teal w3-round">Log In</a>
+                <a href="{{url_for('mod_auth.index')}}" class="w3-left w3-padding w3-text-gray w3-small"><u>Register an account</u></a>
+            </p>
+        </div>
+    </section>
+</body>
+
+</html>

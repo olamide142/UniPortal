@@ -27,12 +27,15 @@ from application.mod_auth.controllers import mod_auth as auth_module
 from application.mod_file.controllers import mod_file as file_system_module
 from application.mod_module.controllers import mod_module as module
 from application.main.controllers import mod_main as main_module
+from application.mod_notification.controllers import mod_notification as notification
+
 
 # Register blueprint(s)
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
 app.register_blueprint(file_system_module)
 app.register_blueprint(module)
+app.register_blueprint(notification)
 # app.register_blueprint(xyz_module)
 # ..
 
