@@ -11,6 +11,5 @@ mod_main = Blueprint('mod_main', __name__, url_prefix='/',\
 
 @mod_main.route('/', methods=['GET'])
 def index():
-    title = "Main Page"
-    return render_template('base.html', title=title)
+    return "Main Page"
 
