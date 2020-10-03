@@ -70,10 +70,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight:700;
 }
 a {transition: all 0.3s ease 0s;text-decoration:none;}
-a:hover {
-  color: #00c292;
-  text-decoration: none;
-}
 a:active, a:hover, a:focus {
   outline: 0 none;
   text-decoration: none;
@@ -192,15 +188,7 @@ body {}
 .nav.navbar-nav.notika-top-nav{
 	float: right;
 }
-.nav.notika-top-nav .open>a, .nav.notika-top-nav .open>a:focus, .nav.notika-top-nav .open>a:hover {
-    background: #00c292;
-    border-color: 0px solid #00c292;
-	
-}
-.nav.notika-top-nav>li>a:focus, .nav.notika-top-nav>li>a:hover {
-    text-decoration: none;
-    background-color: #00c292;
-}
+
 .navbar-nav>li>a{
 	color:#fff;
 	padding: 20px 0px 20px 30px;
@@ -497,7 +485,7 @@ ul.notika-menu-wrap li a{
     color: #333;
 }
 .mean-container .mean-nav ul li a:hover {
-    color: #00c292;
+    /* color: #00c292; */
 }
 .box-layout .header-top-area {
 		width: 1200px;
@@ -563,7 +551,7 @@ ul.notika-menu-wrap li a{
 	margin-left:10px;
 }
 .recent-post-icon a:hover, .curved-icon a:hover, .recent-items-icon a:hover, .realtime-icon a:hover{
-	color:#00c292;
+	/* color:#00c292; */
 	transition:all .4s ease 0s;
 }
 .past-day-statis p, .past-statistic-ctn p, .email-ctn-nock p, .blog-ctn p, .animation-ctn-hd p{

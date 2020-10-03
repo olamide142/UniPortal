@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title%}Dashboard{% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+{% include 'module/create_module.html' %}
+
+<div class="container w3-round jumbotron">
+    <h3><u class="w3-text-teal">Modules</u></h3>
+    <div class="w3-teal w3-right w3-row w3-round">
+        <button class="w3-half w3-button" data-toggle="modal" data-target="#createModule">Create Module</button>
+        <button class="w3-half w3-button">Join a Module</button>
+    </div>
+    <span class="text-muted w3-small">You are registered in #0 modules</span><br>
+    <span class="text-muted w3-small">You manage #0 modules</span>
+</div>
+
+<div class="container w3-padding">
+    <div class="input-group">
+        <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-search w3-text-teal"></i></span>
+        <div class="nk-int-st">
+            <input type="text" class="form-control" id="search_module" name="search_module"
+                placeholder="Search Module by Name">
+        </div>
+    </div>
+</div>
+
+<div class="notika-status-area">
+    <div class="container">
+        <div class="row">
+            {% for i in range(10) %}
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                    <div class="w3-small">
+                        <p>Module Name</p>
+                        <p class="text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vpti dignissimos consequuntur obcaecati autem aliquid quo tempore, magnam ullam atque?</p>
+                        <button class="w3-button w3-teal w3-round">View</button>
+                        <button class="w3-button w3-gray w3-text-white w3-round">Manage</button>
+                    </div>
+                </div> <hr>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

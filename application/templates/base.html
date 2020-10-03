@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Login Register | Notika - Notika Admin Template</title>
+    <title>UniPortal | {% block title %}{% endblock %}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
@@ -54,7 +54,17 @@
     <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 
-<body>
+<body class="">
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert w3-light-gray w3-small w3-center alert-dismissible" role="alert">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true"><i class="notika-icon notika-close"></i></span>
+        </button>
+    </div>
+    {% endfor %}
+
 
 
     {% block content %}
@@ -128,7 +138,7 @@
     <script src="/static/js/main.js"></script>
 
     <script>
-        function p(val){
+        function p(val) {
             console.log(val);
         }
 
@@ -138,7 +148,7 @@
                 'url': url,
                 'type': type,
                 'success': function (data) {
-                    return data;
+                    p(data);
                 },
                 'error': function (data) {
                     return data;
@@ -148,7 +158,7 @@
     </script>
 
     {% block js_content %}
-    <!-- Js content from other files -->>
+    <!-- Js content from other files -->
     {% endblock %}
 
 </body>
