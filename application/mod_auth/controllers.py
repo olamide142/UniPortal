@@ -133,3 +133,7 @@ def get_user_object(username):
     returns: User
     '''
     return User.query.filter_by(username=username).first()
+
+def get_fullname(username):
+    u = User.query.filter_by(username=username).first()
+    return f'{u.first_name} {u.last_name}'

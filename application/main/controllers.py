@@ -4,6 +4,7 @@ from werkzeug.security import check_password_hash
 from application.mod_auth.models import User
 from application.mod_auth.controllers import get_user_object
 from application.mod_module.forms import CreateModuleForm
+from application.mod_module.controllers import get_modules
 from application import db, app
 import flask_login
 
@@ -27,5 +28,7 @@ def dashboard():
     
     return render_template(
         'dashboard/index.html',
-        create_form=create_form)
+        create_form=create_form,
+        modules = get_modules(),
+        current_user = str(flask_login.current_user))
 

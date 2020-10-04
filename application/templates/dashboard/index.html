@@ -3,12 +3,13 @@
 {% block content %}
 {% include 'dashboard/nav.html' %}
 {% include 'module/create_module.html' %}
+{% include 'module/join_module.html' %}
 
 <div class="container w3-round jumbotron">
     <h3><u class="w3-text-teal">Modules</u></h3>
     <div class="w3-teal w3-right w3-row w3-round">
         <button class="w3-half w3-button" data-toggle="modal" data-target="#createModule">Create Module</button>
-        <button class="w3-half w3-button">Join a Module</button>
+        <button class="w3-half w3-button" data-toggle="modal" data-target="#joinModule">Join a Module</button>
     </div>
     <span class="text-muted w3-small">You are registered in #0 modules</span><br>
     <span class="text-muted w3-small">You manage #0 modules</span>
@@ -26,20 +27,75 @@
 
 <div class="notika-status-area">
     <div class="container">
-        <div class="row">
-            {% for i in range(10) %}
+        <div class="row" id="list_of_modules">
+            {% for module in modules %}
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                 <div class="wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
                     <div class="w3-small">
-                        <p>Module Name</p>
-                        <p class="text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vpti dignissimos consequuntur obcaecati autem aliquid quo tempore, magnam ullam atque?</p>
-                        <button class="w3-button w3-teal w3-round">View</button>
-                        <button class="w3-button w3-gray w3-text-white w3-round">Manage</button>
+                        <p>{{module.module_name | capitalize}}</p>
+                        <p class="text-muted">Module Tutor: {{module.module_tutor_id}}</p>
+                        <!--
+                            TODO: create a filter in mod_auth controller to
+                            generate a user's full name instead of using username as 
+                            Module Tutor
+                        -->
+                        <a href="/module/view/{{module.module_id}}" class="w3-button w3-teal w3-round">View</a>
+                        <!-- <button class="w3-button w3-gray w3-text-white w3-round">Manage</button> -->
                     </div>
-                </div> <hr>
+                </div>
+                <hr>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block js_content%}
+<script>
+    $("#join_module_search").on('keydown', function () {
+        $('#search_module_list').empty();
+        $.ajax({
+            'data': {data:$('#join_module_search').val(), action:"get_mod"},
+            'url': '/module/join_module/',
+            'type': 'GET',
+            'success': function (res) {
+                for(var i=0; i<res.data.length; i++){
+                    $('#search_module_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-small">Module Name: ${res.data[i][0]}</p>
+                                <p class="w3-small">Module Tutor: ${res.data[i][2]}</p>
+                                <p class="text-muted w3-small">Module ID: ${res.data[i][1]}</p>
+                                <button id="${res.data[i][1]}" onclick="joinModule('${res.data[i][1]}')"
+                                 class="w3-button w3-gray w3-round">Join</button>
+                            </div>
+                        </div> <br>`);
+
+                }
+            },
+            'error': function (res) {
+            }
+        });
+    });
+
+    function joinModule(module_id){
+        $.ajax({
+            'data': {module_id:module_id, action:'join'},
+            'url': '/module/join_module/',
+            'type': 'GET',
+            'success': function(res){
+                if (res.msg == "Success"){
+                    $("#"+module_id).toggleClass('w3-gray w3-teal');
+                    $("#"+module_id).html("Joined");
+                }else{
+                    $("#"+module_id).toggleClass('w3-gray w3-red');
+                    $("#"+module_id).html("Error Occured");
+                }
+            }
+        });
+    }
+</script>
+
 {% endblock %}
