@@ -1,37 +1,51 @@
 <div class="modal fade" id="createModule" role="dialog">
     <div class="modal-dialog modals-default">
         <div class="modal-content w3-light-gray">
-            
+
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <h1 class="w3-text-teal">Create a Module</h1>
                 <p class="w3-small w3-justify">
-                    Manage a module with unlimited number of students, grade assignment and assessments, share documents, live and interactive white board to engage with students
+                    Manage a module with unlimited number of students, grade assignment and assessments, share
+                    documents, live and interactive white board to engage with students.
                 </p>
-                <form id="login_form" method="POST" action="{{url_for('mod_auth.signin')}}" class="nk-form">
+                <form id="login_form" method="POST" action="{{url_for('mod_module.create')}}" class="nk-form">
+                    {{create_form.csrf_token}}
                     <div class="input-group">
-                        <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
+                        <span class="input-group-addon nk-ic-st-pro"></span>
                         <div class="nk-int-st">
-                            <input type="text" class="form-control" id="login_username" name="login_username"
-                                placeholder="Username">
+                            <input type="text" class="form-control" id="name" name="name"
+                            placeholder="Module Name">
                         </div>
                     </div>
-                    <div class="input-group mg-t-15">
-                        <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
+                    <div class="input-group">
+                        <span class="input-group-addon nk-ic-st-pro"></span>
                         <div class="nk-int-st">
-                            <input type="password" id="login_password" name="login_password" class="form-control"
-                                placeholder="Password">
+                            <input type="text" class="form-control" id="session" name="session"
+                            placeholder="Module Session">
                         </div>
                     </div>
-                    <br>
-                    <input type="submit" id="login_submit" class="w3-teal w3-button w3-round w3-small w3-right" value="Log In">
+                    <div class="input-group">
+                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <div class="nk-int-st">
+                            <textarea type="text" class="form-control" id="description" name="description"
+                            placeholder="Description of the Module Name..."></textarea>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <div class="nk-int-st">
+                            <input type="text" class="form-control" id="code" name="code"
+                            placeholder="Module Code e.g: MOD123">
+                        </div>
+                    </div>
+                    <hr>
+                
+                    <input type="submit" id="login_submit" class="w3-teal w3-button w3-round w3-small w3-right"
+                        value="Create">
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Save changes</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

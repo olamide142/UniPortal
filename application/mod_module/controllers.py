@@ -12,44 +12,44 @@ from .forms import *
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_module = Blueprint('mod_module', __name__, url_prefix='/module',\
-     template_folder='templates/mod_module')
+     template_folder='templates/')
 
 
-@mod_module.route('/', methods=['GET'])
-def index():
-    return render_template('module_index.html')
 
-@flask_login.login_required
 @mod_module.route('/create/', methods=['POST'])
+@flask_login.login_required
 def create():
-    # form = CreateModuleForm(meta={'csrf_token':False})
+    form = CreateModuleForm(meta={'csrf_token':False})
     try:
-        for i in range(100):
-            print(f'{flask_login.current_user}')
-        m = Module(request.form['name'],
-        str(flask_login.current_user),
-        request.form['session'],
-        request.form['description'],
-        request.form['code'])
+        if form.validate_on_submit():
+            m = Module(form.name.data,
+            str(flask_login.current_user),
+            form.session.data,
+            form.description.data,
+            form.code.data)
 
-        db.session.add(m)
-        db.session.commit()
-        flash("Module Created Successfully")
-        return redirect(f'/module/view/{m.module_id}/')
+            db.session.add(m)
+            db.session.commit()
+            flash("Module Created Successfully")
+            return redirect(f'/module/view/{m.module_id}/')
+        else:
+            flash("Submitted Form was Invalid")
+            return redirect(f'/module/view/{m.module_id}/')
+
     except Exception as ex:
         flash("Something went wrong, please try again")
         return redirect(url_for('mod_module.index'))
 
 
-@flask_login.login_required
 @mod_module.route('/view/<module_id>/', methods=['GET'])
+@flask_login.login_required
 def view(module_id):
     m = Module.query.filter_by(module_id=module_id).first()
 
     if m is None:
         redirect(url_for('not_found'))
     else:
-        return jsonify(
+        return render_template('module/index.html',
             module_id = module_id,
             module_name = m.module_name,
             module_tutor_id = m.module_tutor_id,
@@ -60,8 +60,8 @@ def view(module_id):
         )
 
 
-@flask_login.login_required
 @mod_module.route('/<module_id>/add/', methods=['POST'])
+@flask_login.login_required
 def add_student(module_id):
     user_making_the_addition = \
         get_user_object(str(flask_login.current_user))

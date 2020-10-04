@@ -16,7 +16,7 @@ def load_user(username):
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('mod_auth', __name__, url_prefix='/auth',\
-     template_folder='templates/auth')
+     template_folder='templates/')
 login_manager.login_view = "mod_auth.index"
 login_manager.login_message = "Please log in to access this page"
 
@@ -86,7 +86,7 @@ def signin():
         
         else:
             msg = 'Username or Password was incorrect.'
-        return jsonify(next=next or url_for('mod_auth.index'), msg=msg)
+        return redirect(next or url_for('mod_main.index'))
 
     else:
         msg = 'Form submitted was invalid'
@@ -94,8 +94,8 @@ def signin():
     return jsonify(msg=msg)
 
 
-@flask_login.login_required
 @mod_auth.route('/signout/', methods=['GET'])
+@flask_login.login_required
 def signout():
     '''
     Sign a user out from the platform 
@@ -109,7 +109,7 @@ def signout():
     flask_login.logout_user()
     flash('Successfully Logged Out.')
     
-    return render_template('index.html')
+    return redirect(url_for('mod_main.index'))
 
 
 

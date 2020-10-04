@@ -19,8 +19,8 @@ class NotificationType(Enum):
 mod_notification = Blueprint('mod_notification', __name__, url_prefix='/notification',\
      template_folder='templates/mod_notification')
 
-@flask_login.login_required
 @mod_notification.route('/', methods=['GET'])
+@flask_login.login_required
 def index():
     notifications = get_notifications(str(flask_login.current_user))
     return jsonify(len_unseen=len(notifications))

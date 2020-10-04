@@ -24,10 +24,10 @@ db = SQLAlchemy(app)
 def not_found(error):
     return render_template('404.html'), 404
 
+from application.main.controllers import mod_main as main_module
 from application.mod_auth.controllers import mod_auth as auth_module
 from application.mod_file.controllers import mod_file as file_system_module
 from application.mod_module.controllers import mod_module as module
-from application.main.controllers import mod_main as main_module
 from application.mod_notification.controllers import mod_notification as notification
 
 

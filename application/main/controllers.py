@@ -3,23 +3,29 @@ from flask import Blueprint, request, render_template, flash, \
 from werkzeug.security import check_password_hash
 from application.mod_auth.models import User
 from application.mod_auth.controllers import get_user_object
+from application.mod_module.forms import CreateModuleForm
 from application import db, app
 import flask_login
-
 
 mod_main = Blueprint('mod_main', __name__, url_prefix='/',\
      template_folder='templates/')
 
 @mod_main.route('/', methods=['GET'])
 def index():
-    if flask_login.current_user is not '':
-        return redirect(url_for('mod_main.dashboard'))
-    else:
+
+    if 'flask_login.mixins.AnonymousUserMixin' in str(flask_login.current_user):
+        # Couldn't figure out a better way to do this
         return render_template('index.html')
+    else:
+        return redirect(url_for('mod_main.dashboard'))
 
 
-@flask_login.login_required
 @mod_main.route('/dashboard/', methods=['GET'])
+@flask_login.login_required
 def dashboard():
-    return render_template('dashboard/index.html')
+    create_form = CreateModuleForm()
+    
+    return render_template(
+        'dashboard/index.html',
+        create_form=create_form)
 
