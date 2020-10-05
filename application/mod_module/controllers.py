@@ -52,13 +52,14 @@ def view(module_id):
         return redirect(url_for('not_found'))
     else:
         return render_template('module/index.html',
+            editForm = CreateModuleForm(),
             module_id = module_id,
             module_name = m.module_name,
             module_tutor_id = m.module_tutor_id,
             session = m.session,
             description = m.description,
             module_code = m.module_code,
-            created_on = m.created_on
+            current_user=str(flask_login.current_user)
         )
 
 
@@ -160,7 +161,32 @@ def join_module():
         except Exception:
             return jsonify(msg="Error Occured")
 
-    
+
+
+@mod_module.route('/<module_id>/update/', methods=['POST'])
+@flask_login.login_required
+def update(module_id):
+    form = CreateModuleForm(meta={'csrf_token':True})
+    username = str(flask_login.current_user)
+    try:
+        if form.validate_on_submit():
+            m = Module.query.filter_by(module_id=module_id).first()
+            m.module_name   = form.name.data
+            m.description   = form.description.data
+            m.session       = form.session.data
+            m.module_code   = form.code.data
+            db.session.add(m)
+            db.session.commit()
+            flash("Module Updated Successfully")
+            return redirect(f'/module/view/{m.module_id}/')
+        else:
+            flash("Submitted Form was Invalid")
+            return redirect(f'/module/view/{m.module_id}/')
+
+    except Exception as ex:
+        flash("Something went wrong, please try again")
+        return redirect(f'/module/view/{module_id}/')
+
 
 
 
