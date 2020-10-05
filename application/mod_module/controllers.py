@@ -3,7 +3,8 @@ from flask import Blueprint, request, render_template, flash, \
 from werkzeug.security import check_password_hash
 from application.mod_module.models import Module, ClassRoom
 from application.mod_auth.models import User
-from application.mod_auth.controllers import get_user_object
+from application.mod_auth.controllers import get_user_object, get_fullname
+from application.mod_notification.controllers import set_notification, NotificationType
 from application import db, app
 import flask_login
 from .forms import *
@@ -11,56 +12,59 @@ from .forms import *
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_module = Blueprint('mod_module', __name__, url_prefix='/module',\
-     template_folder='templates/mod_module')
+     template_folder='templates/')
 
 
-@mod_module.route('/', methods=['GET'])
-def index():
-    return render_template('module_index.html')
 
-@flask_login.login_required
 @mod_module.route('/create/', methods=['POST'])
+@flask_login.login_required
 def create():
-    # form = CreateModuleForm(meta={'csrf_token':False})
+    form = CreateModuleForm(meta={'csrf_token':False})
+    username = str(flask_login.current_user)
     try:
-        for i in range(100):
-            print(f'{flask_login.current_user}')
-        m = Module(request.form['name'],
-        str(flask_login.current_user),
-        request.form['session'],
-        request.form['description'],
-        request.form['code'])
+        if form.validate_on_submit():
+            m = Module(form.name.data,
+            username,
+            form.session.data,
+            form.description.data,
+            form.code.data)
+            c = ClassRoom(m.module_id, username)
+            db.session.add(c)
+            db.session.add(m)
+            db.session.commit()
+            flash("Module Created Successfully")
+            return redirect(f'/module/view/{m.module_id}/')
+        else:
+            flash("Submitted Form was Invalid")
+            return redirect(f'/module/view/{m.module_id}/')
 
-        db.session.add(m)
-        db.session.commit()
-        flash("Module Created Successfully")
-        return redirect(f'/module/view/{m.module_id}/')
     except Exception as ex:
         flash("Something went wrong, please try again")
         return redirect(url_for('mod_module.index'))
 
 
-@flask_login.login_required
 @mod_module.route('/view/<module_id>/', methods=['GET'])
+@flask_login.login_required
 def view(module_id):
     m = Module.query.filter_by(module_id=module_id).first()
 
     if m is None:
-        redirect(url_for('not_found'))
+        return redirect(url_for('not_found'))
     else:
-        return jsonify(
+        return render_template('module/index.html',
+            editForm = CreateModuleForm(),
             module_id = module_id,
             module_name = m.module_name,
             module_tutor_id = m.module_tutor_id,
             session = m.session,
             description = m.description,
             module_code = m.module_code,
-            created_on = m.created_on
+            current_user=str(flask_login.current_user)
         )
 
 
-@flask_login.login_required
 @mod_module.route('/<module_id>/add/', methods=['POST'])
+@flask_login.login_required
 def add_student(module_id):
     user_making_the_addition = \
         get_user_object(str(flask_login.current_user))
@@ -79,11 +83,11 @@ def add_student(module_id):
 
         if user_making_the_addition is user_to_be_added:
             # When Students joins a class by himself
-            if not is_student_in_classroom(module_id, user_to_be_added.username):
+            if ClassRoom.query.filter_by(module_id=module_id, username=user_to_be_added.username).first():
                 c = ClassRoom(module.module_id, user_to_be_added.username)
                 db.session.add(c)
                 db.session.commit()
-                return jsonify(status='success')
+                return jsonify(status='Success')
             else:
                 return "This student is already in this class"
         elif user_making_the_addition.username == module.module_tutor_id:
@@ -92,14 +96,20 @@ def add_student(module_id):
             # section of the student where they can accept 
 
             # TODO: call Notification system function to create
-            # 'Add module' notification in student's db 
-            return jsonify("Notification will be sent to the student")
+            # 'Add module' notification in student's db
+            if set_notification(user_making_the_addition.username, \
+                user_to_be_added.username, NotificationType.JoinModule):
+                return jsonify("Notification will be sent to the student")
+            else:
+                return jsonify("Something Went Wrong")
+
     else:
         return jsonify(msg='Error encountered')
 
 
 
 @mod_module.route('/<module_id>/members/', methods=['GET'])
+@flask_login.login_required
 def get_members(module_id):
     m = get_module_object(module_id)
     c = get_classroom_object(module_id)
@@ -107,6 +117,78 @@ def get_members(module_id):
         module_tutor = m.module_tutor_id,
         others = c
     )
+
+
+def get_modules():
+    # get modules this user is registered in
+    c = ClassRoom.query.filter_by(\
+        member_username=str(flask_login.current_user))
+
+    # get modules created by this user
+    modules = []
+    for i in c:
+        modules.append(Module.query.filter_by(module_id=i.module_id).first())
+    return modules
+
+
+@mod_module.route('/join_module/', methods=['GET'])
+@flask_login.login_required
+def join_module():
+    # Generate ajax list
+    username = str(flask_login.current_user)
+    if request.args['action'] == "get_mod":
+        text = request.args['data'].lower()
+        if text.strip() == '':
+            return jsonify(data=[])
+        m = Module.query.all()
+        s = []
+        for i in m:
+            if (text in (i.module_id).lower()) or (text in (i.module_name).lower()):
+                s.append((i.module_name, i.module_id, get_fullname(i.module_tutor_id)))
+        return jsonify(data = s)
+
+    if request.args['action'] == "join":
+        module_id = request.args['module_id']
+        try:
+            if ClassRoom.query.filter_by(\
+                module_id=module_id, member_username = username).first() is None:
+                c = ClassRoom(module_id, username)
+                db.session.add(c)
+                db.session.commit()
+                return jsonify(msg="Success")
+            else:
+                return jsonify(msg="Error Occured")
+        except Exception:
+            return jsonify(msg="Error Occured")
+
+
+
+@mod_module.route('/<module_id>/update/', methods=['POST'])
+@flask_login.login_required
+def update(module_id):
+    form = CreateModuleForm(meta={'csrf_token':True})
+    username = str(flask_login.current_user)
+    try:
+        if form.validate_on_submit():
+            m = Module.query.filter_by(module_id=module_id).first()
+            m.module_name   = form.name.data
+            m.description   = form.description.data
+            m.session       = form.session.data
+            m.module_code   = form.code.data
+            db.session.add(m)
+            db.session.commit()
+            flash("Module Updated Successfully")
+            return redirect(f'/module/view/{m.module_id}/')
+        else:
+            flash("Submitted Form was Invalid")
+            return redirect(f'/module/view/{m.module_id}/')
+
+    except Exception as ex:
+        flash("Something went wrong, please try again")
+        return redirect(f'/module/view/{module_id}/')
+
+
+
 
 
 def get_module_object(module_id):
@@ -117,7 +199,7 @@ def get_classroom_object(module_id):
 
 def is_student_in_classroom(module_id, username):
     c = ClassRoom.query.filter_by(\
-        module_id=module_id, student_username=username).first()
+        module_id=module_id, member_username=username).first()
     if c is None:
         return False
     else:

@@ -46,16 +46,16 @@ class ClassRoom(db.Model):
         
     id                  = db.Column(db.String(10),  nullable=False, primary_key=True)
     module_id           = db.Column(db.String(10), nullable=True)
-    student_username    = db.Column(db.String(15), nullable=True)
+    member_username    = db.Column(db.String(15), nullable=True)
     created_on          = db.Column(db.DateTime, nullable=False)
     
 
-    def __init__(self, module_id, student_username):
+    def __init__(self, module_id, member_username):
 
         self.id                 = str(uuid.uuid4())
         self.module_id          = module_id
-        self.student_username   = student_username
+        self.member_username    = member_username
         self.created_on         = datetime.utcnow()
 
     def __repr__(self):
-        return f'<ClassRoom {self.module_id} - {self.student_username}>'
+        return f'<ClassRoom {self.module_id} - {self.member_username}>'

@@ -16,14 +16,21 @@ def load_user(username):
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('mod_auth', __name__, url_prefix='/auth',\
-     template_folder='templates/mod_auth')
+     template_folder='templates/')
 login_manager.login_view = "mod_auth.index"
 login_manager.login_message = "Please log in to access this page"
 
 
 @mod_auth.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    form1 = SigninForm()
+    form2 = SignupForm()
+    return render_template(
+        'auth/auth.html',
+        form1=form1,
+        form2=form2
+    )
+
 
 
 # Set the route and accepted methods
@@ -33,19 +40,23 @@ def signup():
     Register a user onto the platform
     returns: flask.jsonify()
     '''
-    form = SignupForm(meta={'csrf': False})
+    form = SignupForm(meta={'csrf': True})
 
     if form.validate_on_submit():
         try:
-            user = User(form.username.data, form.email.data, form.password.data, \
-                form.first_name.data, form.last_name.data)
+            user = User(form.signup_username.data, form.signup_email.data, form.signup_password.data, \
+                form.signup_firstname.data, form.signup_lastname.data)
             db.session.add(user)
             db.session.commit()
+            flash("Account Created Successfully")
+            return redirect(url_for('mod_main.dashboard'))
         except Exception:
-            return jsonify(status=False, error="Account Creation was Unsuccessfull")
-        return jsonify(status=True, msg="Account Created Successfully")
+            flash("Account Creation was Unsuccessfull")
     else:
-        return jsonify(status=False, error="Form submitted was invalid")
+        flash("Form submitted was invalid")
+    
+    return redirect(url_for('mod_auth.index'))
+
 
 
 @mod_auth.route('/signin/', methods=['POST'])
@@ -55,12 +66,14 @@ def signin():
     Sign the user in
     returns: flask.jsonify() || flask.render_template
     '''
-    form = SigninForm(meta={'csrf': False})
+    form = SigninForm(meta={'csrf_token':True})
     next,msg = None, ''
+
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(username=form.login_username.data).first()
+
         if (user is not None) and \
-            (check_password_hash(user.password, form.password.data)):
+            (check_password_hash(user.password, form.login_password.data)):
             flask_login.login_user(user, remember=True)
             user.authenticated = True
             db.session.add(user)
@@ -73,7 +86,7 @@ def signin():
         
         else:
             msg = 'Username or Password was incorrect.'
-        return jsonify(next=next or url_for('mod_auth.index'), msg=msg)
+        return redirect(next or url_for('mod_main.index'))
 
     else:
         msg = 'Form submitted was invalid'
@@ -81,8 +94,8 @@ def signin():
     return jsonify(msg=msg)
 
 
-@flask_login.login_required
 @mod_auth.route('/signout/', methods=['GET'])
+@flask_login.login_required
 def signout():
     '''
     Sign a user out from the platform 
@@ -96,14 +109,8 @@ def signout():
     flask_login.logout_user()
     flash('Successfully Logged Out.')
     
-    return render_template('index.html')
+    return redirect(url_for('mod_main.index'))
 
-
-
-@mod_auth.route('/see/', methods=['GET'])
-@flask_login.login_required
-def see():
-    return 'in here'
 
 
 def is_safe_url(target):
@@ -126,3 +133,7 @@ def get_user_object(username):
     returns: User
     '''
     return User.query.filter_by(username=username).first()
+
+def get_fullname(username):
+    u = User.query.filter_by(username=username).first()
+    return f'{u.first_name} {u.last_name}'
