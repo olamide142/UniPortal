@@ -22,8 +22,8 @@ def index():
 
 
 
-# @flask_login.login_required
 @mod_file.route('/upload', methods=['POST'])
+@flask_login.login_required
 def upload_file():
 
     uploaded_file = request.files['file']

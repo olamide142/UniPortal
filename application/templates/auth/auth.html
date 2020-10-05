@@ -1,0 +1,119 @@
+{% extends 'base.html'%}
+{% block content %}
+<!-- Login Register area Start-->
+<a href="{{url_for('mod_main.index')}}" class="w3-button w3-small w3-gray">Back</a>
+<div class="login-content">
+    <!-- Login -->
+    <div class="nk-block toggled" id="l-login">
+        <form id="login_form" method="POST" action="{{url_for('mod_auth.signin')}}" class="nk-form">
+            {{ form1.csrf_token }}
+            <div class="input-group">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
+                <div class="nk-int-st">
+                    <input type="text" class="form-control" id="login_username" name="login_username"
+                        placeholder="Username">
+                </div>
+            </div>
+            <div class="input-group mg-t-15">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
+                <div class="nk-int-st">
+                    <input type="password" id="login_password" name="login_password" class="form-control"
+                        placeholder="Password">
+                </div>
+            </div>
+            <br>
+            <input type="submit" id="login_submit" class="w3-teal w3-button w3-round w3-small w3-right" value="Log In">
+        </form>
+
+        <div class="nk-navigation nk-lg-ic">
+            <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-register"><i
+                    class="notika-icon notika-plus-symbol"></i> <span>Register</span></a>
+            <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Forgot
+                    Password</span></a>
+        </div>
+    </div>
+
+    <!-- Register -->
+    <div class="nk-block" id="l-register">
+        <form method="POST" action="{{url_for('mod_auth.signup')}}" class="nk-form">
+            {{form2.csrf_token}}
+
+            <div class="input-group">
+                <span class="input-group-addon nk-ic-st-pro"><i class=""></i></span>
+                <div class="nk-int-st">
+                    <input type="text" name="signup_firstname" class="form-control" placeholder="First Name">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <span class="input-group-addon nk-ic-st-pro"><i class=""></i></span>
+                <div class="nk-int-st">
+                    <input type="text" name="signup_lastname" class="form-control" placeholder="Last Name">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
+                <div class="nk-int-st">
+                    <input type="text" name="signup_username" class="form-control" placeholder="Username">
+                </div>
+            </div>
+
+            <div class="input-group mg-t-15">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-mail"></i></span>
+                <div class="nk-int-st">
+                    <input type="text" class="form-control" name="signup_email" placeholder="Email Address">
+                </div>
+            </div>
+
+            <div class="input-group mg-t-15">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
+                <div class="nk-int-st">
+                    <input type="password" class="form-control" name="signup_password" placeholder="Password">
+                </div>
+            </div>
+            <br>
+            <input type="submit" class="w3-teal w3-button w3-round w3-small w3-right" value="Sign Up">
+        </form>
+
+        <div class="nk-navigation rg-ic-stl">
+            <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i
+                    class="notika-icon notika-right-arrow"></i> <span>Sign in</span></a>
+            <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Forgot
+                    Password</span></a>
+        </div>
+    </div>
+
+    <!-- Forgot Password -->
+    <div class="nk-block" id="l-forget-password">
+        <div class="nk-form">
+            <p class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur
+                commodo lorem fringilla enim feugiat commodo sed ac lacus.</p>
+
+            <div class="input-group">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-mail"></i></span>
+                <div class="nk-int-st">
+                    <input type="text" class="form-control" placeholder="Email Address">
+                </div>
+            </div>
+
+            <a href="#l-login" data-ma-action="nk-login-switch" data-ma-block="#l-login"
+                class="btn btn-login btn-success btn-float"><i class="notika-icon notika-right-arrow"></i></a>
+        </div>
+
+        <div class="nk-navigation nk-lg-ic rg-ic-stl">
+            <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i
+                    class="notika-icon notika-right-arrow"></i> <span>Sign in</span></a>
+            <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-register"><i
+                    class="notika-icon notika-plus-symbol"></i> <span>Register</span></a>
+        </div>
+    </div>
+</div>
+<!-- Login Register area End-->
+{% endblock %}
+
+{% block js_content %}
+<script>
+
+</script>
+{% endblock %}
