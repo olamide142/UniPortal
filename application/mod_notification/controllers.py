@@ -36,8 +36,8 @@ def set_notification(sender, receiver, notification_type):
         n = Notification(
             sender, 
             receiver, 
-            notification_type, 
-            set_content()
+            notification_type,
+            ""
         )
         db.session.add(n)
         db.session.commit()

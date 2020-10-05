@@ -4,7 +4,6 @@ import pytest
 from application import app, db
 import config 
 from application.mod_auth.models import User
-import json
 
 
 @pytest.fixture
