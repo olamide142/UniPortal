@@ -28,7 +28,7 @@ def index():
 
 def get_notifications(username, unseen=True):
     user = get_user_object(username)
-    return Notification.query.filter_by(receiver=user.username, seen=seen)
+    return Notification.query.filter_by(receiver=user.username, seen=unseen)
 
 
 def set_notification(sender, receiver, notification_type):
