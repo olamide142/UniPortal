@@ -40,7 +40,8 @@ def signup():
     Register a user onto the platform
     returns: flask.jsonify()
     '''
-    form = SignupForm(meta={'csrf': True})
+    
+    form = SignupForm(meta={'csrf': False})
 
     if form.validate_on_submit():
         try:

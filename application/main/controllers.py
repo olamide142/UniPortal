@@ -32,3 +32,11 @@ def dashboard():
         modules = get_modules(),
         current_user = str(flask_login.current_user))
 
+
+@mod_main.route('/profile/', methods=['GET'])
+@flask_login.login_required
+def profile():
+    return render_template(
+        'profile/index.html',
+        current_user=str(flask_login.current_user)
+        )

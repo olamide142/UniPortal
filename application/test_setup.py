@@ -2,9 +2,8 @@ import os
 import tempfile
 import pytest
 from application import app, db
-import config 
 from application.mod_auth.models import User
-
+import config 
 
 @pytest.fixture
 def client():
@@ -12,6 +11,8 @@ def client():
         
     app.config["TESTING"] = True
     app.testing = True
+    config.CSRF_ENABLED = False
+    config.WTF_CSRF_ENABLED = False
 
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
 
