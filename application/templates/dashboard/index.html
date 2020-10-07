@@ -34,11 +34,8 @@
                     <div class="w3-small">
                         <p>{{module.module_name | capitalize}}</p>
                         <p class="text-muted">Module Tutor: {{module.module_tutor_id|fullname}}</p>
-                        <!--
-                            TODO: create a filter in mod_auth controller to
-                            generate a user's full name instead of using username as 
-                            Module Tutor
-                        -->
+                        <p class="text-muted">Module Code: {{module.module_code}}</p>
+                        <p class="text-muted w3-tiny w3-text-teal">ID: {{module.module_id}}</p>
                         <a href="/module/view/{{module.module_id}}" class="w3-button w3-teal w3-round">View</a>
                         <!-- <button class="w3-button w3-gray w3-text-white w3-round">Manage</button> -->
                     </div>
@@ -113,7 +110,9 @@
                             <div class="w3-small">
                                 <p>${res.data[i][0]}</p>
                                 <p class="text-muted">Module Tutor: ${res.data[i][1]}</p>
-                                <a href="/module/view/${res.data[i][2]}" class="w3-button w3-teal w3-round">View</a>
+                                <p class="text-muted">Module Code: ${res.data[i][2]}</p>
+                                <p class="text-muted w3-tiny w3-text-teal">ID: ${res.data[i][3]}</p> 
+                                <a href="/module/view/${res.data[i][3]}" class="w3-button w3-teal w3-round">View</a>
                             </div>
                         </div>
                         <hr></div>`

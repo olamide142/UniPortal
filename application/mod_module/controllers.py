@@ -207,8 +207,11 @@ def search_my_module():
         if (text in (get_fullname(module.module_tutor_id).lower()) or\
              text in (module.module_id).lower()) or \
                  (text in (module.module_name).lower()):
-            s.append((module.module_name, \
-                get_fullname(module.module_tutor_id), module.module_id))
+            s.append((module.module_name,
+            get_fullname(module.module_tutor_id),
+            module.module_code,
+            module.module_id
+            ))
     return jsonify(data = s)
 
 
