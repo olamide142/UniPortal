@@ -33,7 +33,7 @@
                 <div class="wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
                     <div class="w3-small">
                         <p>{{module.module_name | capitalize}}</p>
-                        <p class="text-muted">Module Tutor: {{module.module_tutor_id}}</p>
+                        <p class="text-muted">Module Tutor: {{module.module_tutor_id|fullname}}</p>
                         <!--
                             TODO: create a filter in mod_auth controller to
                             generate a user's full name instead of using username as 
@@ -54,14 +54,14 @@
 
 {% block js_content%}
 <script>
-    $("#join_module_search").on('keydown', function () {
+    $("#join_module_search").on('keyup', function () {
         $('#search_module_list').empty();
         $.ajax({
-            'data': {data:$('#join_module_search').val(), action:"get_mod"},
+            'data': { data: $('#join_module_search').val(), action: "get_mod" },
             'url': '/module/join_module/',
             'type': 'GET',
             'success': function (res) {
-                for(var i=0; i<res.data.length; i++){
+                for (var i = 0; i < res.data.length; i++) {
                     $('#search_module_list').append(
                         `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
                             <div>
@@ -80,22 +80,50 @@
         });
     });
 
-    function joinModule(module_id){
+    function joinModule(module_id) {
         $.ajax({
-            'data': {module_id:module_id, action:'join'},
+            'data': { module_id: module_id, action: 'join' },
             'url': '/module/join_module/',
             'type': 'GET',
-            'success': function(res){
-                if (res.msg == "Success"){
-                    $("#"+module_id).toggleClass('w3-gray w3-teal');
-                    $("#"+module_id).html("Joined");
-                }else{
-                    $("#"+module_id).toggleClass('w3-gray w3-red');
-                    $("#"+module_id).html("Error Occured");
+            'success': function (res) {
+                if (res.msg == "Success") {
+                    $("#" + module_id).toggleClass('w3-gray w3-teal');
+                    $("#" + module_id).html("Joined");
+                } else {
+                    $("#" + module_id).toggleClass('w3-gray w3-red');
+                    $("#" + module_id).html("Error Occured");
                 }
             }
         });
     }
+
+
+    $("#search_module").on('keyup', function () {
+        $.ajax({
+            'data': { data: $('#search_module').val() },
+            'url': '/module/search_my_module/',
+            'type': 'GET',
+            'success': function (res) {
+                var temp = $('#list_of_modules').children();
+                $('#list_of_modules').empty();
+                for (var i = 0; i < res.data.length; i++) {
+                    $('#list_of_modules').append(
+                        `<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div class="w3-small">
+                                <p>${res.data[i][0]}</p>
+                                <p class="text-muted">Module Tutor: ${res.data[i][1]}</p>
+                                <a href="/module/view/${res.data[i][2]}" class="w3-button w3-teal w3-round">View</a>
+                            </div>
+                        </div>
+                        <hr></div>`
+                    );
+
+                }
+            }
+        });
+    });
+
 </script>
 
 {% endblock %}

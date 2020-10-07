@@ -188,6 +188,28 @@ def update(module_id):
         return redirect(f'/module/view/{module_id}/')
 
 
+@mod_module.route('/search_my_module/', methods=['GET'])
+@flask_login.login_required
+def search_my_module():
+    '''
+    User can search for a module by name, tutor's name,
+    module_id.
+    returns: flask.jsonify
+    '''
+    username = str(flask_login.current_user)
+    text = request.args['data'].lower()
+    m = ClassRoom.query.filter_by(member_username=username)
+    s = []
+    # return "olamide"
+    for i in m:
+        # get the module info
+        module = Module.query.filter_by(module_id=i.module_id).first()
+        if (text in (get_fullname(module.module_tutor_id).lower()) or\
+             text in (module.module_id).lower()) or \
+                 (text in (module.module_name).lower()):
+            s.append((module.module_name, \
+                get_fullname(module.module_tutor_id), module.module_id))
+    return jsonify(data = s)
 
 
 
