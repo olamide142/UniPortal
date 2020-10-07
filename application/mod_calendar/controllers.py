@@ -8,8 +8,10 @@ import flask_login
 mod_calendar = Blueprint('mod_calendar', __name__, url_prefix='/calendar',\
      template_folder='templates/')
 
-
-
+@mod_calendar.route('/', methods=['GET'])
+@flask_login.login_required
+def index():
+    return render_template('calendar/index.html')
 
 def create_event():
     pass

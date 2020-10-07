@@ -55,11 +55,11 @@ def view(module_id):
             editForm = CreateModuleForm(),
             module_id = module_id,
             module_name = m.module_name,
-            module_tutor_id = m.module_tutor_id,
+            module_tutor_id = get_fullname(m.module_tutor_id),
             session = m.session,
             description = m.description,
             module_code = m.module_code,
-            current_user=str(flask_login.current_user)
+            current_user= get_fullname(str(flask_login.current_user))
         )
 
 

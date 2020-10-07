@@ -17,13 +17,13 @@ class NotificationType(Enum):
 
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_notification = Blueprint('mod_notification', __name__, url_prefix='/notification',\
-     template_folder='templates/mod_notification')
+     template_folder='templates/')
 
 @mod_notification.route('/', methods=['GET'])
 @flask_login.login_required
 def index():
     notifications = get_notifications(str(flask_login.current_user))
-    return jsonify(len_unseen=len(notifications))
+    return render_template('notification/index.html')
 
 
 def get_notifications(username, unseen=True):
@@ -44,3 +44,4 @@ def set_notification(sender, receiver, notification_type):
         return True
     except Exception:
         return False
+
