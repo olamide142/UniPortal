@@ -3,9 +3,10 @@
 {% block content %}
 {% include 'dashboard/nav.html' %}
 {% include 'module/edit_module.html' %}
+{% include 'module/add_student.html' %}
 <div class="container w3-round jumbotron w3-black w3-padding">
     {% if current_user == module_tutor_id %}
-    <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal" data-target="#addModule">Add
+    <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal" data-target="#addStudent">Add
         Student</button>
     {% endif  %}
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
@@ -15,8 +16,8 @@
     <br>
     <div class="">
         {% if current_user == module_tutor_id %}
-            <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal"
-                data-target="#editModule">Edit</button>
+        <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal"
+            data-target="#editModule">Edit</button>
         {% endif %}
     </div>
 </div>
@@ -50,4 +51,58 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block js_content %}
+<script>
+    $("#search_student").on('keyup', function () {
+        $('#search_student_list').empty();
+        $('#search_student_list').empty();
+        $.ajax({
+            'data': { student: $('#search_student').val() },
+            'url': '/search_student/',
+            'type': 'GET',
+            'success': function (res) {
+                if (res.data.length == 0) {
+                    $('#search_student_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-text-teal w3-center">No Result</p>
+                            </div>
+                        </div> <br>`);
+                }
+                for (var i = 0; i < res.data.length; i++) {
+                    $('#search_student_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-small">Studnet Name: ${res.data[i][1]}</p>
+                                <p class="w3-small">Student Username: ${res.data[i][0]}</p>
+                                <p class="w3-small">Student Email: ${res.data[i][2]}</p>
+                                <button class="w3-button w3-teal w3-round" id="addStudentBtn${res.data[i][0]}"
+                                onclick="sendRequestToStudent('${res.data[i][0]}')">Invite</button>
+                            </div>
+                        </div> <br>`);
+
+                }
+            }
+        });
+    });
+
+
+    function sendRequestToStudent(username) {
+        var module_id = '{{module_id}}';
+        $.ajax({
+            'data': { student: username },
+            'url': `/module/${module_id}/add/`,
+            'type': 'GET',
+            'success': function (res) {
+                if (res.status == true) {
+                    $("#addStudentBtn" + username).html(res.msg);
+                }else{
+                    $("#addStudentBtn" + username).html(res.msg);
+                }
+            }
+        });
+    }
+</script>
 {% endblock %}
