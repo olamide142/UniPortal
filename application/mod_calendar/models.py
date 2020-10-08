@@ -39,7 +39,7 @@ class Event(db.Model):
     def __init__(self, event_creator_id, date_n_time):
 
         self.event_id                   = gen_random_id()
-        self.event_id           = event_creator_id
+        self.event_id                   = event_creator_id
         self.date_n_time                = date_n_time
         self.created_on                 = datetime.utcnow()
 

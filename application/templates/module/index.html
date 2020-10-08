@@ -32,31 +32,39 @@
                     <p>Upcoming Event: <code>session : 5th of May,2020 | 3:00 pm - 6:00 pm </code></p>
                 </div>
                 <div class="widget-tabs-list">
-                        <div class="w3-bar w3-white">
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Description')">Description</button>
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Community')">Community</button>
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Materials')">Materials</button>
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Calendar')">Module Calendar</button>
-                        </div>
+                    <div class="w3-bar w3-white">
+                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                            onclick="openTabb('Description')">Description</button>
+                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                            onclick="openTabb('Community')">Community</button>
+                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                            onclick="openTabb('Materials')">Materials</button>
+                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                            onclick="openTabb('Calendar')">Module Calendar</button>
+                    </div>
                     <div class="tab-content tab-custom-st tab-ctn-left">
                         <div id="Description" class="Tabb">
-                            <h2>Description</h2><hr>
+                            <h2>Description</h2>
+                            <hr>
                             <p>{{description}}</p>
                         </div>
 
                         <div id="Community" class="Tabb" style="display:none">
-                            <h2>Community</h2><hr>
+                            <h2>Community</h2>
+                            <hr>
                             {% include 'module/community.html' %}
                         </div>
 
                         <div id="Materials" class="Tabb" style="display:none">
-                            <h2>Materials</h2><hr>
+                            <h2>Materials</h2>
+                            <hr>
                             <p>Materials is the capital of Japan.</p>
                         </div>
-                        
+
                         <div id="Calendar" class="Tabb" style="display:none">
-                            <h2>Module Calendar</h2><hr>
-                            <p>Calendar is the capital of Japan.</p>
+                            <h2>Module Calendar</h2>
+                            <hr>
+                            {% include 'module/module_calendar.html' %}
                         </div>
                     </div>
                 </div>
@@ -70,6 +78,16 @@
 
 {% block js_content %}
 <script>
+
+    function openTabb(TabbName) {
+        var i;
+        var x = document.getElementsByClassName("Tabb");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(TabbName).style.display = "block";
+    }
+
     $("#search_student").on('keyup', function () {
         $('#search_student_list').empty();
         $('#search_student_list').empty();
@@ -103,7 +121,6 @@
         });
     });
 
-
     function sendRequestToStudent(username) {
         var module_id = '{{module_id}}';
         $.ajax({
@@ -120,11 +137,7 @@
         });
     }
 
-
     $(document).ready(function () {
-        var students;
-        var desc = '{{description}}';
-
         $.ajax({
             'url': '/module/{{module_id}}/members/',
             'type': 'GET',
@@ -137,14 +150,10 @@
         });
 
     });
-    function openTabb(TabbName) {
-        var i;
-        var x = document.getElementsByClassName("Tabb");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-        }
-        document.getElementById(TabbName).style.display = "block";
-    }
+
+    $('#evoCalendar').evoCalendar({
+        calendarEvents: myEvents
+    });
 
 </script>
 {% endblock %}
