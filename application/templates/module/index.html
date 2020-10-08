@@ -15,7 +15,7 @@
         <div class="btn-group notika-group-btn w3-right w3-small">
             <br>
             <button class="w3-button w3-teal w3-round btn-default notika-gp-default" data-toggle="modal"
-                data-target="#editModule">Edit</button></button>
+                data-target="#editModule">Edit</button>
             <button id="decline_module_btn" data-toggle="modal" class="w3-button w3-teal w3-round 
                 btn-default notika-gp-default" data-target="#addStudent">Add Student</button></button>
         </div>
@@ -29,19 +29,23 @@
             <div class="widget-tabs-int tab-ctm-wp mg-t-30">
                 <div class="tab-hd">
                     <h2>Hello, {{current_user}}</h2>
-                    <p>Upcoming Event: <code>session : 5th of May,2020 | 3:00 pm - 6:00 pm </code></p>
+                    <p>Upcoming Event: <code class="w3-teal">session : 5th of May,2020 | 3:00 pm - 6:00 pm </code></p>
                 </div>
                 <div class="widget-tabs-list">
-                    <div class="w3-bar w3-white">
-                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                    <!-- Tab Nav -->
+                    <div class="w3-center w3-black w3-round">
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
                             onclick="openTabb('Description')">Description</button>
-                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
                             onclick="openTabb('Community')">Community</button>
-                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
                             onclick="openTabb('Materials')">Materials</button>
-                        <button class="w3-bar-item w3-white w3-text-teal w3-button"
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
+                            onclick="openTabb('Assessment')">Assessment</button>
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
                             onclick="openTabb('Calendar')">Module Calendar</button>
                     </div>
+                    <!-- Tab Content -->
                     <div class="tab-content tab-custom-st tab-ctn-left">
                         <div id="Description" class="Tabb">
                             <h2>Description</h2>
@@ -58,13 +62,19 @@
                         <div id="Materials" class="Tabb" style="display:none">
                             <h2>Materials</h2>
                             <hr>
-                            <p>Materials is the capital of Japan.</p>
+                            <p>abc</p>
+                        </div>
+                        <div id="Assessment" class="Tabb" style="display:none">
+                            <h2>Assessment</h2>
+                            <hr>
+                            <p>123</p>
                         </div>
 
                         <div id="Calendar" class="Tabb" style="display:none">
                             <h2>Module Calendar</h2>
                             <hr>
-                            {% include 'module/module_calendar.html' %}
+                            {% include 'calendar/add_event.html' %}
+                            {% include 'calendar/the_calendar.html' %}
                         </div>
                     </div>
                 </div>
