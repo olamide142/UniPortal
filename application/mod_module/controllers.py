@@ -107,11 +107,11 @@ def add_student(module_id):
 @flask_login.login_required
 def get_members(module_id):
     m = get_module_object(module_id)
-    c = get_classroom_object(module_id)
-    return jsonify(
-        module_tutor = m.module_tutor_id,
-        others = c
-    )
+    c = ClassRoom.query.filter_by(module_id=module_id)
+    s = []
+    for i in c:
+        s.append(get_fullname(i.member_username))
+    return jsonify(students = s)
 
 
 def get_modules():
