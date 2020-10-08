@@ -32,33 +32,38 @@
                     <p>Upcoming Event: <code>session : 5th of May,2020 | 3:00 pm - 6:00 pm </code></p>
                 </div>
                 <div class="widget-tabs-list">
-                    <ul class="nav nav-tabs tab-nav-right">
-                        <li><a data-toggle="tab" href="#description">Description</a></li>
-                        <li><a data-toggle="tab" href="#materials">Materials</a></li>
-                        <li><a data-toggle="tab" href="#students">Students</a></li>
-                    </ul>
-                    <div class="tab-content tab-custom-st tab-ctn-right">
-                        <div id="description" class="tab-pane fade in active">
-                            <div class="tab-ctn">
-                                <p class="w3-justify">{{description}}</p>
-                            </div>
+                        <div class="w3-bar w3-white">
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Description')">Description</button>
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Community')">Community</button>
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Materials')">Materials</button>
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Calendar')">Module Calendar</button>
                         </div>
-                        <div id="materials" class="tab-pane fade">
-                            <div class="tab-ctn">
-                            </div>
+                    <div class="tab-content tab-custom-st tab-ctn-left">
+                        <div id="Description" class="Tabb">
+                            <h2>Description</h2><hr>
+                            <p>{{description}}</p>
                         </div>
-                        <div id="students" class="tab-pane fade">
-                            <div class="tab-ctn">
-                                <ul class="w3-ul" id="studentlist">
 
-                                </ul>
-                            </div>
+                        <div id="Community" class="Tabb" style="display:none">
+                            <h2>Community</h2><hr>
+                            {% include 'module/community.html' %}
+                        </div>
+
+                        <div id="Materials" class="Tabb" style="display:none">
+                            <h2>Materials</h2><hr>
+                            <p>Materials is the capital of Japan.</p>
+                        </div>
+                        
+                        <div id="Calendar" class="Tabb" style="display:none">
+                            <h2>Module Calendar</h2><hr>
+                            <p>Calendar is the capital of Japan.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 {% endblock %}
@@ -117,15 +122,29 @@
 
 
     $(document).ready(function () {
+        var students;
+        var desc = '{{description}}';
+
         $.ajax({
             'url': '/module/{{module_id}}/members/',
             'type': 'GET',
             'success': function (res) {
+                students = res.students;
                 for (var i = 0; i < res.students.length; i++) {
-                    $("#studentlist").append(`<li>${i+1} : ${res.students[i]}</li>`);
+                    $("#studentlist").append(`<li>${i + 1} : ${res.students[i]}</li>`);
                 }
             }
         });
+
     });
+    function openTabb(TabbName) {
+        var i;
+        var x = document.getElementsByClassName("Tabb");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(TabbName).style.display = "block";
+    }
+
 </script>
 {% endblock %}
