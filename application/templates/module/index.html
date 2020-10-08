@@ -3,45 +3,60 @@
 {% block content %}
 {% include 'dashboard/nav.html' %}
 {% include 'module/edit_module.html' %}
+{% include 'module/add_student.html' %}
 <div class="container w3-round jumbotron w3-black w3-padding">
-    {% if current_user == module_tutor_id %}
-    <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal" data-target="#addModule">Add
-        Student</button>
-    {% endif  %}
+
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
-    <span class="text-muted w3-small">Module Description: {{description}}</span><br>
-    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span><br>
-    <span class="text-muted w3-small">Module Code: {{module_code}}</span>
+    <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
+    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span>
     <br>
     <div class="">
-
-        <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal"
-            data-target="#editModule">Edit</button>
+        {% if current_user == module_tutor_id %}
+        <div class="btn-group notika-group-btn w3-right w3-small">
+            <br>
+            <button class="w3-button w3-teal w3-round btn-default notika-gp-default" data-toggle="modal"
+                data-target="#editModule">Edit</button></button>
+            <button id="decline_module_btn" data-toggle="modal" class="w3-button w3-teal w3-round 
+                btn-default notika-gp-default" data-target="#addStudent">Add Student</button></button>
+        </div>
+        {% endif %}
     </div>
 </div>
 
-<div class="breadcomb-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="breadcomb-list">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="breadcomb-wp">
-                                <div class="breadcomb-icon">
-                                    <i class="notika-icon notika-app"></i>
-                                </div>
-                                <div class="breadcomb-ctn">
-                                    <h2>Dialogs</h2>
-                                    <p>Welcome to Notika <span class="bread-ntd">Admin Template</span></p>
-                                </div>
-                            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="widget-tabs-int tab-ctm-wp mg-t-30">
+                <div class="tab-hd">
+                    <h2>Hello, {{current_user}}</h2>
+                    <p>Upcoming Event: <code>session : 5th of May,2020 | 3:00 pm - 6:00 pm </code></p>
+                </div>
+                <div class="widget-tabs-list">
+                        <div class="w3-bar w3-white">
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Description')">Description</button>
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Community')">Community</button>
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Materials')">Materials</button>
+                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Calendar')">Module Calendar</button>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
-                            <div class="breadcomb-report">
-                                <button data-toggle="tooltip" data-placement="left" title="Download Report"
-                                    class="btn"><i class="notika-icon notika-sent"></i></button>
-                            </div>
+                    <div class="tab-content tab-custom-st tab-ctn-left">
+                        <div id="Description" class="Tabb">
+                            <h2>Description</h2><hr>
+                            <p>{{description}}</p>
+                        </div>
+
+                        <div id="Community" class="Tabb" style="display:none">
+                            <h2>Community</h2><hr>
+                            {% include 'module/community.html' %}
+                        </div>
+
+                        <div id="Materials" class="Tabb" style="display:none">
+                            <h2>Materials</h2><hr>
+                            <p>Materials is the capital of Japan.</p>
+                        </div>
+                        
+                        <div id="Calendar" class="Tabb" style="display:none">
+                            <h2>Module Calendar</h2><hr>
+                            <p>Calendar is the capital of Japan.</p>
                         </div>
                     </div>
                 </div>
@@ -49,4 +64,87 @@
         </div>
     </div>
 </div>
+</div>
+
+{% endblock %}
+
+{% block js_content %}
+<script>
+    $("#search_student").on('keyup', function () {
+        $('#search_student_list').empty();
+        $('#search_student_list').empty();
+        $.ajax({
+            'data': { student: $('#search_student').val() },
+            'url': '/search_student/',
+            'type': 'GET',
+            'success': function (res) {
+                if (res.data.length == 0) {
+                    $('#search_student_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-text-teal w3-center">No Result</p>
+                            </div>
+                        </div> <br>`);
+                }
+                for (var i = 0; i < res.data.length; i++) {
+                    $('#search_student_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-small">Studnet Name: ${res.data[i][1]}</p>
+                                <p class="w3-small">Student Username: ${res.data[i][0]}</p>
+                                <p class="w3-small">Student Email: ${res.data[i][2]}</p>
+                                <button class="w3-button w3-teal w3-round" id="addStudentBtn${res.data[i][0]}"
+                                onclick="sendRequestToStudent('${res.data[i][0]}')">Invite</button>
+                            </div>
+                        </div> <br>`);
+
+                }
+            }
+        });
+    });
+
+
+    function sendRequestToStudent(username) {
+        var module_id = '{{module_id}}';
+        $.ajax({
+            'data': { student: username },
+            'url': `/module/${module_id}/add/`,
+            'type': 'GET',
+            'success': function (res) {
+                if (res.status == true) {
+                    $("#addStudentBtn" + username).html(res.msg);
+                } else {
+                    $("#addStudentBtn" + username).html(res.msg);
+                }
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        var students;
+        var desc = '{{description}}';
+
+        $.ajax({
+            'url': '/module/{{module_id}}/members/',
+            'type': 'GET',
+            'success': function (res) {
+                students = res.students;
+                for (var i = 0; i < res.students.length; i++) {
+                    $("#studentlist").append(`<li>${i + 1} : ${res.students[i]}</li>`);
+                }
+            }
+        });
+
+    });
+    function openTabb(TabbName) {
+        var i;
+        var x = document.getElementsByClassName("Tabb");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(TabbName).style.display = "block";
+    }
+
+</script>
 {% endblock %}

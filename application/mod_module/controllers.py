@@ -4,7 +4,7 @@ from werkzeug.security import check_password_hash
 from application.mod_module.models import Module, ClassRoom
 from application.mod_auth.models import User
 from application.mod_auth.controllers import get_user_object, get_fullname
-from application.mod_notification.controllers import set_notification, NotificationType
+from application.mod_notification.controllers import *
 from application import db, app
 import flask_login
 from .forms import *
@@ -55,21 +55,21 @@ def view(module_id):
             editForm = CreateModuleForm(),
             module_id = module_id,
             module_name = m.module_name,
-            module_tutor_id = m.module_tutor_id,
+            module_tutor_id = get_fullname(m.module_tutor_id),
             session = m.session,
             description = m.description,
             module_code = m.module_code,
-            current_user=str(flask_login.current_user)
+            current_user= get_fullname(str(flask_login.current_user))
         )
 
 
-@mod_module.route('/<module_id>/add/', methods=['POST'])
+@mod_module.route('/<module_id>/add/', methods=['GET'])
 @flask_login.login_required
 def add_student(module_id):
     user_making_the_addition = \
         get_user_object(str(flask_login.current_user))
     user_to_be_added = \
-        get_user_object(request.form['username'])
+        get_user_object(request.args['student'])
 
     module = get_module_object(module_id)
 
@@ -78,30 +78,25 @@ def add_student(module_id):
         # module leader cannot add himself to the module
         # since he owns the module
         if module.module_tutor_id == user_to_be_added.username:
-            return 'Error encountered'
+            return jsonify(status= False,
+            msg = "Error, You can not add your self as a student")
 
+       #Check that student isn't already a member of the module
+        if ClassRoom.query.filter_by(module_id=module_id, \
+            member_username=user_to_be_added.username).first() is not None:
+            return jsonify(status= False,
+            msg = "Student is already registered in this Module")
 
-        if user_making_the_addition is user_to_be_added:
-            # When Students joins a class by himself
-            if ClassRoom.query.filter_by(module_id=module_id, username=user_to_be_added.username).first():
-                c = ClassRoom(module.module_id, user_to_be_added.username)
-                db.session.add(c)
-                db.session.commit()
-                return jsonify(status='Success')
-            else:
-                return "This student is already in this class"
-        elif user_making_the_addition.username == module.module_tutor_id:
-            # Tutor is adding student to a classroom
-            # send invite that appears in the notifcation 
-            # section of the student where they can accept 
-
-            # TODO: call Notification system function to create
-            # 'Add module' notification in student's db
-            if set_notification(user_making_the_addition.username, \
-                user_to_be_added.username, NotificationType.JoinModule):
-                return jsonify("Notification will be sent to the student")
-            else:
-                return jsonify("Something Went Wrong")
+        # Tutor is adding student to a classroom
+        # send invite that appears in the notifcation 
+        # section of the student where they can accept 
+        if set_notification(user_making_the_addition.username, \
+            user_to_be_added.username, NOTIFICATION_JOIN_MODULE, module.module_id):
+            return jsonify(status = True,
+            msg = "Notification has be sent to the student")
+        else:
+            return jsonify(status= False,
+            msg = "Something Went Wrong")
 
     else:
         return jsonify(msg='Error encountered')
@@ -112,11 +107,11 @@ def add_student(module_id):
 @flask_login.login_required
 def get_members(module_id):
     m = get_module_object(module_id)
-    c = get_classroom_object(module_id)
-    return jsonify(
-        module_tutor = m.module_tutor_id,
-        others = c
-    )
+    c = ClassRoom.query.filter_by(module_id=module_id)
+    s = []
+    for i in c:
+        s.append(get_fullname(i.member_username))
+    return jsonify(students = s)
 
 
 def get_modules():
@@ -188,6 +183,31 @@ def update(module_id):
         return redirect(f'/module/view/{module_id}/')
 
 
+@mod_module.route('/search_my_module/', methods=['GET'])
+@flask_login.login_required
+def search_my_module():
+    '''
+    User can search for a module by name, tutor's name,
+    module_id.
+    returns: flask.jsonify
+    '''
+    username = str(flask_login.current_user)
+    text = request.args['data'].lower()
+    m = ClassRoom.query.filter_by(member_username=username)
+    s = []
+    # return "olamide"
+    for i in m:
+        # get the module info
+        module = Module.query.filter_by(module_id=i.module_id).first()
+        if (text in (get_fullname(module.module_tutor_id).lower()) or\
+             text in (module.module_id).lower()) or \
+                 (text in (module.module_name).lower()):
+            s.append((module.module_name,
+            get_fullname(module.module_tutor_id),
+            module.module_code,
+            module.module_id
+            ))
+    return jsonify(data = s)
 
 
 

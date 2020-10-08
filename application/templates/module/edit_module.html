@@ -14,40 +14,40 @@
                 <form id="login_form" method="POST" action="/module/{{module_id}}/update/" class="nk-form">
                     {{editForm.csrf_token}}
                     <div class="input-group">
-                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <span class="input-group-addon nk-ic-st-pro">-</span>
                         <div class="nk-int-st">
                             <input type="text" class="form-control" value="Tutor: {{module_tutor_id|capitalize}}" disabled>
                         </div>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <span class="input-group-addon nk-ic-st-pro">-</span>
                         <div class="nk-int-st">
                             <input type="text" class="form-control" value="{{module_id}}" name="module_id" id="module_id" disabled>
                         </div>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <span class="input-group-addon nk-ic-st-pro">-</span>
                         <div class="nk-int-st">
                             <input type="text" class="form-control" id="name" name="name"
                             placeholder="Module Name" value="{{module_name}}" required>
                         </div>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <span class="input-group-addon nk-ic-st-pro">-</span>
                         <div class="nk-int-st">
                             <input type="text" class="form-control" id="session" name="session"
                             placeholder="Module Session" value="{{session}}" required>
                         </div>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <span class="input-group-addon nk-ic-st-pro">-</span>
                         <div class="nk-int-st">
                             <textarea type="text" class="form-control" id="description" name="description"
                             placeholder="Description of the Module Name..." required>{{description}}</textarea>
                         </div>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon nk-ic-st-pro"></span>
+                        <span class="input-group-addon nk-ic-st-pro">-</span>
                         <div class="nk-int-st">
                             <input type="text" class="form-control" id="code" name="code"
                             placeholder="Module Code e.g: MOD123" value="{{module_code}}" required>

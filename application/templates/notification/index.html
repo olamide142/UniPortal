@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+    <div class="container">
+        <div class="breadcomb-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="breadcomb-list">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="breadcomb-wp">
+                                        <div class="breadcomb-icon">
+                                            <i class="notika-icon notika-form"></i>
+                                        </div>
+                                        <div class="breadcomb-ctn">
+                                            <h2>Notifications</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="sale-statistic-inner notika-shadow mg-tb-30" id="notification_list">
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_content %}
+    <script> 
+        $(document).ready(function(){
+            $.ajax({
+            'url': '/notification/get_notifications/',
+            'type': 'GET',
+            'success': function (res) {
+                $("#notification_list").empty();
+                if (res.notifications.length == 0) {
+                    $('#notification_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-text-teal w3-center">No Notification</p>
+                            </div>
+                        </div> <br>`);
+                }
+                for (var i = 0; i < res.notifications.length; i++) {
+                    $('#notification_list').append(res.notifications[i][1]);
+                }
+
+                
+            }
+            });
+        });
+
+
+        function joinModuleNotification(module_id) {
+        $.ajax({
+            'data': { module_id: module_id, action: 'join' },
+            'url': '/module/join_module/',
+            'type': 'GET',
+            'success': function (res) {
+                if (res.msg == "Success") {
+                    $("#join" + module_id).html("Joined Module");
+                } else {
+                    $("#join" + module_id).toggleClass('w3-gray w3-red');
+                    $("#" + module_id).html("Error Occured");
+                }
+            }
+        });
+        
+        
+
+        function deleteNotification(nid) {
+        $.ajax({
+            'data': { nid: nid},
+            'url': '/notification/delete_notification/',
+            'type': 'GET',
+            'success': function (res) {
+                if (res.status == true) {
+                    $("#" + nid).hide();
+                } else {
+                    alert('Something went wrong');
+                }
+            }
+        });
+    }
+    </script>
+
+{% endblock %}

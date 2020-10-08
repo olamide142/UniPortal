@@ -1,7 +1,7 @@
 import pytest
 from application import app, db
 from application.mod_auth.models import User
-from application.tests.test_application import client
+from application.test_setup import client
 from application.mod_module.models import Module, ClassRoom
 
 def test_create_module(client):

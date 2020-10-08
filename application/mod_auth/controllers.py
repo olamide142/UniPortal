@@ -40,7 +40,8 @@ def signup():
     Register a user onto the platform
     returns: flask.jsonify()
     '''
-    form = SignupForm(meta={'csrf': True})
+    
+    form = SignupForm(meta={'csrf': False})
 
     if form.validate_on_submit():
         try:
@@ -134,6 +135,7 @@ def get_user_object(username):
     '''
     return User.query.filter_by(username=username).first()
 
+@app.template_filter('fullname')
 def get_fullname(username):
     u = User.query.filter_by(username=username).first()
     return f'{u.first_name} {u.last_name}'
