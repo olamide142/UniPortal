@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+<div class="container w3-round jumbotron w3-black">
+    <h3><u class="w3-text-teal">Interactive Board</u></h3>
+    {% include 'board/create_board.html' %}
+    <button class="w3-teal w3-right w3-button" data-toggle="modal" 
+    data-target="#createBoard">Create Private Board</button>
+</div>
+
+
+<div class="container w3-padding">
+    <div class="input-group">
+        <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-search w3-text-teal"></i></span>
+        <div class="nk-int-st">
+            <input type="text" class="form-control" id="search_module" name="search_module"
+                placeholder="Search Board by Name">
+        </div>
+    </div>
+</div>
+
+<div class="notika-status-area">
+    <div class="container">
+        <div class="row" id="list_of_modules">
+            {% for board in pb %}
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                    <div class="w3-small">
+                        <p>{{board.board_id|board_info}}</p>
+                        <p class="text-muted">Creator: {{board.username|fullname}}</p>
+                        <p class="text-muted w3-tiny w3-text-teal">ID: {{board.board_id}}</p>
+                        <a href="/board/view/{{board.board_id}}" class="w3-button w3-teal w3-round">View</a>
+                        <!-- <button class="w3-button w3-gray w3-text-white w3-round">Manage</button> -->
+                    </div>
+                </div>
+                <hr>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

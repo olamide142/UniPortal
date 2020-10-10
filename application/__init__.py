@@ -74,6 +74,7 @@ app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {'/file/uploads': app.config['
 '''
     White Board Sockets Controllers
 '''
+from application.mod_whiteboard.controllers import save_draw_info
 def background_thread():
     """Example of how to send server generated events to clients."""
     count = 0
@@ -105,6 +106,7 @@ def join(message):
 @socketio.on('my_room_event', namespace='/theboard')
 def send_room_message(message):
     session['receive_count'] = session.get('receive_count', 0) + 1
+    save_draw_info(message['room'], message['data'])
     emit('my_response',
          {'data': message['data'], 'count': session['receive_count']},
          room=message['room'])
