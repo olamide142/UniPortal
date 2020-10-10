@@ -5,15 +5,25 @@ from application import db, app
 import flask_login
 
 
-mod_whiteboard = Blueprint('mod_whiteboard', __name__, url_prefix='/whiteboard',\
+mod_whiteboard = Blueprint('mod_whiteboard', __name__, url_prefix='/board',\
      template_folder='templates/')
+
 
 @mod_whiteboard.route('/', methods=['GET'])
 @flask_login.login_required
 def index():
     return render_template('whiteboard/index.html')
 
+
+
 @mod_whiteboard.route('/view/<board_id>', methods=['GET'])
 @flask_login.login_required
 def view(board_id):
-    return render_template('whiteboard/the_board.html')
+    return render_template(
+        'whiteboard/the_board.html',
+        board_room = "lams123")
+
+
+
+
+
