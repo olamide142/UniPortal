@@ -69,7 +69,7 @@ class BoardFile():
     def __init__(self, file_name):
         b = Board.query.filter_by(file_name=file_name).first()
         self.file_name = b.file_name
-    
+       
     def read_board_file(self):
         f = open(f'application/mod_whiteboard/boardfile/{self.file_name}', 'r')
         for i in f.readlines():
