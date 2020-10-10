@@ -2,5 +2,106 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 {% include 'dashboard/nav.html' %}
-    <p>Todo Page</p>
+<div class="breadcomb-area">
+    <div class="container">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="breadcomb-list w3-black w3-round">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="breadcomb-wp">
+                            <div class="breadcomb-icon">
+                                <i class="notika-icon notika-file"></i>
+                            </div>
+                            <div class="w3-text-teal">
+                                <h4 class="w3-padding">My To-Do List</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+            <div class="add-todo-list notika-shadow mg-t-30 w3-round w3-text-teal">
+
+                <ul id="todo-li">
+                    {% for todo in todos %}
+                    <li class="w3-small list-group-item w3-border  w3-round w3-border-teal w3-padding w3-card"
+                        id="{{todo.todo_id}}">
+                        <div class="checkbox checkbox-primary">
+                            <label>{{todo.content}}</label>
+                            <button class="w3-right w3-button w3-teal w3-round"
+                                onclick="removeTodo('{{todo.todo_id}}')">Remove</button>
+                        </div>
+                    </li><br>
+                    {% endfor %}
+
+                </ul>
+
+                <hr>
+                <div id="todo-form">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-sm-12 col-xs-12 todo-inputbar">
+                            <div class="form-group todo-flex">
+                                <div class="nk-int-st">
+                                    <input type="text" id="todo-input-text" name="todo-input-text"
+                                        class="form-control " placeholder="Add new todo" required>
+                                </div>
+                                <div class="todo-send">
+                                    <button class="w3-button w3-teal w3-padding w3-round" id="add-todo">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js_content %}
+<script>
+    $("#add-todo").click(function () {
+        $.ajax({
+            'url': '/todo/add/',
+            'method': 'GET',
+            'data': { 'data': $('#todo-input-text').val() },
+            'success': function (res) {
+                if (res.data == true) {
+                    $('#todo-li').append(`
+                        <li class="w3-small list-group-item w3-border  w3-round w3-border-teal w3-padding">
+                            <div class="checkbox checkbox-primary" id="${res.id}">
+                                <label>${$('#todo-input-text').val()}</label>
+                                <button class="w3-right w3-button w3-teal w3-round" onclick="removeTodo('${res.id}')">Remove</button>
+                            </div>
+                        </li><br>`
+                    );
+                }
+            },
+            'error': function (res) {
+                alert("ERROR OCCURED");
+            }
+        });
+    });
+
+    function removeTodo(id) {
+        $.ajax({
+            'url': '/todo/remove/',
+            'method': 'GET',
+            'data': { 'todo_id': id },
+            'success': function (res) {
+                $("#" + id).hide();
+            },
+            'error': function (res) {
+                console.log("ERROR OCCURED");
+            }
+        });
+    }
+
+    function crossOff(id) {
+    }
+</script>
 {% endblock %}
