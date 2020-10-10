@@ -7,50 +7,45 @@
     <title>UniPortal Interactive Board</title>
     <link rel="stylesheet" href="/static/css/w3.css">
     <script src="/static/js/p5.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf-8">
-       </script>
-       <style>
-            #canvas {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-       </style>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+        integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="canvas" style="position: static;" id="canvas"></div>
-    <!-- <div class="w3-display-top w3-margin">
-        <button>OLA</button>
-    </div> -->
+    <div class="w3-display-top w3-margin">
+        <button class="w3-button w3-teal w3-round">Pin Board</button>
+        <button class="w3-button w3-teal w3-round">Share</button>
+        <button class="w3-button w3-teal w3-round w3-right">Delete</button>
+    </div>
 
 
 
     <script>
         var socket;
-         $(document).ready(function() {
+        $(document).ready(function () {
             namespace = '/theboard';
 
             socket = io(namespace);
 
-            socket.on('connect', function() {
-                socket.emit('my_event', {data: 'I\'m connected!'});
+            socket.on('connect', function () {
+                socket.emit('my_event', { data: 'I\'m connected!' });
                 // Join Room after connecting
-                socket.emit('join', {room: '{{board_room}}'});
+                socket.emit('join', { room: '{{board_room}}' });
             });
 
-            socket.on('my_response', function(msg, cb) {
+            socket.on('my_response', function (msg, cb) {
                 if (cb)
                     cb();
-                if(msg.data.length == 5 && msg.data[4] == 'draw'){
-                    line(msg.data[0], msg.data[1], msg.data[2], msg.data[3]);
-                }
+                    // Get draw strokes from websockets
+                    getDrawings(msg.data);
+
             });
 
         });
-    
+
         function setup() {
             createCanvas(1400, 600);
             background(0);
@@ -62,7 +57,13 @@
             stroke(255);
             if (mouseIsPressed === true) {
                 line(mouseX, mouseY, pmouseX, pmouseY);
-                socket.emit('my_room_event', {room: '{{board_room}}', data: [mouseX, mouseY, pmouseX, pmouseY, 'draw']});
+                socket.emit('my_room_event', { room: '{{board_room}}', data: [mouseX, mouseY, pmouseX, pmouseY, 'draw'] });
+            }
+        }
+
+        function getDrawings(data) {
+            if (data.length == 5 && data[4] == 'draw') {
+                line(data[0], data[1], data[2], data[3]);
             }
         }
     </script>

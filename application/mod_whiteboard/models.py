@@ -61,3 +61,16 @@ def gen_random_id():
     for _ in range(10):
         li.append(let[random.randint(0, len(let)-1)])
     return "".join(li)
+
+
+
+class BoardFile():
+
+    def __init__(self, file_name):
+        b = Board.query.filter_by(file_name=file_name).first()
+        self.file_name = b.file_name
+    
+    def read_board_file(self):
+        f = open(f'application/mod_whiteboard/boardfile/{self.file_name}', 'r')
+        for i in f.readlines():
+            yield i
