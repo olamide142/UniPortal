@@ -10,6 +10,7 @@ class Calendar(db.Model):
         
     calendar_id           = db.Column(db.String(10),  nullable=False, primary_key=True)
     calendar_owner_id     = db.Column(db.String(40), nullable=False) # username of the owner if this calendar
+    calendar_owner_id     = db.Column(db.String(40), nullable=False) 
     created_on          = db.Column(db.DateTime, nullable=False)
     
 
@@ -32,6 +33,7 @@ class Event(db.Model):
         
     event_id            = db.Column(db.String(10),  nullable=False, primary_key=True)
     event_creator_id    = db.Column(db.String(40), nullable=False)
+    content             = db.Column(db.Text, nullable=False)
     date_n_time         = db.Column(db.DateTime, nullable=False)
     created_on          = db.Column(db.DateTime, nullable=False)
     
