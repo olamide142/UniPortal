@@ -10,63 +10,40 @@
     <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
+       </script>
+</head>
+
+<body>
+    <div style="position: static;" id="canvas"></div>
+    <!-- <div class="w3-display-top w3-margin">
+        <button>OLA</button>
+    </div> -->
+
+
+
+    <script>
+        var socket;
+         $(document).ready(function() {
             namespace = '/theboard';
 
-            var socket = io(namespace);
+            socket = io(namespace);
 
             socket.on('connect', function() {
                 socket.emit('my_event', {data: 'I\'m connected!'});
                 // Join Room after connecting
                 socket.emit('join', {room: '{{board_room}}'});
-                socket.emit('my_room_event', {room: '{{board_room}}', data: 'testting'});
             });
 
             socket.on('my_response', function(msg, cb) {
                 if (cb)
                     cb();
-                console.log(msg);
+                if(msg.data.length == 5 && msg.data[4] == 'draw'){
+                    line(msg.data[0], msg.data[1], msg.data[2], msg.data[3]);
+                }
             });
 
-            $('form#emit').submit(function(event) {
-                socket.emit('my_event', {data: $('#emit_data').val()});
-                return false;
-            });
-            // $('form#broadcast').submit(function(event) {
-            //     socket.emit('my_broadcast_event', {data: $('#broadcast_data').val()});
-            //     return false;
-            // });
-            // $('form#join').submit(function(event) {
-            //     socket.emit('join', {room: '{{board_room}}'});
-            //     return false;
-            // });
-            // $('form#leave').submit(function(event) {
-            //     socket.emit('leave', {room: $('#leave_room').val()});
-            //     return false;
-            // });
-            // $('form#send_room').submit(function(event) {
-            //     socket.emit('my_room_event', {room: $('#room_name').val(), data: $('#room_data').val()});
-            //     return false;
-            // });
-            $('form#close').submit(function(event) {
-                socket.emit('close_room', {room: $('#close_room').val()});
-                return false;
-            });
-            $('form#disconnect').submit(function(event) {
-                socket.emit('disconnect_request');
-                return false;
-            });
         });
-    </script>
-</head>
-
-<body>
-    <div style="position: static;" id="canvas"></div>
-
-
-
-
-    <script>
+    
         function setup() {
             createCanvas(1400, 600);
             background(0);
@@ -78,6 +55,7 @@
             stroke(255);
             if (mouseIsPressed === true) {
                 line(mouseX, mouseY, pmouseX, pmouseY);
+                socket.emit('my_room_event', {room: '{{board_room}}', data: [mouseX, mouseY, pmouseX, pmouseY, 'draw']});
             }
         }
     </script>
