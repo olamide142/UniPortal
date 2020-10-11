@@ -7,6 +7,7 @@ from application.mod_whiteboard.models import *
 from application.mod_auth.controllers import get_user_object, get_fullname
 from application.mod_notification.controllers import *
 from application.mod_calendar.forms import CreateEventForm
+from application.mod_calendar.models import Event
 from application import db, app
 import flask_login
 from .forms import *
@@ -52,19 +53,28 @@ def create():
 def view(module_id):
     m = Module.query.filter_by(module_id=module_id).first()
 
+    # get the next event on the calendar
+    events = Event.query.filter_by(module_id=module_id)
+    next_event = events[0]
+    for i in events:
+        if next_event.date_n_time > i.date_n_time:
+            next_event = i
+
     if m is None:
         return redirect(url_for('not_found'))
     else:
         return render_template('module/index.html',
             editForm = CreateModuleForm(),
-            createEventForm = CreateEventForm(),
-            module_id       = module_id,
-            module_name     = m.module_name,
-            module_tutor_id = get_fullname(m.module_tutor_id),
-            session         = m.session,
-            description     = m.description,
-            module_code     = m.module_code,
-            current_user    = get_fullname(str(flask_login.current_user))
+            createEventForm     = CreateEventForm(),
+            module_id           = module_id,
+            module_name         = m.module_name,
+            module_tutor_id     = get_fullname(m.module_tutor_id),
+            session             = m.session,
+            description         = m.description,
+            module_code         = m.module_code,
+            current_user        = get_fullname(str(flask_login.current_user)),
+            next_event          = next_event.date_n_time,
+            next_event_title    = next_event.title
         )
 
 
