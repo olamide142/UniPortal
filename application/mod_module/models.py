@@ -27,8 +27,10 @@ class Module(db.Model):
         self.module_code        = module_code
         self.created_on         = datetime.utcnow()
 
+
     def __repr__(self):
-        return '<Module %r>' % (self.module_id)   
+        return f'<Module {self.module_id}>'
+
 
     def gen_module_id(self):
         let = 'abcdefghijklmnopqrstuvwxyz1234567890'
@@ -48,8 +50,8 @@ class ClassRoom(db.Model):
     module_id           = db.Column(db.String(10), nullable=True)
     member_username     = db.Column(db.String(15), nullable=True)
     created_on          = db.Column(db.DateTime, nullable=False)
-    
 
+    
     def __init__(self, module_id, member_username):
 
         self.id                 = str(uuid.uuid4())

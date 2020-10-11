@@ -161,8 +161,39 @@
 
     });
 
-    $('#evoCalendar').evoCalendar({
-        calendarEvents: myEvents
+
+    $(document).ready(function () {
+        var myEvents = [];
+        $.ajax({
+            'url': '/calendar/view/',
+            'method': 'GET',
+            'data': { 'section': 'module', 'module_id': '{{module_id}}' },
+            'success': function (res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    myEvents.push(
+                        {
+                            id: res.data[i][0],
+                            name: res.data[i][1],
+                            date: res.data[i][2],
+                            type: 'event',
+                        });
+                }
+
+                $('#evoCalendar').evoCalendar({
+                    calendarEvents: myEvents,
+                    sidebarToggler: true,
+                    sidebarDisplayDefault: true,
+                    eventListToggler: true,
+                    eventDisplayDefault: true,
+                    onSelectDate: function () {
+                        console.log('onSelectDate!');
+                    }
+                });
+            },
+            'error': function (res) {
+                // alert("Error Occurred");
+            }
+        })
     });
 
 </script>

@@ -52,7 +52,7 @@ class PinBoard(db.Model):
         self.created_on         = datetime.utcnow()
 
     def __repr__(self):
-        return f'<PinBoard {self.pinboard_id} - {self.usernmae}>'
+        return f'<PinBoard {self.pinboard_id} - {self.username}>'
 
 
 def gen_random_id():

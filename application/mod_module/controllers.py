@@ -3,8 +3,10 @@ from flask import Blueprint, request, render_template, flash, \
 from werkzeug.security import check_password_hash
 from application.mod_module.models import Module, ClassRoom
 from application.mod_auth.models import User
+from application.mod_whiteboard.models import *
 from application.mod_auth.controllers import get_user_object, get_fullname
 from application.mod_notification.controllers import *
+from application.mod_calendar.forms import CreateEventForm
 from application import db, app
 import flask_login
 from .forms import *
@@ -29,7 +31,9 @@ def create():
             form.description.data,
             form.code.data)
             c = ClassRoom(m.module_id, username)
+            b = Board(username, form.name.data)
             db.session.add(c)
+            db.session.add(b)
             db.session.add(m)
             db.session.commit()
             flash("Module Created Successfully")
@@ -40,7 +44,7 @@ def create():
 
     except Exception as ex:
         flash("Something went wrong, please try again")
-        return redirect(url_for('mod_module.index'))
+        return redirect(url_for('mod_main.index'))
 
 
 @mod_module.route('/view/<module_id>/', methods=['GET'])
@@ -53,13 +57,14 @@ def view(module_id):
     else:
         return render_template('module/index.html',
             editForm = CreateModuleForm(),
-            module_id = module_id,
-            module_name = m.module_name,
+            createEventForm = CreateEventForm(),
+            module_id       = module_id,
+            module_name     = m.module_name,
             module_tutor_id = get_fullname(m.module_tutor_id),
-            session = m.session,
-            description = m.description,
-            module_code = m.module_code,
-            current_user= get_fullname(str(flask_login.current_user))
+            session         = m.session,
+            description     = m.description,
+            module_code     = m.module_code,
+            current_user    = get_fullname(str(flask_login.current_user))
         )
 
 
@@ -155,6 +160,7 @@ def join_module():
                 return jsonify(msg="Error Occured")
         except Exception:
             return jsonify(msg="Error Occured")
+
 
 
 

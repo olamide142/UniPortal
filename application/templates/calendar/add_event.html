@@ -5,7 +5,8 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <form class="modal-body" action="" method="POST">
+            <form class="modal-body" action="{{url_for('mod_calendar.create_event')}}" method="POST">
+                {{createEventForm.csrf_token}}
                 <h1 class="w3-text-teal">Add Event</h1>
                 <p class="w3-small w3-justify">
                     Add an Event to this calendar
@@ -13,21 +14,22 @@
                 <div class="input-group">
                     <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-calendar"></i></span>
                     <div class="nk-int-st">
-                        <input type="date" id="event_date" class="form-control" required>
+                        <input type="date" name="date" class="form-control" required>
                     </div>
                 </div><br>
                 <div class="input-group">
                     <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-clock-o"></i></span>
                     <div class="nk-int-st">
-                        <input type="time" id="event_time" class="form-control" required>
+                        <input type="time" name="time" class="form-control" required>
                     </div>
                 </div><br>
                 <div class="input-group">
                     <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-file-text-o"></i></span>
                     <div class="nk-int-st">
-                        <input type="text" id="event-title" class="form-control" placeholder="Event Title" required>
+                        <input type="text" name="title" class="form-control" placeholder="Event Title" required>
                     </div>
                 </div>
+                <input type="hidden" name="module_id" value="{{module_id}}">
                 <hr>
                 <input class="w3-button w3-teal w3-round" type="submit" value="Submit">
             </form>
