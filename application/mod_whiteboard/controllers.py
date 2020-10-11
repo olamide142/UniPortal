@@ -21,7 +21,8 @@ def index():
     return render_template(
         'board/index.html',
         form = form,
-        pb = pb)
+        pb = pb,
+        current_user = str(flask_login.current_user))
 
 
 
@@ -32,7 +33,8 @@ def view(board_id):
     if Board.query.filter_by(board_id=board_id).first() is not None:
         return render_template(
             'board/the_board.html',
-            board_room = board_id)
+            board_room = board_id,
+            current_user = str(flask_login.current_user))
     else:
         return abort(404)
 

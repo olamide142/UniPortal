@@ -93,7 +93,6 @@ def test_connect():
             thread = socketio.start_background_task(background_thread)
     emit('my_response', {'data': 'Connected', 'count': 0})
 
-
 @socketio.on('join', namespace='/theboard')
 def join(message):
     join_room(message['room'])
@@ -101,7 +100,6 @@ def join(message):
     emit('my_response',
          {'data': 'In rooms: ' + ', '.join(rooms()),
           'count': session['receive_count']})
-
 
 @socketio.on('my_room_event', namespace='/theboard')
 def send_room_message(message):

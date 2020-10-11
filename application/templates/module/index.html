@@ -4,7 +4,7 @@
 {% include 'dashboard/nav.html' %}
 {% include 'module/edit_module.html' %}
 {% include 'module/add_student.html' %}
-<div class="container w3-round jumbotron w3-black w3-padding">
+<div class="container w3-round jumbotron w3-pale-green w3-padding">
 
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
     <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
@@ -26,24 +26,24 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="widget-tabs-int tab-ctm-wp mg-t-30">
+            <div class="widget-tabs-int tab-ctm-wp mg-t-30 w3-pale-green w3-round">
                 <div class="tab-hd">
                     <h2>Hello, {{current_user}}</h2>
-                    <p>Upcoming Event: <code class="w3-teal">next session : {{next_event}} | {{next_event_title}}</code></p>
+                    <p><code class="w3-teal">next session : {{next_event}} | {{next_event_title}}</code></p>
                 </div>
                 <div class="widget-tabs-list">
                     <!-- Tab Nav -->
-                    <div class="w3-center w3-black w3-round">
-                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
-                            onclick="openTabb('Description')">Description</button>
-                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
-                            onclick="openTabb('Community')">Community</button>
-                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
-                            onclick="openTabb('Materials')">Materials</button>
-                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
-                            onclick="openTabb('Assessment')">Assessment</button>
-                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
-                            onclick="openTabb('Calendar')">Module Calendar</button>
+                    <div class="w3-center w3-pale-green w3-round">
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Description')"><u>Description</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Community')"><u>Community</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Materials')"><u>Materials</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Assessment')"><u>Assessment</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Calendar')"><u>Module Calendar</u></button>
                     </div>
                     <!-- Tab Content -->
                     <div class="tab-content tab-custom-st tab-ctn-left">

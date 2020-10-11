@@ -72,7 +72,7 @@ def view(module_id):
             session             = m.session,
             description         = m.description,
             module_code         = m.module_code,
-            current_user        = get_fullname(str(flask_login.current_user)),
+            current_user        = str(flask_login.current_user),
             next_event          = next_event.date_n_time,
             next_event_title    = next_event.title
         )
