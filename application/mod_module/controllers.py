@@ -260,7 +260,7 @@ def get_module_materials(module_id):
         sub_mod_info['description'] =  i.description
 
         # Get Materials for this sub module
-        mm = ModuleMaterial.query.filter_by(sub_id=i.sub_id)
+        mm = ModuleMaterial.query.filter_by(sub_id=sub_id)
         sub_mod_info['files'] = []
         for j in mm:
             sub_mod_info['files'].append(get_file_name(j.file_id))
