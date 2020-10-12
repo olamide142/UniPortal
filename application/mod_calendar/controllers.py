@@ -50,18 +50,4 @@ def view_calendar():
             data.append((i.event_id, i.title, i.date_n_time))
         return jsonify(data=data)
     #view personal calendar
-    
-    pass
-
-
-def add_event_to_calendar():
-    pass
-
-def remove_event_from_calendar():
-    pass
-
-
-def create_event_under_module():
-    pass
-
-
+    # pass 

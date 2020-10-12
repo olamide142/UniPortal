@@ -8,7 +8,8 @@
 
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
     <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
-    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span>
+    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span><br>
+    <span class="text-muted w3-small">Module Code: {{module_id}}</span>
     <br>
     <div class="">
         {% if current_user == module_tutor_id %}
@@ -28,7 +29,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="widget-tabs-int tab-ctm-wp mg-t-30 w3-pale-green w3-round">
                 <div class="tab-hd">
-                    <h2>Hello, {{current_user}}</h2>
+                    <h2>Hello, {{current_user|fullname}}</h2>
                     <p><code class="w3-teal">next session : {{next_event}} | {{next_event_title}}</code></p>
                 </div>
                 <div class="widget-tabs-list">
@@ -61,8 +62,7 @@
 
                         <div id="Materials" class="Tabb" style="display:none">
                             <h2>Materials</h2>
-                            <hr>
-                            <p>abc</p>
+                            {% include 'module/materials.html' %}
                         </div>
                         <div id="Assessment" class="Tabb" style="display:none">
                             <h2>Assessment</h2>
