@@ -33,7 +33,7 @@ def create_event():
             dateNtime)
         db.session.add(e)
         db.session.commit()
-
+        flash('Event Created Successfully')
         return redirect(f'/module/view/{form.module_id.data}')
 
 

@@ -7,7 +7,8 @@ from application.mod_whiteboard.models import *
 from application.mod_auth.controllers import get_user_object, get_fullname
 from application.mod_notification.controllers import *
 from application.mod_calendar.forms import CreateEventForm
-from application.mod_calendar.models import Event
+from application.mod_calendar.models import *
+from application.mod_file.controllers import *
 from application.mod_file.controllers import get_file_name
 from application import db, app
 import flask_login
@@ -48,6 +49,7 @@ def create():
         return redirect(url_for('mod_main.index'))
 
 
+
 @mod_module.route('/view/<module_id>/', methods=['GET'])
 @flask_login.login_required
 def view(module_id):
@@ -55,10 +57,13 @@ def view(module_id):
 
     # get the next event on the calendar
     events = Event.query.filter_by(module_id=module_id)
-    next_event = events[0]
-    for i in events:
-        if next_event.date_n_time > i.date_n_time:
-            next_event = i
+    try:
+        next_event = events[0]
+        for i in events:
+            if next_event.date_n_time > i.date_n_time:
+                next_event = i
+    except IndexError:
+        next_event = NoEvent
 
     if m is None:
         return redirect(url_for('not_found'))
@@ -77,6 +82,7 @@ def view(module_id):
             next_event          = next_event.date_n_time,
             next_event_title    = next_event.title
         )
+
 
 
 @mod_module.route('/<module_id>/add/', methods=['GET'])
@@ -130,6 +136,7 @@ def get_members(module_id):
     return jsonify(students = s)
 
 
+
 def get_modules():
     # get modules this user is registered in
     c = ClassRoom.query.filter_by(\
@@ -140,6 +147,7 @@ def get_modules():
     for i in c:
         modules.append(Module.query.filter_by(module_id=i.module_id).first())
     return modules
+
 
 
 @mod_module.route('/join_module/', methods=['GET'])
@@ -260,7 +268,8 @@ def get_module_materials(module_id):
         sub_mod_info['description'] =  i.description
 
         # Get Materials for this sub module
-        mm = ModuleMaterial.query.filter_by(sub_id=sub_id)
+        mm = ModuleMaterial.query.filter_by(sub_id=i.sub_id)
+        sub_mod_info['sub_id'] =  i.sub_id
         sub_mod_info['files'] = []
         for j in mm:
             sub_mod_info['files'].append(get_file_name(j.file_id))
@@ -271,7 +280,18 @@ def get_module_materials(module_id):
 
 
 
-
+@mod_module.route('/<module_id>/upload_material/', methods=['GET'])
+@flask_login.login_required
+def upload_material(module_id):
+    try:
+        status, file_id = upload_file(request.files['file'])
+        if status:
+            m = ModuleMaterial(file_id, request.args['sub_id'])
+            db.session.add(m)
+            db.session.commit()
+        return redirect(f'/module/view/{module_id}/')
+    except Exception:
+        return redirect(f'/module/view/{module_id}/')
 
 
 

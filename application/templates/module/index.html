@@ -147,6 +147,33 @@
         });
     }
 
+
+    function openMaterialModal(id) {
+        // Get Materials for this module
+        $.ajax({
+            'url': '/module/{{module_id}}/get_module_materials/',
+            'method': 'GET',
+            'success': function (res) {
+                if (res.data.length == 0) {
+                    $('#materials_list').append(`
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"><div class="wb-traffic-inner
+                    notika-shadow sm-res-mg-t-30 tb-res-mg-t-30"><div class="website-traffic-ctn">
+                    <p>No Material Available</p></div></div></div>`);}
+                for (var i = 0; i < res.data.length; i++) {
+                    $('#materials_list').append(`<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                        <div class="website-traffic-ctn w3-code"><h2>
+                        <u onclick=openMaterialModal('${res.data[i].sub_id}') style="cursor: pointer;">
+                        ${res.data[i].sub_name}</u></h2></div></div></div><hr>`);
+                }
+            },
+            'error': function (res) {
+                alert("Error Occurred");
+            }
+        });
+    }
+
+
     $(document).ready(function () {
         $.ajax({
             'url': '/module/{{module_id}}/members/',
@@ -163,6 +190,7 @@
 
 
     $(document).ready(function () {
+        // Get events in this module's calendar
         var myEvents = [];
         $.ajax({
             'url': '/calendar/view/',
@@ -193,7 +221,12 @@
             'error': function (res) {
                 // alert("Error Occurred");
             }
-        })
+        });
+
+
+
+
+
     });
 
 </script>

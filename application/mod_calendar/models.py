@@ -34,3 +34,16 @@ def gen_random_id():
     for _ in range(7):
         li.append(let[random.randint(0, len(let)-1)])
     return "".join(li)
+
+
+
+class NoEvent():
+        
+    event_id            = None
+    creator_id          = None
+    module_id           = None
+    title               = None
+    date_n_time         = None
+    created_on          = None
+    
+

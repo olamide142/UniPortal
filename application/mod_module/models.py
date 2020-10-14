@@ -79,7 +79,6 @@ class ModuleMaterial(db.Model):
     def __init__(self, file_id, sub_id):
 
         self.material_id        = gen_module_id()
-        self.module_id          = module_id
         self.sub_id             = sub_id
         self.file_id            = file_id
         self.created_on         = datetime.utcnow()

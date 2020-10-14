@@ -35,10 +35,8 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-@mod_file.route('/upload/', methods=['POST'])
-@flask_login.login_required
-def upload_file():
-    file = request.files['file']
+def upload_file(file):
+    file = file
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filename = f'{gen_random_id().upper()}{file.filename}'
@@ -50,10 +48,10 @@ def upload_file():
         db.session.add(f)
         db.session.commit()
         flash("File Uploaded Successfully")
-        return redirect(url_for('mod_file.index'))
+        return True, f.file_id
     else:
-        flash("File upload Failed")
-        return redirect(url_for('mod_file.index'))
+        flash("File Upload Failed")
+        return False, None
 
 
 
