@@ -148,6 +148,9 @@ def get_modules():
         modules.append(Module.query.filter_by(module_id=i.module_id).first())
     return modules
 
+def get_quotes():
+    return 'sample quote'
+
 
 
 @mod_module.route('/join_module/', methods=['GET'])
