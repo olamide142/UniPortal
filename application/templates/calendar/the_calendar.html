@@ -1,0 +1,34 @@
+{% if current_user == module_tutor_id %}
+	<button  data-toggle="modal" data-target="#addEventToModule" 
+	class="w3-teal w3-button w3-round">Add Event</button><hr>
+{% endif %}
+<div class="w3-small" id="evoCalendar"></div>
+
+<script>
+	myEvents = [
+		{
+			id: "required-id-1",
+			name: "New Yeawwr",
+			date: "Wed Oct 01 2020 00:00:00 GMT-0800 (Pacific Standard Time)",
+			type: "holiday",
+		},
+		{
+			id: "required-id-2",
+			name: "Valentine's Day",
+			date: "Fri Oct 14 2020 00:00:00 GMT-0800 (Pacific Standard Time)",
+			type: "holiday",
+			color: "#222"
+		},
+		{
+			id: "required-id-3",
+			name: "Custom Date",
+			badge: "08/03 - 08/05",
+			date: ["August/03/2020", "August/05/2020"],
+			description: "Description here",
+			type: "event",
+		},
+		// more events here
+	]
+
+
+</script>

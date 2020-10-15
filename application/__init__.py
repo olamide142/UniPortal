@@ -31,6 +31,7 @@ from application.mod_module.controllers import mod_module as module
 from application.mod_notification.controllers import mod_notification as notification_module
 from application.mod_calendar.controllers import mod_calendar as calendar_module
 from application.mod_todo.controllers import mod_todo as todo_module
+from application.mod_whiteboard.controllers import mod_whiteboard as whiteboard_module
 
 
 # Register blueprint(s)
@@ -41,6 +42,7 @@ app.register_blueprint(module)
 app.register_blueprint(notification_module)
 app.register_blueprint(calendar_module)
 app.register_blueprint(todo_module)
+app.register_blueprint(whiteboard_module)
 # app.register_blueprint(xyz_module)
 # ..
 

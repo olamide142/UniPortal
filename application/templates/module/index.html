@@ -5,45 +5,76 @@
 {% include 'module/edit_module.html' %}
 {% include 'module/add_student.html' %}
 <div class="container w3-round jumbotron w3-black w3-padding">
-    {% if current_user == module_tutor_id %}
-    <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal" data-target="#addStudent">Add
-        Student</button>
-    {% endif  %}
+
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
-    <span class="text-muted w3-small">Module Description: {{description}}</span><br>
-    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span><br>
-    <span class="text-muted w3-small">Module Code: {{module_code}}</span>
+    <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
+    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span>
     <br>
     <div class="">
         {% if current_user == module_tutor_id %}
-        <button class="w3-teal w3-button w3-round w3-small w3-right" data-toggle="modal"
-            data-target="#editModule">Edit</button>
+        <div class="btn-group notika-group-btn w3-right w3-small">
+            <br>
+            <button class="w3-button w3-teal w3-round btn-default notika-gp-default" data-toggle="modal"
+                data-target="#editModule">Edit</button>
+            <button id="decline_module_btn" data-toggle="modal" class="w3-button w3-teal w3-round 
+                btn-default notika-gp-default" data-target="#addStudent">Add Student</button></button>
+        </div>
         {% endif %}
     </div>
 </div>
 
-<div class="breadcomb-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="breadcomb-list">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <div class="breadcomb-wp">
-                                <div class="breadcomb-icon">
-                                    <i class="notika-icon notika-app"></i>
-                                </div>
-                                <div class="breadcomb-ctn">
-                                    <h2>Dialogs</h2>
-                                    <p>Welcome to Notika <span class="bread-ntd">Admin Template</span></p>
-                                </div>
-                            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="widget-tabs-int tab-ctm-wp mg-t-30">
+                <div class="tab-hd">
+                    <h2>Hello, {{current_user}}</h2>
+                    <p>Upcoming Event: <code class="w3-teal">session : 5th of May,2020 | 3:00 pm - 6:00 pm </code></p>
+                </div>
+                <div class="widget-tabs-list">
+                    <!-- Tab Nav -->
+                    <div class="w3-center w3-black w3-round">
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
+                            onclick="openTabb('Description')">Description</button>
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
+                            onclick="openTabb('Community')">Community</button>
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
+                            onclick="openTabb('Materials')">Materials</button>
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
+                            onclick="openTabb('Assessment')">Assessment</button>
+                        <button class="w3-bar-item w3-black w3-text-teal w3-button"
+                            onclick="openTabb('Calendar')">Module Calendar</button>
+                    </div>
+                    <!-- Tab Content -->
+                    <div class="tab-content tab-custom-st tab-ctn-left">
+                        <div id="Description" class="Tabb">
+                            <h2>Description</h2>
+                            <hr>
+                            <p>{{description}}</p>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
-                            <div class="breadcomb-report">
-                                <button data-toggle="tooltip" data-placement="left" title="Download Report"
-                                    class="btn"><i class="notika-icon notika-sent"></i></button>
-                            </div>
+
+                        <div id="Community" class="Tabb" style="display:none">
+                            <h2>Community</h2>
+                            <hr>
+                            {% include 'module/community.html' %}
+                        </div>
+
+                        <div id="Materials" class="Tabb" style="display:none">
+                            <h2>Materials</h2>
+                            <hr>
+                            <p>abc</p>
+                        </div>
+                        <div id="Assessment" class="Tabb" style="display:none">
+                            <h2>Assessment</h2>
+                            <hr>
+                            <p>123</p>
+                        </div>
+
+                        <div id="Calendar" class="Tabb" style="display:none">
+                            <h2>Module Calendar</h2>
+                            <hr>
+                            {% include 'calendar/add_event.html' %}
+                            {% include 'calendar/the_calendar.html' %}
                         </div>
                     </div>
                 </div>
@@ -51,10 +82,22 @@
         </div>
     </div>
 </div>
+</div>
+
 {% endblock %}
 
 {% block js_content %}
 <script>
+
+    function openTabb(TabbName) {
+        var i;
+        var x = document.getElementsByClassName("Tabb");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(TabbName).style.display = "block";
+    }
+
     $("#search_student").on('keyup', function () {
         $('#search_student_list').empty();
         $('#search_student_list').empty();
@@ -88,7 +131,6 @@
         });
     });
 
-
     function sendRequestToStudent(username) {
         var module_id = '{{module_id}}';
         $.ajax({
@@ -98,11 +140,30 @@
             'success': function (res) {
                 if (res.status == true) {
                     $("#addStudentBtn" + username).html(res.msg);
-                }else{
+                } else {
                     $("#addStudentBtn" + username).html(res.msg);
                 }
             }
         });
     }
+
+    $(document).ready(function () {
+        $.ajax({
+            'url': '/module/{{module_id}}/members/',
+            'type': 'GET',
+            'success': function (res) {
+                students = res.students;
+                for (var i = 0; i < res.students.length; i++) {
+                    $("#studentlist").append(`<li>${i + 1} : ${res.students[i]}</li>`);
+                }
+            }
+        });
+
+    });
+
+    $('#evoCalendar').evoCalendar({
+        calendarEvents: myEvents
+    });
+
 </script>
 {% endblock %}
