@@ -55,7 +55,7 @@ class ClassRoom(db.Model):
     
     def __init__(self, module_id, member_username):
 
-        self.id                 = str(uuid.uuid4())
+        self.id                 = gen_module_id()
         self.module_id          = module_id
         self.member_username    = member_username
         self.created_on         = datetime.utcnow()
@@ -77,7 +77,7 @@ class ModuleMaterial(db.Model):
 
     
     def __init__(self, file_id, sub_id):
-
+ 
         self.material_id        = gen_module_id()
         self.sub_id             = sub_id
         self.file_id            = file_id

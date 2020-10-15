@@ -9,7 +9,7 @@ from application.mod_notification.controllers import *
 from application.mod_calendar.forms import CreateEventForm
 from application.mod_calendar.models import *
 from application.mod_file.controllers import *
-from application.mod_file.controllers import get_file_name
+from application.mod_file.forms import FileForm
 from application import db, app
 import flask_login
 from .forms import *
@@ -236,7 +236,6 @@ def search_my_module():
 
 
 
-
 @mod_module.route('/<module_id>/create_subtopic/', methods=['POST'])
 @flask_login.login_required
 def create_subtopic(module_id):
@@ -253,10 +252,9 @@ def create_subtopic(module_id):
 
 
 
-
 @mod_module.route('/<module_id>/get_module_materials/', methods=['GET'])
 @flask_login.login_required
-def get_module_materials(module_id):
+def get_module_subs(module_id):
     # Get all Module_sub
     ms = ModuleSub.query.filter_by(\
         module_id=module_id)
@@ -266,13 +264,13 @@ def get_module_materials(module_id):
         sub_mod_info = {}
         sub_mod_info['sub_name'] =  i.sub_name
         sub_mod_info['description'] =  i.description
-
-        # Get Materials for this sub module
-        mm = ModuleMaterial.query.filter_by(sub_id=i.sub_id)
         sub_mod_info['sub_id'] =  i.sub_id
-        sub_mod_info['files'] = []
-        for j in mm:
-            sub_mod_info['files'].append(get_file_name(j.file_id))
+
+        # # Get Materials for this sub module
+        # mm = ModuleMaterial.query.filter_by(sub_id=i.sub_id)
+        # sub_mod_info['files'] = []
+        # for j in mm:
+        #     sub_mod_info['files'].append(get_file_name(j.file_id))
 
         data.append(sub_mod_info)
     return jsonify(data=data)
@@ -280,23 +278,48 @@ def get_module_materials(module_id):
 
 
 
-@mod_module.route('/<module_id>/upload_material/', methods=['GET'])
+
+@mod_module.route('/<module_id>/sub/<sub_id>/', methods=['GET'])
 @flask_login.login_required
-def upload_material(module_id):
-    try:
-        status, file_id = upload_file(request.files['file'])
+def get_module_sub_materials(module_id, sub_id):
+    moduleSub = ModuleSub.query.filter_by(\
+        module_id=module_id, sub_id=sub_id).first()
+    
+    mm = ModuleMaterial.query.filter_by(sub_id=sub_id)
+    files = []
+    for j in mm:
+        files.append(get_file_name(j.file_id))
+    return render_template(
+        'module/sub.html',
+        fileForm = FileForm(),
+        moduleSub = moduleSub,
+        files = files,
+        module = Module.query.filter_by(module_id=module_id).first(),
+        sub_id = sub_id,
+        current_user = str(flask_login.current_user))
+
+
+
+
+@mod_module.route('/<module_id>/sub/<sub_id>/upload_material/', methods=['POST'])
+@flask_login.login_required
+def upload_material(module_id, sub_id):
+        file = request.files['file']
+        status, file_id = upload_file(file)
         if status:
-            m = ModuleMaterial(file_id, request.args['sub_id'])
+            m = ModuleMaterial(file_id, sub_id)
             db.session.add(m)
             db.session.commit()
-        return redirect(f'/module/view/{module_id}/')
-    except Exception:
-        return redirect(f'/module/view/{module_id}/')
+        return redirect(f'/module/{module_id}/sub/{sub_id}/')
+    # try:
+    # except Exception:
+        # return redirect(f'/module/{module_id}/sub/{sub_id}/')
 
 
 
 def get_module_object(module_id):
     return Module.query.filter_by(module_id=module_id).first()
+
 
 
 def get_classroom_object(module_id):

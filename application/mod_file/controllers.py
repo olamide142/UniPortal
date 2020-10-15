@@ -35,6 +35,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
+
 def upload_file(file):
     file = file
     if file and allowed_file(file.filename):
@@ -71,5 +72,5 @@ def get_file_type(filename):
 def get_file_name(file_id):
     f = FileSystem.query.filter_by(\
         file_id=file_id).first()
-    name = f.split('.')
-    return str(name[0][7:]) 
+    name = f.file_name.split('.')
+    return str(name[0][7:]), name[-1]

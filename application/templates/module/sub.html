@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+<div class="container w3-round jumbotron w3-pale-green">
+    <h3><u class="w3-text-teal">{{moduleSub.sub_name}}</u></h3>
+    <button class="w3-right w3-round w3-teal w3-button" data-toggle="modal" data-target="#joinModule">Edit</button>
+</div>
+
+
+
+<div class="container w3-padding">
+    <p><u>Description:</u></p>
+    <span class="text-muted w3-small w3-justify ">{{moduleSub.description}}</span>
+    <hr>
+
+    {% if current_user|string == module.module_tutor_id %}
+    <div class="input-group">
+        <form action="/module/{{module.module_id}}/sub/{{sub_id}}/upload_material/"
+         method="POST" enctype="multipart/form-data">
+            {{fileForm.csrf_token}}
+            <div class="w3-border w3-round w3-pale-green">
+                <input type="file" name="file" placeholder="File Upload">
+            </div>
+            <input type="submit" class="w3-button w3-small w3-margin w3-teal w3-round" value="Upload">
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+<div class="container w3-pale-green">
+    {% for file in files %}
+    
+        {{file}} <br>
+
+    {% endfor %}
+</div>
+{% endblock %}
+{% block js_content %}
+
+{% endblock %}
