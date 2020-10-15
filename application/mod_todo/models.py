@@ -1,7 +1,8 @@
-import uuid
-import random
 from application import db 
 from datetime import datetime
+from application.mod_whiteboard.models import gen_random_id
+
+
 
 # Define a Todo model
 class Todo(db.Model):
@@ -15,13 +16,13 @@ class Todo(db.Model):
     created_on          = db.Column(db.DateTime, nullable=False)
     
 
-    def __init__(self, owner_id, content, status):
+    def __init__(self, owner_id, content):
 
-        self.todo_id            = str(uuid.uuid4())
+        self.todo_id            = gen_random_id()
         self.owner_id           = owner_id
         self.content            = content  
-        self.status             = status
+        self.status             = ""
         self.created_on         = datetime.utcnow()
 
     def __repr__(self):
-        return '<Todo %r>' % (self.todo_id)
+        return f'<Todo {self.todo_id}>'

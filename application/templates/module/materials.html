@@ -1,0 +1,10 @@
+{% include 'module/add_topic.html' %}
+
+{% if current_user == module_tutor_id %}
+<button class="w3-button w3-teal w3-round" data-toggle="modal" data-target="#addTopic">Add Topic</button>
+<hr>
+{% endif %}
+
+<div class="container" id="materials_list">
+    
+</div>

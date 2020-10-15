@@ -68,7 +68,7 @@ def delete_notification():
         db.session.commit()
         return jsonify(status=True)
     except Exception:
-        return False
+        return jsonify(status=False)
     
 
 
@@ -82,8 +82,6 @@ def set_notification(sender, receiver, notification_type, module_id=None):
         )
         n.content = set_content(sender, notification_type,
             {'module_id':module_id, 'notification':n})
-        for _ in range(100):
-            print(sender, receiver, notification_type, module_id)
         db.session.add(n)
         db.session.commit()
         return True
