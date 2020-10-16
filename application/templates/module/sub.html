@@ -42,7 +42,7 @@
 
         {% if module.module_tutor_id == current_user%}
         <button class="w3-button w3-border w3-round w3-small" 
-        onclick="deleteMaterial('{{ [file[0], file[1] , '.' , file[2]] | join }}')">Delete</button>
+        onclick="deleteMaterial('{{ [file[0], file[1] , '.' , file[2]] | join }}', '{{file[0]}}')">Delete</button>
         {% endif %}
 
     </div>
@@ -54,7 +54,7 @@
 
 {% block js_content %}
 <script>
-    function deleteMaterial(filename) {
+    function deleteMaterial(filename, id) {
         $.ajax({
             'url': '/module/{{module.module_id}}/sub/{{sub_id}}/delete_material/',
             'type': 'GET',
@@ -62,6 +62,7 @@
             'success': function (res) {
                 if (res.status == true) {
                     $('#'+id).hide();
+
                 }else{
                     alert("Deletion Failed");
                 }
