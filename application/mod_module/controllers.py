@@ -323,20 +323,20 @@ def upload_material(module_id, sub_id):
 def delete_material(module_id, sub_id):
     # Make sure logged in user is the creator of the file
     if get_module_object(module_id).module_tutor_id == str(flask_login.current_user):
-        # Delete file from the File System and ModuleMaterial
         file_name = request.args['data']
-        return str(file_name)
+        
+        # Delete the actual file
+        delete_file(file_name)
+
+        # Delete file from the File System and ModuleMaterial
         f = FileSystem.query.filter_by(file_name=file_name).first()
         m = ModuleMaterial.query.filter_by(file_id=f.file_id).first()
         db.session.delete(f)
         db.session.delete(m)
         db.session.commit()
-        # Delete the actual file
-        delete_file(file_name)
         return jsonify(status = True)
     else:
         return jsonify(status = False)
-
 
 
 
