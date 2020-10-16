@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+<div class="container w3-round jumbotron w3-black">
+    <h3><u class="w3-text-teal">Whiteboard</u></h3>
+    {% include 'whiteboard/create_board.html' %}
+    <button class="w3-teal w3-right w3-button" data-toggle="modal" 
+    data-target="#createBoard">Create Private Board</button>
+</div>
+
+
+<div class="container w3-padding">
+    <div class="input-group">
+        <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-search w3-text-teal"></i></span>
+        <div class="nk-int-st">
+            <input type="text" class="form-control" id="search_module" name="search_module"
+                placeholder="Search Board by Name">
+        </div>
+    </div>
+</div>
+
+{% endblock %}

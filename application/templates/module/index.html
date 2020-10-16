@@ -4,18 +4,19 @@
 {% include 'dashboard/nav.html' %}
 {% include 'module/edit_module.html' %}
 {% include 'module/add_student.html' %}
-<div class="container w3-round jumbotron w3-black w3-padding">
+<div class="container w3-round jumbotron w3-pale-green w3-padding">
 
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
     <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
-    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span>
+    <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span><br>
+    <span class="text-muted w3-small">Module Code: {{module_id}}</span>
     <br>
     <div class="">
         {% if current_user == module_tutor_id %}
         <div class="btn-group notika-group-btn w3-right w3-small">
             <br>
             <button class="w3-button w3-teal w3-round btn-default notika-gp-default" data-toggle="modal"
-                data-target="#editModule">Edit</button></button>
+                data-target="#editModule">Edit</button>
             <button id="decline_module_btn" data-toggle="modal" class="w3-button w3-teal w3-round 
                 btn-default notika-gp-default" data-target="#addStudent">Add Student</button></button>
         </div>
@@ -26,37 +27,59 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="widget-tabs-int tab-ctm-wp mg-t-30">
+            <div class="widget-tabs-int tab-ctm-wp mg-t-30 w3-pale-green w3-round">
                 <div class="tab-hd">
-                    <h2>Hello, {{current_user}}</h2>
-                    <p>Upcoming Event: <code>session : 5th of May,2020 | 3:00 pm - 6:00 pm </code></p>
+                    <h2>Hello, {{current_user|fullname}}</h2>
+                    <p><code class="w3-teal">next session : {{next_event}} | {{next_event_title}}</code></p>
                 </div>
                 <div class="widget-tabs-list">
-                        <div class="w3-bar w3-white">
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Description')">Description</button>
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Community')">Community</button>
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Materials')">Materials</button>
-                            <button class="w3-bar-item w3-white w3-text-teal w3-button" onclick="openTabb('Calendar')">Module Calendar</button>
-                        </div>
+                    <!-- Tab Nav -->
+                    <div class="w3-center w3-pale-green w3-round">
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Description')"><u>Description</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Community')"><u>Community</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Materials')"><u>Materials</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Assessment')"><u>Assessment</u></button>
+                        <button class="w3-bar-item w3-pale-green w3-text-teal w3-button"
+                            onclick="openTabb('Calendar')"><u>Module Calendar</u></button>
+                    </div>
+                    <!-- Tab Content -->
                     <div class="tab-content tab-custom-st tab-ctn-left">
                         <div id="Description" class="Tabb">
-                            <h2>Description</h2><hr>
+                            <h2>Description</h2>
+                            <hr>
                             <p>{{description}}</p>
                         </div>
 
                         <div id="Community" class="Tabb" style="display:none">
-                            <h2>Community</h2><hr>
+                            <h2>Community</h2>
+                            <hr>
                             {% include 'module/community.html' %}
                         </div>
 
                         <div id="Materials" class="Tabb" style="display:none">
-                            <h2>Materials</h2><hr>
-                            <p>Materials is the capital of Japan.</p>
+                            <h2>Materials</h2>
+<<<<<<< HEAD
+                            <hr>
+                            <p>abc</p>
+=======
+                            {% include 'module/materials.html' %}
+>>>>>>> de99db26dfa5ec2f42060e4383171ee0583c6228
                         </div>
-                        
+                        <div id="Assessment" class="Tabb" style="display:none">
+                            <h2>Assessment</h2>
+                            <hr>
+                            <p>123</p>
+                        </div>
+
                         <div id="Calendar" class="Tabb" style="display:none">
-                            <h2>Module Calendar</h2><hr>
-                            <p>Calendar is the capital of Japan.</p>
+                            <h2>Module Calendar</h2>
+                            <hr>
+                            {% include 'calendar/add_event.html' %}
+                            {% include 'calendar/the_calendar.html' %}
                         </div>
                     </div>
                 </div>
@@ -70,6 +93,16 @@
 
 {% block js_content %}
 <script>
+
+    function openTabb(TabbName) {
+        var i;
+        var x = document.getElementsByClassName("Tabb");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        document.getElementById(TabbName).style.display = "block";
+    }
+
     $("#search_student").on('keyup', function () {
         $('#search_student_list').empty();
         $('#search_student_list').empty();
@@ -103,7 +136,6 @@
         });
     });
 
-
     function sendRequestToStudent(username) {
         var module_id = '{{module_id}}';
         $.ajax({
@@ -120,11 +152,37 @@
         });
     }
 
+<<<<<<< HEAD
+=======
 
+    function openMaterialModal(id) {
+        // Get Materials for this module
+        $.ajax({
+            'url': '/module/{{module_id}}/get_module_materials/',
+            'method': 'GET',
+            'success': function (res) {
+                if (res.data.length == 0) {
+                    $('#materials_list').append(`
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8"><div class="wb-traffic-inner
+                    notika-shadow sm-res-mg-t-30 tb-res-mg-t-30"><div class="website-traffic-ctn">
+                    <p>No Material Available</p></div></div></div>`);}
+                for (var i = 0; i < res.data.length; i++) {
+                    $('#materials_list').append(`<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                        <div class="website-traffic-ctn w3-code"><h2>
+                        <u onclick=openMaterialModal('${res.data[i].sub_id}') style="cursor: pointer;">
+                        ${res.data[i].sub_name}</u></h2></div></div></div><hr>`);
+                }
+            },
+            'error': function (res) {
+                alert("Error Occurred");
+            }
+        });
+    }
+
+
+>>>>>>> de99db26dfa5ec2f42060e4383171ee0583c6228
     $(document).ready(function () {
-        var students;
-        var desc = '{{description}}';
-
         $.ajax({
             'url': '/module/{{module_id}}/members/',
             'type': 'GET',
@@ -137,14 +195,52 @@
         });
 
     });
-    function openTabb(TabbName) {
-        var i;
-        var x = document.getElementsByClassName("Tabb");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-        }
-        document.getElementById(TabbName).style.display = "block";
-    }
+
+<<<<<<< HEAD
+    $('#evoCalendar').evoCalendar({
+        calendarEvents: myEvents
+=======
+
+    $(document).ready(function () {
+        // Get events in this module's calendar
+        var myEvents = [];
+        $.ajax({
+            'url': '/calendar/view/',
+            'method': 'GET',
+            'data': { 'section': 'module', 'module_id': '{{module_id}}' },
+            'success': function (res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    myEvents.push(
+                        {
+                            id: res.data[i][0],
+                            name: res.data[i][1],
+                            date: res.data[i][2],
+                            type: 'event',
+                        });
+                }
+
+                $('#evoCalendar').evoCalendar({
+                    calendarEvents: myEvents,
+                    sidebarToggler: true,
+                    sidebarDisplayDefault: true,
+                    eventListToggler: true,
+                    eventDisplayDefault: true,
+                    onSelectDate: function () {
+                        console.log('onSelectDate!');
+                    }
+                });
+            },
+            'error': function (res) {
+                // alert("Error Occurred");
+            }
+        });
+
+
+
+
+
+>>>>>>> de99db26dfa5ec2f42060e4383171ee0583c6228
+    });
 
 </script>
 {% endblock %}

@@ -1,16 +1,20 @@
 from flask import Blueprint, request, render_template, flash, \
     g, session, redirect, url_for, jsonify, abort, url_for, make_response
 from werkzeug.security import check_password_hash
-from application.mod_module.models import Module, ClassRoom
+from application.mod_module.models import *
 from application.mod_auth.models import User
+from application.mod_whiteboard.models import *
 from application.mod_auth.controllers import get_user_object, get_fullname
 from application.mod_notification.controllers import *
+from application.mod_calendar.forms import CreateEventForm
+from application.mod_calendar.models import *
+from application.mod_file.controllers import *
+from application.mod_file.controllers import get_file_name
 from application import db, app
 import flask_login
 from .forms import *
 
 
-# Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_module = Blueprint('mod_module', __name__, url_prefix='/module',\
      template_folder='templates/')
 
@@ -29,7 +33,9 @@ def create():
             form.description.data,
             form.code.data)
             c = ClassRoom(m.module_id, username)
+            b = Board(username, form.name.data)
             db.session.add(c)
+            db.session.add(b)
             db.session.add(m)
             db.session.commit()
             flash("Module Created Successfully")
@@ -40,7 +46,8 @@ def create():
 
     except Exception as ex:
         flash("Something went wrong, please try again")
-        return redirect(url_for('mod_module.index'))
+        return redirect(url_for('mod_main.index'))
+
 
 
 @mod_module.route('/view/<module_id>/', methods=['GET'])
@@ -48,19 +55,34 @@ def create():
 def view(module_id):
     m = Module.query.filter_by(module_id=module_id).first()
 
+    # get the next event on the calendar
+    events = Event.query.filter_by(module_id=module_id)
+    try:
+        next_event = events[0]
+        for i in events:
+            if next_event.date_n_time > i.date_n_time:
+                next_event = i
+    except IndexError:
+        next_event = NoEvent
+
     if m is None:
         return redirect(url_for('not_found'))
     else:
         return render_template('module/index.html',
-            editForm = CreateModuleForm(),
-            module_id = module_id,
-            module_name = m.module_name,
-            module_tutor_id = get_fullname(m.module_tutor_id),
-            session = m.session,
-            description = m.description,
-            module_code = m.module_code,
-            current_user= get_fullname(str(flask_login.current_user))
+            editForm            = CreateModuleForm(),
+            topicForm           = CreateTopicForm(),
+            createEventForm     = CreateEventForm(),
+            module_id           = module_id,
+            module_name         = m.module_name,
+            module_tutor_id     = m.module_tutor_id,
+            session             = m.session,
+            description         = m.description,
+            module_code         = m.module_code,
+            current_user        = str(flask_login.current_user),
+            next_event          = next_event.date_n_time,
+            next_event_title    = next_event.title
         )
+
 
 
 @mod_module.route('/<module_id>/add/', methods=['GET'])
@@ -114,6 +136,7 @@ def get_members(module_id):
     return jsonify(students = s)
 
 
+
 def get_modules():
     # get modules this user is registered in
     c = ClassRoom.query.filter_by(\
@@ -124,6 +147,10 @@ def get_modules():
     for i in c:
         modules.append(Module.query.filter_by(module_id=i.module_id).first())
     return modules
+
+def get_quotes():
+    return 'sample quote'
+
 
 
 @mod_module.route('/join_module/', methods=['GET'])
@@ -183,6 +210,7 @@ def update(module_id):
         return redirect(f'/module/view/{module_id}/')
 
 
+
 @mod_module.route('/search_my_module/', methods=['GET'])
 @flask_login.login_required
 def search_my_module():
@@ -211,11 +239,73 @@ def search_my_module():
 
 
 
+
+@mod_module.route('/<module_id>/create_subtopic/', methods=['POST'])
+@flask_login.login_required
+def create_subtopic(module_id):
+    form = CreateTopicForm(meta={'csrf_token':True})
+    if form.validate_on_submit():
+        t = ModuleSub(module_id, form.title.data, form.description.data)
+        db.session.add(t)
+        db.session.commit()
+        flash(f"{form.title.data} has been created Successfully")
+        return redirect(f'/module/view/{module_id}')
+    else:
+        flash("Form submitted was Invalid")
+        return redirect(f'/module/view/{module_id}')
+
+
+
+
+@mod_module.route('/<module_id>/get_module_materials/', methods=['GET'])
+@flask_login.login_required
+def get_module_materials(module_id):
+    # Get all Module_sub
+    ms = ModuleSub.query.filter_by(\
+        module_id=module_id)
+        # Get each sub's description and materail info 
+    data = []
+    for i in ms:
+        sub_mod_info = {}
+        sub_mod_info['sub_name'] =  i.sub_name
+        sub_mod_info['description'] =  i.description
+
+        # Get Materials for this sub module
+        mm = ModuleMaterial.query.filter_by(sub_id=i.sub_id)
+        sub_mod_info['sub_id'] =  i.sub_id
+        sub_mod_info['files'] = []
+        for j in mm:
+            sub_mod_info['files'].append(get_file_name(j.file_id))
+
+        data.append(sub_mod_info)
+    return jsonify(data=data)
+
+
+
+
+@mod_module.route('/<module_id>/upload_material/', methods=['GET'])
+@flask_login.login_required
+def upload_material(module_id):
+    try:
+        status, file_id = upload_file(request.files['file'])
+        if status:
+            m = ModuleMaterial(file_id, request.args['sub_id'])
+            db.session.add(m)
+            db.session.commit()
+        return redirect(f'/module/view/{module_id}/')
+    except Exception:
+        return redirect(f'/module/view/{module_id}/')
+
+
+
 def get_module_object(module_id):
     return Module.query.filter_by(module_id=module_id).first()
 
+
 def get_classroom_object(module_id):
     return ClassRoom.query.filter_by(module_id=module_id)
+
+
 
 def is_student_in_classroom(module_id, username):
     c = ClassRoom.query.filter_by(\
@@ -224,3 +314,4 @@ def is_student_in_classroom(module_id, username):
         return False
     else:
         return True
+

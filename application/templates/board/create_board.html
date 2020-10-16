@@ -1,0 +1,25 @@
+<div class="modal fade" id="createBoard" role="dialog">
+    <div class="modal-dialog modals-default">
+        <div class="modal-content w3-light-gray">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3 class="w3-text-teal">Create a private Board</h3>
+                <form action="{{url_for('mod_whiteboard.create')}}" method="POST">
+                    {{form.csrf_token}}
+                    <div class="input-group">
+                        <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-clipboard"></i></span>
+                        <div class="nk-int-st">
+                            <input type="text" id="name" name="name" class="form-control"
+                            placeholder="Enter Name for this Board">
+                        </div>
+                    </div>
+                    <hr>
+                    <button class="w3-button w3-teal w3-round" type="submit">Create Board</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

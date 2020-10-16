@@ -4,8 +4,8 @@ from werkzeug.security import check_password_hash
 from application.mod_auth.models import User
 from application.mod_auth.controllers import get_user_object, get_fullname
 from application.mod_module.forms import CreateModuleForm
-from application.mod_module.controllers import get_modules
-from application import db, app
+from application.mod_module.controllers import get_modules, get_quotes
+from application import db, app, socketio
 import flask_login
 
 mod_main = Blueprint('mod_main', __name__, url_prefix='/',\
@@ -30,6 +30,7 @@ def dashboard():
         'dashboard/index.html',
         create_form=create_form,
         modules = get_modules(),
+        quotes = get_quotes(),
         current_user = str(flask_login.current_user))
 
 
@@ -60,3 +61,5 @@ def search_student():
             get_fullname(i.username),
             i.email))
     return jsonify(data=s)
+
+
