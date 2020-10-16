@@ -1,0 +1,28 @@
+<div class="modal fade" id="addTopic" role="dialog">
+    <div class="modal-dialog modals-default">
+        <div class="modal-content w3-light-gray">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h1 class="w3-text-teal">Add a Topic</h1>
+                <p class="w3-small w3-justify">
+                    Create a Topic and add materials
+                </p>
+                <form action="/module/{{module_id}}/create_subtopic/" method="POST">
+                    {{topicForm.csrf_token}}
+                    <div class="nk-int-st">
+                        <input name="title" type="text" class="form-control" placeholder=" Title" required><br>
+                    </div>
+                    <div class="nk-int-st">
+                        <textarea name="description" placeholder=" Description" id="description" 
+                        cols="30" rows="10" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="w3-margin w3-button w3-teal w3-round">Create</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

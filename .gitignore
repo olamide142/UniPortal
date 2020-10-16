@@ -7,6 +7,7 @@ __pycache__/
 .db
 
 fake_postman.py
+shellsetup.py
 
 .txt
 .pdf

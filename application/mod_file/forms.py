@@ -3,5 +3,5 @@ from flask_wtf.file import FileField
 from wtforms import SubmitField
 
 class FileForm(FlaskForm):
-    file = FileField('file')
+    filefile  = FileField('filefile')
     submit = SubmitField('submit')

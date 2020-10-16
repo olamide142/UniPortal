@@ -5,7 +5,7 @@ from application.mod_auth.models import User
 from application.mod_auth.controllers import get_user_object, get_fullname
 from application.mod_module.forms import CreateModuleForm
 from application.mod_module.controllers import get_modules
-from application import db, app
+from application import db, app, socketio
 import flask_login
 
 mod_main = Blueprint('mod_main', __name__, url_prefix='/',\
@@ -60,3 +60,5 @@ def search_student():
             get_fullname(i.username),
             i.email))
     return jsonify(data=s)
+
+
