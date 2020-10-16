@@ -2,9 +2,11 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 {% include 'dashboard/nav.html' %}
-<div class="container w3-round jumbotron w3-pale-green">
-    <h3><u class="w3-text-teal">{{moduleSub.sub_name}}</u></h3>
-    <button class="w3-right w3-round w3-teal w3-button" data-toggle="modal" data-target="#joinModule">Edit</button>
+<div class="container w3-text-teal w3-round w3-padding w3-pale-green">
+    <h3>Sub Topic:</h3>
+    <h4><u class="w3-margin">{{moduleSub.sub_name}}</u></h4>
+    <button class="w3-right w3-round w3-teal w3-small w3-button" data-toggle="modal"
+        data-target="#joinModule">Edit</button>
 </div>
 
 
@@ -16,8 +18,8 @@
 
     {% if current_user|string == module.module_tutor_id %}
     <div class="input-group">
-        <form action="/module/{{module.module_id}}/sub/{{sub_id}}/upload_material/"
-         method="POST" enctype="multipart/form-data">
+        <form action="/module/{{module.module_id}}/sub/{{sub_id}}/upload_material/" method="POST"
+            enctype="multipart/form-data">
             {{fileForm.csrf_token}}
             <div class="w3-border w3-round w3-pale-green">
                 <input type="file" name="file" placeholder="File Upload">
@@ -31,14 +33,40 @@
 
 <div class="container w3-pale-green">
     {% for file in files %}
-    
-        {{file}} <br>
 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 w3-padding" id="{{file[0]}}">
+        <a target="_blank" href="/file/uploads/{{ [file[0], file[1] , '.' , file[2]] | join }}" class="w3-text-teal">
+            <h4 class="w3-large">{{file[1] | capitalize}}</h4>
+        </a>
+        <code class="w3-teal w3-text-white w3-right">type: .{{file[2]}}</code>
+
+        {% if module.module_tutor_id == current_user%}
+        <button class="w3-button w3-border w3-round w3-small" 
+        onclick="deleteMaterial('{{ [file[0], file[1] , '.' , file[2]] | join }}')">Delete</button>
+        {% endif %}
+
+    </div>
     {% endfor %}
 </div>
-<i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-<i class="fas fa-video" aria-hidden="true"></i>
-{% endblock %}
-{% block js_content %}
 
+{% endblock %}
+
+
+{% block js_content %}
+<script>
+    function deleteMaterial(filename) {
+        $.ajax({
+            'url': '/module/{{module.module_id}}/sub/{{sub_id}}/delete_material/',
+            'type': 'GET',
+            'data' : {data : filename},
+            'success': function (res) {
+                if (res.status == true) {
+                    $('#'+id).hide();
+                }else{
+                    alert("Deletion Failed");
+                }
+            }
+        });
+    }
+</script>
 {% endblock %}

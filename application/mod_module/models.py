@@ -90,7 +90,7 @@ class ModuleMaterial(db.Model):
 
 class ModuleSub(db.Model):
     # Module Subcategory 
-    __tablename__ = 'modulesub'
+    __tablename__ = 'modulesub' 
         
     sub_id              = db.Column(db.String(10),  nullable=False, primary_key=True)
     module_id           = db.Column(db.String(10), nullable=False)

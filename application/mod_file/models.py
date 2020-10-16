@@ -1,6 +1,6 @@
 from application import db 
 from datetime import datetime
-
+import random
 
 def gen_module_id():
     let = 'abcdefghijklmnopqrstuvwxyz1234567890'

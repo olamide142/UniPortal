@@ -40,7 +40,8 @@ def upload_file(file):
     file = file
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        filename = f'{gen_random_id().upper()}{file.filename}'
+        filename = f'{gen_random_id()}{file.filename}'
+        filename = filename.replace(' ', '_')
         f = FileSystem(filename, 
                         get_file_type(filename), '', 
                         str(flask_login.current_user))
@@ -57,10 +58,10 @@ def upload_file(file):
 
 
     
-@mod_file.route('/uploads/<path:filename>', methods=['GET'])
+@mod_file.route('/uploads/<path:filename>', methods=['GET']) 
 def download(filename):
     f = FileSystem.query.filter_by(file_name=filename).first()
-    uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
     return send_from_directory(directory=uploads, filename=filename)
 
 
@@ -72,5 +73,13 @@ def get_file_type(filename):
 def get_file_name(file_id):
     f = FileSystem.query.filter_by(\
         file_id=file_id).first()
-    name = f.file_name.split('.')
-    return str(name[0][7:]), name[-1]
+    if f is not None:
+        name = f.file_name.split('.')
+        return  str(name[0][0:7].lower()), str(name[0][7:]), name[-1]
+    else:
+        return
+    
+
+def delete_file(filename):
+    uploads = os.path.join(app.root_path, f"{app.config['UPLOAD_FOLDER']}//{filename}")
+    os.remove(path=uploads)
