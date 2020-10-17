@@ -252,6 +252,31 @@ def create_subtopic(module_id):
 
 
 
+
+
+@mod_module.route('/<module_id>/edit_subtopic/', methods=['POST'])
+@flask_login.login_required
+def edit_subtopic(module_id):
+    form = CreateTopicForm(meta={'csrf_token':True})
+    if form.validate_on_submit():
+        
+        ms = ModuleSub.query.filter_by(module_id = module_id).first()
+        ms.sub_name = form.title.data
+        ms.description = form.description.data
+
+        db.session.add(ms)
+        db.session.commit()
+        flash(f"{form.title.data} has been updated Successfully")
+        return redirect(f'/module/view/{module_id}')
+    else:
+        flash("Form submitted was Invalid")
+        return redirect(f'/module/view/{module_id}')
+
+
+
+
+
+
 @mod_module.route('/<module_id>/get_module_materials/', methods=['GET'])
 @flask_login.login_required
 def get_module_subs(module_id):
@@ -291,6 +316,7 @@ def get_module_sub_materials(module_id, sub_id):
         files.append(get_file_name(j.file_id))
     return render_template(
         'module/sub.html',
+        topicForm = CreateTopicForm(),
         fileForm = FileForm(),
         moduleSub = moduleSub,
         files = files,
@@ -304,16 +330,13 @@ def get_module_sub_materials(module_id, sub_id):
 @mod_module.route('/<module_id>/sub/<sub_id>/upload_material/', methods=['POST'])
 @flask_login.login_required
 def upload_material(module_id, sub_id):
-        file = request.files['file']
-        status, file_id = upload_file(file)
-        if status:
-            m = ModuleMaterial(file_id, sub_id)
-            db.session.add(m)
-            db.session.commit()
-        return redirect(f'/module/{module_id}/sub/{sub_id}/')
-    # try:
-    # except Exception:
-        # return redirect(f'/module/{module_id}/sub/{sub_id}/')
+    file = request.files['file']
+    status, file_id = upload_file(file)
+    if status:
+        m = ModuleMaterial(file_id, sub_id)
+        db.session.add(m)
+        db.session.commit()
+    return redirect(f'/module/{module_id}/sub/{sub_id}/')
 
 
 
@@ -324,7 +347,7 @@ def delete_material(module_id, sub_id):
     # Make sure logged in user is the creator of the file
     if get_module_object(module_id).module_tutor_id == str(flask_login.current_user):
         file_name = request.args['data']
-        
+
         # Delete the actual file
         delete_file(file_name)
 

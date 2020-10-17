@@ -2,11 +2,15 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 {% include 'dashboard/nav.html' %}
+
+<!-- Edit Subtopic Modal -->
+{% include 'module/edit_sub_topic.html' %}
+
 <div class="container w3-text-teal w3-round w3-padding w3-pale-green">
     <h3>Sub Topic:</h3>
     <h4><u class="w3-margin">{{moduleSub.sub_name}}</u></h4>
     <button class="w3-right w3-round w3-teal w3-small w3-button" data-toggle="modal"
-        data-target="#joinModule">Edit</button>
+        data-target="#editSubTopic">Edit</button>
 </div>
 
 
@@ -62,7 +66,6 @@
             'success': function (res) {
                 if (res.status == true) {
                     $('#'+id).hide();
-
                 }else{
                     alert("Deletion Failed");
                 }
