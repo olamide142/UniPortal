@@ -4,7 +4,7 @@
 {% include 'dashboard/nav.html' %}
 {% include 'module/edit_module.html' %}
 {% include 'module/add_student.html' %}
-<div class="container w3-round jumbotron w3-pale-green w3-padding">
+<div class="container w3-round jumbotron w3-card w3-pale-green w3-padding">
 
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
     <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
@@ -27,7 +27,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="widget-tabs-int tab-ctm-wp mg-t-30 w3-pale-green w3-round">
+            <div class="widget-tabs-int tab-ctm-wp mg-t-30 w3-pale-green w3-card w3-round">
                 <div class="tab-hd">
                     <h2>Hello, {{current_user|fullname}}</h2>
                     <p><code class="w3-teal">next session : {{next_event}} | {{next_event_title}}</code></p>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} {{module_name|capitalize}} {% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+<div class="container w3-round jumbotron w3-card w3-pale-green w3-padding">
+    <h3><u class="w3-text-teal">Chats</u></h3>
+    <button class="w3-button w3-right w3-teal w3-round" data-toggle="modal" data-target="#createModule">New Chat</button>
+    <span class="text-muted w3-small">Start a conversation with a friend or  tutor</span><br>
+    <span class="text-muted w3-small">Share documents, images, videos and many more...</span>
+</div>
+
+
+{% endblock %}
+
+{% block js_content %}
+
+{% endblock %}

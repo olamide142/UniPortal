@@ -43,6 +43,7 @@ from application.mod_notification.controllers import mod_notification as notific
 from application.mod_calendar.controllers import mod_calendar as calendar_module
 from application.mod_todo.controllers import mod_todo as todo_module
 from application.mod_whiteboard.controllers import mod_whiteboard as whiteboard_module
+from application.mod_chat.controllers import mod_chat as chat_module
 
 
 # Register blueprint(s)
@@ -54,6 +55,7 @@ app.register_blueprint(notification_module)
 app.register_blueprint(calendar_module)
 app.register_blueprint(todo_module)
 app.register_blueprint(whiteboard_module)
+app.register_blueprint(chat_module)
 # app.register_blueprint(xyz_module)
 # ..
 
@@ -74,7 +76,7 @@ app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {'/file/uploads': app.config['
 '''
     White Board Sockets Controllers
 '''
-from application.mod_whiteboard.controllers import save_draw_info
+from application.mod_whiteboard.controllers import *
 def background_thread():
     """Example of how to send server generated events to clients."""
     count = 0
