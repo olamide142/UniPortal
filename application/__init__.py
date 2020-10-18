@@ -110,3 +110,57 @@ def send_room_message(message):
     emit('my_response',
          {'data': message['data'], 'count': session['receive_count']},
          room=message['room'])
+
+
+
+'''
+    Instant Messaging Sockets Controllers
+'''
+from application.mod_chat.controllers import *
+from application.mod_chat.models import *
+def background_thread_chat():
+    count = 0
+    while True:
+        socketio.sleep(10)
+        count += 1
+        socketio.emit('my_response',
+                      {'data': 'Server generated event', 'count': count},
+                      namespace='/thechat')
+
+
+@socketio.on('connect', namespace='/thechat')
+def test_connect_chat():
+    global thread
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(background_thread_chat)
+    emit('my_response', {'data': 'Connected', 'count': 0})
+
+
+@socketio.on('join', namespace='/thechat')
+def join(message):
+    join_room(message['room'])
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('my_response',
+         {'data': 'In rooms: ' + ', '.join(rooms()),
+          'count': session['receive_count']})
+
+
+@socketio.on('my_room_event', namespace='/thechat')
+def send_room_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    if message['new'] == 'true':
+        # Create new chat instance
+        chat_id = new_chat(message['room'])
+        # Save Message 
+        save_msg(chat_id, message['data'])
+    else:
+        # Get chat id
+        chat_id = get_chat_id(message['room'])
+        # Save message
+        save_msg(chat_id, message['data'])
+
+    emit('my_response',
+         {'data': message['data'], 'count': session['receive_count']},
+         room=message['room'])
+ 

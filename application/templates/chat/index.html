@@ -31,21 +31,7 @@
                     <div class="widgets-chat-scrollbar">
                         <ul class="conversation-list" id="convo_list">
                             <!-- Conversation List -->
-                            {% for i in range(10) %}
-                            <div class="recent-post-signle rct-pt-mg-wp w3-hover-white w3-padding w3-round">
-                                <a href="#">
-                                    <div class="recent-post-flex">
-                                        <div class="recent-post-img">
-                                            <img src="img/post/2.jpg" alt="">
-                                        </div>
-                                        <div class="recent-post-it-ctn">
-                                            <h2>Smith</h2>
-                                            <p>Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div><hr>
-                            {% endfor %}
+
                         </ul>
                     </div>
                 </div>
@@ -66,24 +52,9 @@
             <div class="card-box">
                 <div class="chat-conversation">
                     <div class="widgets-chat-scrollbar">
-                        <ul class="conversation-list">
-                            <li class="clearfix">
-                                <div class="chat-avatar">
-                                    <img src="img/post/1.jpg" alt="male">
-                                    <i>10:00</i>
-                                </div>
-                                <div class="conversation-text">
-                                    <div class="ctext-wrap">
-                                        <i>John Deo</i>
-                                        <p>
-                                            Hello!
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
+                        <ul class="conversation-list" id="inner_convo_list">
                             <li class="clearfix odd">
                                 <div class="chat-avatar">
-                                    <img src="img/post/2.jpg" alt="Female">
                                     <i>10:01</i>
                                 </div>
                                 <div class="conversation-text">
@@ -91,62 +62,6 @@
                                         <i>Smith</i>
                                         <p>
                                             Hi, How are you? What about our next meeting?
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="chat-avatar">
-                                    <img src="img/post/1.jpg" alt="male">
-                                    <i>10:01</i>
-                                </div>
-                                <div class="conversation-text">
-                                    <div class="ctext-wrap">
-                                        <i>John Deo</i>
-                                        <p>
-                                            Yeah everything is fine
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="clearfix odd">
-                                <div class="chat-avatar">
-                                    <img src="img/post/2.jpg" alt="male">
-                                    <i>10:02</i>
-                                </div>
-                                <div class="conversation-text">
-                                    <div class="ctext-wrap chat-widgets-cn">
-                                        <i>Smith</i>
-                                        <p>
-                                            Wow that's great
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="chat-avatar">
-                                    <img src="img/post/1.jpg" alt="male">
-                                    <i>10:01</i>
-                                </div>
-                                <div class="conversation-text">
-                                    <div class="ctext-wrap">
-                                        <i>John Deo</i>
-                                        <p>
-                                            Doing Better i am thinking about that..
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="clearfix odd">
-                                <div class="chat-avatar">
-                                    <img src="img/post/2.jpg" alt="male">
-                                    <i>10:02</i>
-                                </div>
-                                <div class="conversation-text">
-                                    <div class="ctext-wrap chat-widgets-cn">
-                                        <i>Smith</i>
-                                        <p>
-                                            Wow, You also tallent man...
                                         </p>
                                     </div>
                                 </div>
@@ -178,6 +93,196 @@
 
 {% endblock %}
 
+
+
+
+
+
+
+<!-- JavaScript -->
 {% block js_content %}
+<script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+    integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+    var socket;
+    var current_user = "{{current_user}}";
+    var chat_list = [];
+
+
+
+
+    $("#search_student").on('keyup', function () {
+        $('#search_list').empty();
+        $('#search_list').empty();
+        $.ajax({
+            'data': { user: $('#search_student').val() },
+            'url': '/chat/search_user/',
+            'type': 'GET',
+            'success': function (res) {
+                if (res.data.length == 0) {
+                    $('#search_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-text-teal w3-center">No Result</p>
+                            </div>
+                        </div> <br>`);
+                }
+                for (var i = 0; i < res.data.length; i++) {
+                    var unique_id = gen_id(7);
+                    $('#search_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-small">Student Name: ${res.data[i][1]}</p>
+                                <p class="w3-small">Student Username: 
+                                <span id="${unique_id}username">${res.data[i][0]}</span></p>
+                                <p class="w3-small">Student Email: ${res.data[i][2]}</p>
+                                <div class="form-group todo-flex">
+                                    <div class="nk-int-st">
+                                        <input type="text" class="form-control chat-input"
+                                        id="${unique_id}msg" placeholder="Enter your message" required>
+                                    </div>
+                                    <div class="chat-send">
+                                        <button onclick="send_msg_to_new_user('${unique_id}')" class="btn btn-md 
+                                        w3-teal btn-block notika-chat-btn">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <br>`);
+
+                }
+            }
+        });
+    });
+
+
+    function send_msg_to_new_user(id) {
+        var username = $("#" + id + "username").text().trim();
+        var msg = $("#" + id + "msg").val().trim();
+        if (current_user == username) {
+            alert('You cannot send a message to yourself');
+            return;
+        } else {
+            var room_name = gen_room_name(current_user, username);
+            socket.emit('join', { room: room_name });
+            socket.emit('my_room_event', { room: room_name, data: msg, new: 'true' });
+            // Add new chat to chat list and open chat panel
+            open_new_chat(username, msg);
+        }
+    }
+
+    // Generate a room name
+    // Based on the two usernames
+    function gen_room_name(user1, user2) {
+        var temp = [user1, user2];
+        temp = temp.sort();
+        return temp.join('-');
+    }
+
+    // Open a new chat panel
+    function open_new_chat(username, msg) {
+        // Add the new chat name to the list
+        if (chat_list.includes(username) == false) {
+            $("#convo_list").append(`<div class="recent-post-signle rct-pt-mg-wp 
+            w3-hover-white w3-padding w3-round"><span id=""><div class="recent-post-flex">
+            <div class="recent-post-it-ctn"><h2>${username}</h2><p>${message_to_snip(msg)}</p>
+                </div>  </div>  </span>  </div><hr>`);
+            chat_list.push(username);
+        }
+        open_message_panel(gen_room_name(current_user, username));
+    }
+
+
+    function open_message_panel(room) {
+        console.log('in open_message_panel');
+        $.ajax({
+            'url': '/chat/get_messages/', 'type': 'GET',
+            'data': { room: room }, 'success': function (res) {
+                display_messages(res.data);
+            }
+        });
+    }
+
+
+    function display_messages(messages) {
+        $("#inner_convo_list").empty();
+        for (var i = 0; i < messages.length; i++) {
+            $("#inner_convo_list").append(`
+            <li class="clearfix ${messages[i][1]}"><div class="chat-avatar">
+            <i>10:01</i></div><div class="conversation-text"><div 
+            class="ctext-wrap  chat-widgets-cn"><i>${messages[i][0]}</i>
+            <p>${messages[i][2]}</p></div></div></li>`);
+        }
+    }
+
+
+    function message_to_snip(msg) {
+        snip = msg
+        if (msg.length > 16) {
+            snip = ""
+            for (var i = 0; i < 15; i++) {
+                snip += msg[i];
+            }
+        }
+        return snip;
+    }
+
+
+    function load_all_messages() {
+        $.ajax({
+            'url': '/chat/get_all_messages/', 'type': 'GET',
+            'success': function (res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    $("#convo_list").append(`<div onclick="open_message_panel(gen_room_name('${current_user}', '${res.data[i][0]}'))"
+                     class="recent-post-signle rct-pt-mg-wp w3-hover-white w3-padding w3-round">
+                     <span id=""><div class="recent-post-flex"> <div class="recent-post-it-ctn">
+                     <h2>${res.data[i][0]}</h2><p>${message_to_snip(res.data[i][1])}</p>
+                    </div></div></span></div><hr>`);
+                    socket.emit('join', { room: gen_room_name(current_user, res.data[i][0])});
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        namespace = '/thechat';
+
+        socket = io(namespace);
+
+        socket.on('connect', function () {
+            socket.emit('my_event', { data: 'I\'m connected!' });
+        });
+
+        socket.on('my_response', function (msg, cb) {
+            console.log(msg);
+            // $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+            if (cb)
+                cb();
+        });
+
+        $('form#emit').submit(function (event) {
+            socket.emit('my_event', { data: $('#emit_data').val() });
+            return false;
+        });
+        $('form#broadcast').submit(function (event) {
+            socket.emit('my_broadcast_event', { data: $('#broadcast_data').val() });
+            return false;
+        });
+        $('form#join').submit(function (event) {
+            socket.emit('join', { room: $('#join_room').val() });
+            return false;
+        });
+        $('form#send_room').submit(function (event) {
+            socket.emit('my_room_event', { room: $('#room_name').val(), data: $('#room_data').val() });
+            return false;
+        });
+
+        load_all_messages();
+    });
+
+</script>
 
 {% endblock %}

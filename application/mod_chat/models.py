@@ -15,7 +15,7 @@ def gen_module_id():
 class Chat(db.Model):
 
     __tablename__ = 'chat'
-
+ 
     chat_id         = db.Column(db.String(10),  nullable=False, primary_key=True)
     user1           = db.Column(db.String(15), nullable=False)
     user2           = db.Column(db.String(15), nullable=False)
@@ -47,12 +47,13 @@ class Message(db.Model):
     def __init__(self, chat_id, username, content):
 
         self.message_id     = str(uuid.uuid4())
-        self.user1          = user1
-        self.user2          = user2
+        self.chat_id        = chat_id
+        self.username       = username
+        self.content        = content
         self.created_on     = datetime.utcnow()
 
     def __repr__(self):
-        return f'{self.user1} - {self.user2}'
+        return f'{self.chat_id} - {self.username}'
 
 
 
