@@ -73,12 +73,12 @@
                             <div class="col-sm-12 col-md-12 col-sm-12 col-xs-12 chat-inputbar">
                                 <div class="form-group todo-flex">
                                     <div class="nk-int-st">
-                                        <input type="text" class="form-control chat-input"
+                                        <input type="text" class="form-control chat-input" id="msg_to_send"
                                             placeholder="Enter your text">
                                     </div>
                                     <div class="chat-send">
                                         <button type="submit"
-                                            class="btn btn-md btn-primary btn-block notika-chat-btn">Send</button>
+                                            class="btn btn-md w3-teal btn-block notika-chat-btn" onclick="send_a_msg()">Send</button>
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
     var socket;
     var current_user = "{{current_user}}";
     var chat_list = [];
-
+    var current_room;
 
 
 
@@ -197,7 +197,7 @@
 
 
     function open_message_panel(room) {
-        console.log('in open_message_panel');
+        current_room = room;
         $.ajax({
             'url': '/chat/get_messages/', 'type': 'GET',
             'data': { room: room }, 'success': function (res) {
@@ -245,6 +245,14 @@
                 }
             }
         });
+    }
+
+
+    function send_a_msg(){
+        // get the message
+        // emit to the current room
+        // append to the message panel
+        // update chat list msg snippet
     }
 
     $(document).ready(function () {

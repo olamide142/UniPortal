@@ -6,12 +6,12 @@ from .forms import SignupForm
 from flask_wtf.csrf import generate_csrf
 
 
-def test_signup(client):
-    # when everything is done right
-    payload = {'username':'test', 'email':'tes@portal.com', \
-        'first_name':'test', 'last_name':'test', 'password':'123'}
-    res = client.post('/auth/signup/', data=payload)    
-    assert 'Account Created Successfully' in str(res.data)
+# def test_signup(client):
+#     # when everything is done right
+#     payload = {'username':'test', 'email':'tes@portal.com', \
+#         'first_name':'test', 'last_name':'test', 'password':'123'}
+#     res = client.post('/auth/signup/', data=payload)    
+#     assert 'Account Created Successfully' in str(res.data)
 
 #     # if form is incorrect
 #     payload = {'username':'test', 'first_name':'test', \
