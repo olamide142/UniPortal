@@ -13,7 +13,7 @@ from application.mod_file.controllers import get_file_name
 from application import db, app
 import flask_login
 from .forms import *
-
+import random
 
 mod_module = Blueprint('mod_module', __name__, url_prefix='/module',\
      template_folder='templates/')
@@ -148,8 +148,15 @@ def get_modules():
         modules.append(Module.query.filter_by(module_id=i.module_id).first())
     return modules
 
+# @mod_module.route('/random_quote', methods=['GET'])
 def get_quotes():
-    return 'sample quote'
+    directory = os.path.dirname(os.path.abspath(__file__))
+    quote_path = os.path.join(directory, "quotes.txt")
+
+    with open(quote_path) as f:
+        quotes = f.read().split("\n")
+
+    return random.choice(quotes)
 
 
 
