@@ -359,3 +359,12 @@ def is_student_in_classroom(module_id, username):
     else:
         return True
 
+
+def get_quotes():
+    directory = os.path.dirname(os.path.abspath(__file__))
+    quote_path = os.path.join(directory, "quotes.txt")
+
+    with open(quote_path) as f:
+        quotes = f.read().split("\n")
+
+    return random.choice(quotes)
