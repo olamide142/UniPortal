@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% block title %} Chat {% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+{% include 'chat/new_chat.html' %}
+<div class="container w3-round jumbotron w3-card w3-pale-green w3-padding">
+    <h3><u class="w3-text-teal">Chats</u></h3>
+    <button class="w3-button w3-right w3-teal w3-round" data-toggle="modal" data-target="#newChat">New Chat</button>
+    <span class="text-muted w3-small">Start a conversation with a friend or tutor</span><br>
+    <span class="text-muted w3-small">Share documents, images, videos and many more...</span>
+</div>
+
+<div class="container w3-row w3-border w3-padding">
+
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div class="w3-pale-green w3-card w3-round notika-chat-list notika-shadow mg-t-30 tb-res-ds-n dk-res-ds">
+            <div class="realtime-ctn">
+                <div class="w3-text-teal">
+                    <h4 class="w3-center">Messages</h4>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group ic-cmp-int">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control w3-pale-green" placeholder="  Search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-box">
+                <div class="chat-conversation">
+                    <div class="widgets-chat-scrollbar">
+                        <ul class="conversation-list" id="convo_list">
+                            <!-- Conversation List -->
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+        <div class="notika-chat-list notika-shadow mg-t-30 tb-res-ds-n dk-res-ds" id="chat_box">
+            <div class="realtime-ctn">
+                <div class="realtime-title">
+                    <h2 id="name_of_open_user">Username</h2>
+                </div>
+            </div>
+            <div class="card-box">
+                <div class="chat-conversation">
+                    <div class="widgets-chat-scrollbar" id="scroller">
+                        <ul class="conversation-list" id="inner_convo_list">
+
+                        </ul>
+                    </div>
+                    <div class="chat-widget-input">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-sm-12 col-xs-12 chat-inputbar">
+                                <div class="form-group todo-flex">
+                                    <div class="nk-int-st">
+                                        <input type="text" class="form-control chat-input" id="msg_to_send"
+                                            placeholder="Enter your text">
+                                    </div>
+                                    <div class="">
+                                        <button type="submit" class="btn btn-md w3-teal btn-block notika-chat-btn"
+                                            onclick="send_a_msg()">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+        <div class="notika-chat-list notika-shadow mg-t-30 tb-res-ds-n dk-res-ds" id="welcome_box">
+            <div class="card-box">
+                <div class="chat-conversation ">
+                    <header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+                        <img class="w3-image"
+                            src="https://www.publicdomainpictures.net/pictures/310000/velka/background-texture-teal.jpg"
+                            alt="Architecture" width="1500" height="800">
+                        <div class="w3-display-middle w3-margin-top w3-center">
+                            <p class="w3-xlarge w3-center w3-text-white w3-wide">Chat System</p><br>
+                            <h1 class="w3-xxlarge w3-text-white"><span
+                                    class="w3-padding w3-black w3-opacity-min"><b>Uni</b></span> <span
+                                    class="w3-hide-small w3-text-light-grey">Portal</span></h1>
+                        </div>
+                    </header>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+<!-- JavaScript -->
+{% block js_content %}
+<script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"
+    integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+    var socket;
+    var current_user = "{{current_user}}";
+    var chat_list = [];
+    var current_room;
+    var name_of_open_user;
+
+
+
+    $("#search_student").on('keyup', function () {
+        $('#search_list').empty();
+        $('#search_list').empty();
+        $.ajax({
+            'data': { user: $('#search_student').val() },
+            'url': '/chat/search_user/',
+            'type': 'GET',
+            'success': function (res) {
+                if (res.data.length == 0) {
+                    $('#search_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-text-teal w3-center">No Result</p>
+                            </div>
+                        </div> <br>`);
+                }
+                for (var i = 0; i < res.data.length; i++) {
+                    var unique_id = gen_id(7);
+                    $('#search_list').append(
+                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                            <div>
+                                <p class="w3-small">Student Name: ${res.data[i][1]}</p>
+                                <p class="w3-small">Student Username: 
+                                <span id="${unique_id}username">${res.data[i][0]}</span></p>
+                                <p class="w3-small">Student Email: ${res.data[i][2]}</p>
+                                <div class="form-group todo-flex">
+                                    <div class="nk-int-st">
+                                        <input type="text" class="form-control chat-input"
+                                        id="${unique_id}msg" placeholder="Enter your message" required>
+                                    </div>
+                                    <div class="chat-send">
+                                        <button onclick="send_msg_to_new_user('${unique_id}')" class="btn btn-md 
+                                        w3-teal btn-block notika-chat-btn">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <br>`);
+
+                }
+            }
+        });
+    });
+
+
+    function send_msg_to_new_user(id) {
+        var username = $("#" + id + "username").text().trim();
+        var msg = $("#" + id + "msg").val().trim();
+        if (current_user == username) {
+            alert('You cannot send a message to yourself');
+            return;
+        } else {
+            var room_name = gen_room_name(current_user, username);
+            socket.emit('join', { room: room_name });
+            socket.emit('my_room_event', { room: room_name, data: msg, new: 'true' });
+            // Add new chat to chat list and open chat panel
+            open_new_chat(username, msg);
+        }
+    }
+
+    // Generate a room name
+    // Based on the two usernames
+    function gen_room_name(user1, user2) {
+        var temp = [user1, user2];
+        temp = temp.sort();
+        return temp.join('-');
+    }
+
+    // Open a new chat panel
+    function open_new_chat(username, msg) {
+        // Add the new chat name to the list
+        if (chat_list.includes(username) == false) {
+            $("#convo_list").append(`<div class="recent-post-signle rct-pt-mg-wp 
+            w3-hover-white w3-padding w3-round"><span id=""><div class="recent-post-flex">
+            <div class="recent-post-it-ctn"><h2>${username}</h2><p>${message_to_snip(msg)}</p>
+                </div>  </div>  </span>  </div><hr>`);
+            chat_list.push(username);
+        }
+        name_of_open_user = username;
+        open_message_panel(gen_room_name(current_user, username));
+    }
+
+
+    function open_message_panel(room) {
+        current_room = room;
+        $.ajax({
+            'url': '/chat/get_messages/', 'type': 'GET',
+            'data': { room: room }, 'success': function (res) {
+                display_messages(res.data);
+            }
+        });
+    }
+
+
+    function display_messages(messages) {
+        $('#welcome_box').hide();
+        $('#chat_box').show();
+        $('#name_of_open_user').html(name_of_open_user);
+        $("#inner_convo_list").empty();
+        for (var i = 0; i < messages.length; i++) {
+            $("#inner_convo_list").append(`
+            <li class="clearfix ${messages[i][1]}"><div class="chat-avatar">
+            <i>10:01</i></div><div class="conversation-text"><div 
+            class="ctext-wrap  chat-widgets-cn"><i>${messages[i][0]}</i>
+            <p>${messages[i][2]}</p></div></div></li>`);
+        }
+    }
+
+
+    function message_to_snip(msg) {
+        snip = msg
+        if (msg.length > 16) {
+            snip = ""
+            for (var i = 0; i < 15; i++) {
+                snip += msg[i];
+            }
+        }
+        return snip;
+    }
+
+
+    function load_all_messages() {
+        $.ajax({
+            'url': '/chat/get_all_messages/', 'type': 'GET',
+            'success': function (res) {
+                for (var i = 0; i < res.data.length; i++) {
+                    $("#convo_list").append(`<div onclick="open_message_panel(gen_room_name('${current_user}', '${res.data[i][0]}'))"
+                     class="recent-post-signle rct-pt-mg-wp w3-hover-white w3-padding w3-round">
+                     <span id=""><div class="recent-post-flex"> <div class="recent-post-it-ctn">
+                     <h2>${res.data[i][0]}</h2><p>${message_to_snip(res.data[i][1])}</p>
+                    </div></div></span></div><hr>`);
+                    socket.emit('join', { room: gen_room_name(current_user, res.data[i][0]) });
+                }
+            }
+        });
+    }
+
+
+    function send_a_msg() {
+        // get the message
+        var msg = $("#msg_to_send").val();
+        // emit to the current room
+        socket.emit('my_room_event', { room: current_room, data: msg, new: 'false' });
+        // append to the message panel
+        $("#inner_convo_list").append(`
+            <li class="clearfix odd"><div class="chat-avatar">
+            <i>10:01</i></div><div class="conversation-text"><div 
+            class="ctext-wrap  chat-widgets-cn"><i>${current_user}</i>
+            <p>${msg}</p></div></div></li>`);
+            $( "#scroller").scrollBy(100, 0);
+        // update chat list msg snippet
+    }
+
+    $(document).ready(function () {
+        $('#chat_box').hide();
+        namespace = '/thechat';
+
+        socket = io(namespace);
+
+        socket.on('connect', function () {
+            socket.emit('my_event', { data: 'I\'m connected!' });
+        });
+
+        socket.on('my_response', function (msg, cb) {
+            console.log(msg);
+            // $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+            if (cb)
+                cb();
+        });
+
+        $('form#emit').submit(function (event) {
+            socket.emit('my_event', { data: $('#emit_data').val() });
+            return false;
+        });
+        $('form#broadcast').submit(function (event) {
+            socket.emit('my_broadcast_event', { data: $('#broadcast_data').val() });
+            return false;
+        });
+        $('form#join').submit(function (event) {
+            socket.emit('join', { room: $('#join_room').val() });
+            return false;
+        });
+        $('form#send_room').submit(function (event) {
+            socket.emit('my_room_event', { room: $('#room_name').val(), data: $('#room_data').val() });
+            return false;
+        });
+
+        load_all_messages();
+    });
+
+</script>
+
+{% endblock %}

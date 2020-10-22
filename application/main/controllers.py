@@ -39,8 +39,7 @@ def dashboard():
 def profile():
     return render_template(
         'profile/index.html',
-        current_user=str(flask_login.current_user)
-        )
+        current_user=str(flask_login.current_user))
 
 
 

@@ -5,9 +5,9 @@
 {% include 'module/create_module.html' %}
 {% include 'module/join_module.html' %}
 
-<div class="container w3-round jumbotron w3-pale-green">
+<div class="container w3-round w3-card jumbotron w3-pale-green">
     <h3><u class="w3-text-teal">Modules</u></h3>
-    <div class="w3-teal w3-right w3-row w3-round">
+    <div class="w3-teal w3-right w3-row w3-card w3-round">
         <button class="w3-half w3-button" data-toggle="modal" data-target="#createModule">Create Module</button>
         <button class="w3-half w3-button" data-toggle="modal" data-target="#joinModule">Join a Module</button>
     </div>
@@ -40,7 +40,7 @@
         <div class="row" id="list_of_modules">
             {% for module in modules %}
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                <div class="wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round  w3-pale-green">
+                <div class="wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round w3-card w3-pale-green">
                     <div class="w3-small">
                         <p>{{module.module_name | capitalize}}</p>
                         <p class="text-muted">Module Tutor: {{module.module_tutor_id|fullname}}</p>

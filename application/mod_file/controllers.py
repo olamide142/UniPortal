@@ -15,7 +15,7 @@ mod_file = Blueprint('mod_file', __name__, url_prefix='/file',\
      template_folder='templates/')
 
 UPLOAD_FOLDER = 'application/file_bank/'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pptx', 'zip', 'mp4'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pptx', 'zip', 'mp4', 'md'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -81,5 +81,5 @@ def get_file_name(file_id):
     
 
 def delete_file(filename):
-    uploads = os.path.join(app.root_path, f"{app.config['UPLOAD_FOLDER']}//{filename}")
+    uploads = os.path.join(app.root_path, f"file_bank\\{filename}")
     os.remove(path=uploads)

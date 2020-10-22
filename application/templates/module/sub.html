@@ -2,11 +2,19 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 {% include 'dashboard/nav.html' %}
-<div class="container w3-text-teal w3-round w3-padding w3-pale-green">
+
+<!-- Edit Subtopic Modal -->
+{% include 'module/edit_sub_topic.html' %}
+
+<div class="container w3-text-teal jumbotron w3-card w3-round w3-padding w3-pale-green">
     <h3>Sub Topic:</h3>
     <h4><u class="w3-margin">{{moduleSub.sub_name}}</u></h4>
+
+    {% if current_user|string == module.module_tutor_id %}
     <button class="w3-right w3-round w3-teal w3-small w3-button" data-toggle="modal"
-        data-target="#joinModule">Edit</button>
+        data-target="#editSubTopic">Edit</button>
+    {% endif %}
+
 </div>
 
 
@@ -42,7 +50,7 @@
 
         {% if module.module_tutor_id == current_user%}
         <button class="w3-button w3-border w3-round w3-small" 
-        onclick="deleteMaterial('{{ [file[0], file[1] , '.' , file[2]] | join }}')">Delete</button>
+        onclick="deleteMaterial('{{ [file[0], file[1] , '.' , file[2]] | join }}', '{{file[0]}}')">Delete</button>
         {% endif %}
 
     </div>
@@ -54,7 +62,7 @@
 
 {% block js_content %}
 <script>
-    function deleteMaterial(filename) {
+    function deleteMaterial(filename, id) {
         $.ajax({
             'url': '/module/{{module.module_id}}/sub/{{sub_id}}/delete_material/',
             'type': 'GET',

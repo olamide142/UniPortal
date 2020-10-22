@@ -4,7 +4,7 @@
 {% include 'dashboard/nav.html' %}
 {% include 'module/edit_module.html' %}
 {% include 'module/add_student.html' %}
-<div class="container w3-round jumbotron w3-pale-green w3-padding">
+<div class="container w3-round jumbotron w3-card w3-pale-green w3-padding">
 
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
     <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
@@ -27,7 +27,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="widget-tabs-int tab-ctm-wp mg-t-30 w3-pale-green w3-round">
+            <div class="widget-tabs-int tab-ctm-wp mg-t-30 w3-pale-green w3-card w3-round">
                 <div class="tab-hd">
                     <h2>Hello, {{current_user|fullname}}</h2>
                     <p><code class="w3-teal">next session : {{next_event}} | {{next_event_title}}</code></p>
@@ -118,7 +118,7 @@
                     $('#search_student_list').append(
                         `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
                             <div>
-                                <p class="w3-small">Studnet Name: ${res.data[i][1]}</p>
+                                <p class="w3-small">Student Name: ${res.data[i][1]}</p>
                                 <p class="w3-small">Student Username: ${res.data[i][0]}</p>
                                 <p class="w3-small">Student Email: ${res.data[i][2]}</p>
                                 <button class="w3-button w3-teal w3-round" id="addStudentBtn${res.data[i][0]}"

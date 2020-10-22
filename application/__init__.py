@@ -43,6 +43,7 @@ from application.mod_notification.controllers import mod_notification as notific
 from application.mod_calendar.controllers import mod_calendar as calendar_module
 from application.mod_todo.controllers import mod_todo as todo_module
 from application.mod_whiteboard.controllers import mod_whiteboard as whiteboard_module
+from application.mod_chat.controllers import mod_chat as chat_module
 
 
 # Register blueprint(s)
@@ -54,6 +55,7 @@ app.register_blueprint(notification_module)
 app.register_blueprint(calendar_module)
 app.register_blueprint(todo_module)
 app.register_blueprint(whiteboard_module)
+app.register_blueprint(chat_module)
 # app.register_blueprint(xyz_module)
 # ..
 
@@ -74,7 +76,7 @@ app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {'/file/uploads': app.config['
 '''
     White Board Sockets Controllers
 '''
-from application.mod_whiteboard.controllers import save_draw_info
+from application.mod_whiteboard.controllers import *
 def background_thread():
     """Example of how to send server generated events to clients."""
     count = 0
@@ -108,3 +110,57 @@ def send_room_message(message):
     emit('my_response',
          {'data': message['data'], 'count': session['receive_count']},
          room=message['room'])
+
+
+
+'''
+    Instant Messaging Sockets Controllers
+'''
+from application.mod_chat.controllers import *
+from application.mod_chat.models import *
+def background_thread_chat():
+    count = 0
+    while True:
+        socketio.sleep(10)
+        count += 1
+        socketio.emit('my_response',
+                      {'data': 'Server generated event', 'count': count},
+                      namespace='/thechat')
+
+
+@socketio.on('connect', namespace='/thechat')
+def test_connect_chat():
+    global thread
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(background_thread_chat)
+    emit('my_response', {'data': 'Connected', 'count': 0})
+
+
+@socketio.on('join', namespace='/thechat')
+def join(message):
+    join_room(message['room'])
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('my_response',
+         {'data': 'In rooms: ' + ', '.join(rooms()),
+          'count': session['receive_count']})
+
+
+@socketio.on('my_room_event', namespace='/thechat')
+def send_room_message(message):
+    session['receive_count'] = session.get('receive_count', 0) + 1
+    if message['new'] == 'true':
+        # Create new chat instance
+        chat_id = new_chat(message['room'])
+        # Save Message 
+        save_msg(chat_id, message['data'])
+    else:
+        # Get chat id
+        chat_id = get_chat_id(message['room'])
+        # Save message
+        save_msg(chat_id, message['data'])
+
+    emit('my_response',
+         {'data': message['data'], 'count': session['receive_count']},
+         room=message['room'])
+ 

@@ -54,10 +54,10 @@
   <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 
-<body>
+<body style="zoom: 80%;">
 
   {% for message in get_flashed_messages() %}
-  <div class="alert w3-black w3-text-teal w3-small w3-center alert-dismissible" role="alert">
+  <div class="alert w3-white w3-small w3-center alert-dismissible" role="alert">
     {{message}}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true"><i class="notika-icon notika-close"></i></span>
@@ -167,9 +167,20 @@
         }
       });
     }
+
+    function gen_id(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
   </script>
 
   {% block js_content %}
+
   <!-- Js content from other files -->
   {% endblock %}
 
