@@ -43,29 +43,17 @@
 
 
     <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-        <div class="notika-chat-list notika-shadow mg-t-30 tb-res-ds-n dk-res-ds">
+        <div class="notika-chat-list notika-shadow mg-t-30 tb-res-ds-n dk-res-ds" id="chat_box">
             <div class="realtime-ctn">
                 <div class="realtime-title">
-                    <h2>Username</h2>
+                    <h2 id="name_of_open_user">Username</h2>
                 </div>
             </div>
             <div class="card-box">
                 <div class="chat-conversation">
-                    <div class="widgets-chat-scrollbar">
+                    <div class="widgets-chat-scrollbar" id="scroller">
                         <ul class="conversation-list" id="inner_convo_list">
-                            <li class="clearfix odd">
-                                <div class="chat-avatar">
-                                    <i>10:01</i>
-                                </div>
-                                <div class="conversation-text">
-                                    <div class="ctext-wrap chat-widgets-cn">
-                                        <i>Smith</i>
-                                        <p>
-                                            Hi, How are you? What about our next meeting?
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
+
                         </ul>
                     </div>
                     <div class="chat-widget-input">
@@ -76,14 +64,35 @@
                                         <input type="text" class="form-control chat-input" id="msg_to_send"
                                             placeholder="Enter your text">
                                     </div>
-                                    <div class="chat-send">
-                                        <button type="submit"
-                                            class="btn btn-md w3-teal btn-block notika-chat-btn" onclick="send_a_msg()">Send</button>
+                                    <div class="">
+                                        <button type="submit" class="btn btn-md w3-teal btn-block notika-chat-btn"
+                                            onclick="send_a_msg()">Send</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+        <div class="notika-chat-list notika-shadow mg-t-30 tb-res-ds-n dk-res-ds" id="welcome_box">
+            <div class="card-box">
+                <div class="chat-conversation ">
+                    <header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+                        <img class="w3-image"
+                            src="https://www.publicdomainpictures.net/pictures/310000/velka/background-texture-teal.jpg"
+                            alt="Architecture" width="1500" height="800">
+                        <div class="w3-display-middle w3-margin-top w3-center">
+                            <p class="w3-xlarge w3-center w3-text-white w3-wide">Chat System</p><br>
+                            <h1 class="w3-xxlarge w3-text-white"><span
+                                    class="w3-padding w3-black w3-opacity-min"><b>Uni</b></span> <span
+                                    class="w3-hide-small w3-text-light-grey">Portal</span></h1>
+                        </div>
+                    </header>
                 </div>
             </div>
         </div>
@@ -112,6 +121,7 @@
     var current_user = "{{current_user}}";
     var chat_list = [];
     var current_room;
+    var name_of_open_user;
 
 
 
@@ -192,6 +202,7 @@
                 </div>  </div>  </span>  </div><hr>`);
             chat_list.push(username);
         }
+        name_of_open_user = username;
         open_message_panel(gen_room_name(current_user, username));
     }
 
@@ -208,6 +219,9 @@
 
 
     function display_messages(messages) {
+        $('#welcome_box').hide();
+        $('#chat_box').show();
+        $('#name_of_open_user').html(name_of_open_user);
         $("#inner_convo_list").empty();
         for (var i = 0; i < messages.length; i++) {
             $("#inner_convo_list").append(`
@@ -241,21 +255,30 @@
                      <span id=""><div class="recent-post-flex"> <div class="recent-post-it-ctn">
                      <h2>${res.data[i][0]}</h2><p>${message_to_snip(res.data[i][1])}</p>
                     </div></div></span></div><hr>`);
-                    socket.emit('join', { room: gen_room_name(current_user, res.data[i][0])});
+                    socket.emit('join', { room: gen_room_name(current_user, res.data[i][0]) });
                 }
             }
         });
     }
 
 
-    function send_a_msg(){
+    function send_a_msg() {
         // get the message
+        var msg = $("#msg_to_send").val();
         // emit to the current room
+        socket.emit('my_room_event', { room: current_room, data: msg, new: 'false' });
         // append to the message panel
+        $("#inner_convo_list").append(`
+            <li class="clearfix odd"><div class="chat-avatar">
+            <i>10:01</i></div><div class="conversation-text"><div 
+            class="ctext-wrap  chat-widgets-cn"><i>${current_user}</i>
+            <p>${msg}</p></div></div></li>`);
+            $( "#scroller").scrollBy(100, 0);
         // update chat list msg snippet
     }
 
     $(document).ready(function () {
+        $('#chat_box').hide();
         namespace = '/thechat';
 
         socket = io(namespace);
