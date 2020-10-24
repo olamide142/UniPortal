@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, flash, \
     g, session, redirect, url_for, jsonify, abort, url_for, make_response
-from application.mod_calendar.models import Event
+from application.mod_calendar.models import *
+from application.mod_module.models import *
 from .forms import CreateEventForm
 from application import db, app
 import flask_login
@@ -50,4 +51,13 @@ def view_calendar():
             data.append((i.event_id, i.title, i.date_n_time))
         return jsonify(data=data)
     #view personal calendar
-    # pass 
+    if section == 'personal':
+        # Get all the modules am in
+        current_user = str(flask_login.current_user)
+        m = ClassRoom.query.filter_by(member_username=current_user)
+        data = []
+        for i in m:
+            e = Event.query.filter_by(module_id=i.module_id)
+            for i in e:
+                data.append((i.event_id, i.title, i.date_n_time))
+        return jsonify(data=data)

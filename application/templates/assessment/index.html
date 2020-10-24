@@ -1,0 +1,9 @@
+{% include 'assessment/create.html' %}
+{% if current_user == module_tutor_id %}
+	<button  data-toggle="modal" data-target="#createAssessment" 
+	class="w3-teal w3-button w3-round">Create Assement</button><hr>
+{% endif %}
+
+<div class="container" id="assessments_list">
+    
+</div>

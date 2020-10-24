@@ -9,7 +9,8 @@ from application.mod_notification.controllers import *
 from application.mod_calendar.forms import CreateEventForm
 from application.mod_calendar.models import *
 from application.mod_file.controllers import *
-from application.mod_file.forms import FileForm
+from application.mod_file.forms import *
+from application.mod_assessment.forms import *
 from application import db, app
 import flask_login
 from .forms import *
@@ -72,6 +73,7 @@ def view(module_id):
             editForm            = CreateModuleForm(),
             topicForm           = CreateTopicForm(),
             createEventForm     = CreateEventForm(),
+            assessmentForm      = AssessmentForm(),
             module_id           = module_id,
             module_name         = m.module_name,
             module_tutor_id     = m.module_tutor_id,
@@ -377,8 +379,17 @@ def get_classroom_object(module_id):
 def is_student_in_classroom(module_id, username):
     c = ClassRoom.query.filter_by(\
         module_id=module_id, member_username=username).first()
-    if c is None:
+    if c is None: 
         return False
     else:
         return True
 
+
+def get_quotes():
+    directory = os.path.dirname(os.path.abspath(__file__))
+    quote_path = os.path.join(directory, "quotes.txt")
+
+    with open(quote_path) as f:
+        quotes = f.read().split("\n")
+
+    return random.choice(quotes)  

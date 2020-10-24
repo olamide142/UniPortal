@@ -1,0 +1,27 @@
+<div class="modal fade" id="editProfile" role="dialog">
+    <div class="modal-dialog w3-padding-32 modals-default">
+        <div class="modal-content w3-light-gray">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h1 class="w3-text-teal">Edit Profile</h1>
+                <form action="/profile/edit_profile/" method="POST">
+                    {{profileForm.csrf_token}}
+                    <div class="nk-int-st">
+                        <label for="firstname">First Name</label>
+                        <input name="firstname" type="text" class="form-control" value="{{info.first_name}}" id="firstname" required><br>
+                    </div>
+                    <div class="nk-int-st">
+                        <label for="lastname">Last Name</label>
+                        <input name="lastname" type="text" class="form-control" value="{{info.last_name}}" id="lastname" required><br>
+                    </div>
+                    
+                    <button type="submit" class="w3-margin w3-button w3-teal w3-round">Update</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

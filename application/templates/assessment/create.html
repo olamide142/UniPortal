@@ -1,0 +1,52 @@
+<div class="modal fade" id="createAssessment" role="dialog">
+    <div class="modal-dialog modals-default">
+        <div class="modal-content w3-light-gray">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form class="modal-body" action="/assessment/create/{{module_id}}/" method="POST" enctype="multipart/form-data">
+                {{assessmentForm.csrf_token}}
+                <h1 class="w3-text-teal">Create Assement</h1>
+                <p class="w3-small w3-justify">
+                    Add an Assessment to this module
+                </p>
+                <p>Title</p>
+                <div class="input-group">
+                    <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-file-text-o"></i></span>
+                    <div class="nk-int-st">
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                </div>
+                <p>Due Date</p>
+                <div class="input-group">
+                    <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-calendar"></i></span>
+                    <div class="nk-int-st">
+                        <input type="date" name="due_date" class="form-control" required>
+                    </div>
+                </div><br>
+                <p>Due Time</p>
+                <div class="input-group">
+                    <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-clock-o"></i></span>
+                    <div class="nk-int-st">
+                        <input type="time" id="" name="due_time" class="form-control" required>
+                    </div>
+                </div><br>
+                <p>Description</p>
+                <div class="input-group">
+                    <textarea name="description" id="" cols="60" rows="10" class="form-control"></textarea>
+                </div><br>
+                <p>File</p>
+                <div class="input-group">
+                    <span class="input-group-addon nk-ic-st-pro"><i class="fa fa-upload"></i></span>
+                    <div class="nk-int-st">
+                        <input type="file" id="file" name="file" class="form-control" >
+                    </div>
+                </div><br>
+                <hr>
+                <input class="w3-button w3-teal w3-round" type="submit" value="Create">
+            </form>
+        </div>
+    </div>
+</div>
+

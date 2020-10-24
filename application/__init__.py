@@ -44,6 +44,7 @@ from application.mod_calendar.controllers import mod_calendar as calendar_module
 from application.mod_todo.controllers import mod_todo as todo_module
 from application.mod_whiteboard.controllers import mod_whiteboard as whiteboard_module
 from application.mod_chat.controllers import mod_chat as chat_module
+from application.mod_assessment.controllers import mod_assessment as assessment_module
 
 
 # Register blueprint(s)
@@ -56,6 +57,7 @@ app.register_blueprint(calendar_module)
 app.register_blueprint(todo_module)
 app.register_blueprint(whiteboard_module)
 app.register_blueprint(chat_module)
+app.register_blueprint(assessment_module)
 # app.register_blueprint(xyz_module)
 # ..
 

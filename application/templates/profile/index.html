@@ -2,5 +2,125 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 {% include 'dashboard/nav.html' %}
-    <p>Profile Page</p>
+{% include 'profile/calendar.html' %}
+{% include 'profile/edit.html' %}
+<!-- The Grid -->
+<div class="w3-row-padding container">
+
+    <!-- Left Column -->
+    <div class="w3-third">
+
+        <div class="w3-white w3-text-grey w3-card-4">
+            <div class="w3-display-container">
+                <img src="https://W3Schools.com/w3images/avatar_hat.jpg" style="width:100%" alt="Avatar">
+                <div class="w3-display-bottomleft w3-container w3-text-black">
+                    <h2>{{current_user|fullname}}</h2>
+                </div>
+            </div>
+            <div class="w3-container">
+                <p>Modules in as a</p>
+                <p>Tutor: {{mdoule_in_as_tutor}}</p>
+                <p>Student: {{mdoule_in_as_student}}</p>
+                <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{email}}</p>
+                <p><i class="fa fa-calendar fa-fw w3-margin-right w3-large w3-text-teal"></i>{{joined_on}}</p>
+                <button id="decline_module_btn" data-toggle="modal" class="w3-button w3-teal w3-round 
+                btn-default notika-gp-default" data-target="#editProfile">Edit</button>
+                <button id="decline_module_btn" data-toggle="modal" class="w3-button w3-teal w3-round 
+                btn-default notika-gp-default" data-target="#myCalendar">My Calendar</button>
+
+                <hr>
+
+
+            </div>
+        </div><br>
+
+        <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    <div class="w3-twothird">
+
+        <div class="w3-container w3-card w3-white w3-margin-bottom w3-padding-16">
+            <h2 class="w3-text-grey w3-padding-16"><i
+                    class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>My Assessment</h2>
+            <div class="w3-container">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
+                Ipsam eveniet praesentium odio deserunt quo corporis excepturi 
+                animi facere distinctio, atque aut minima ut magni? Molestiae 
+                explicabo provident vitae ducimus libero!
+            </div>
+            
+        </div>
+
+        <div class="w3-container w3-card w3-white">
+            <h2 class="w3-text-grey w3-padding-16"><i
+                    class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education</h2>
+            <div class="w3-container">
+                <h5 class="w3-opacity"><b>W3Schools.com</b></h5>
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Forever</h6>
+                <p>Web Development! All I need to know in one place</p>
+                <hr>
+            </div>
+            <div class="w3-container">
+                <h5 class="w3-opacity"><b>London Business School</b></h5>
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2013 - 2015</h6>
+                <p>Master Degree</p>
+                <hr>
+            </div>
+            <div class="w3-container">
+                <h5 class="w3-opacity"><b>School of Coding</b></h5>
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>2010 - 2013</h6>
+                <p>Bachelor Degree</p><br>
+            </div>
+        </div>
+
+        <!-- End Right Column -->
+    </div>
+
+    <!-- End Grid -->
+</div>
+{% endblock %}
+
+
+{% block js_content %}
+
+
+<script>
+
+    // Get events in this module's calendar
+    var myEvents = [];
+    $.ajax({
+        'url': '/calendar/view/',
+        'method': 'GET',
+        'data': { 'section': 'personal', 'module_id': 'None' },
+        'success': function (res) {
+            for (var i = 0; i < res.data.length; i++) {
+                myEvents.push(
+                    {
+                        id: res.data[i][0],
+                        name: res.data[i][1],
+                        date: res.data[i][2],
+                        type: 'event',
+                    });
+            }
+
+            $('#evoCalendar').evoCalendar({
+                calendarEvents: myEvents,
+                sidebarToggler: true,
+                sidebarDisplayDefault: true,
+                eventListToggler: true,
+                eventDisplayDefault: true,
+                onSelectDate: function () {
+                    console.log('onSelectDate!');
+                }
+            });
+        },
+        'error': function (res) {
+            // alert("Error Occurred");
+        }
+    });
+
+</script>
+
+
 {% endblock %}

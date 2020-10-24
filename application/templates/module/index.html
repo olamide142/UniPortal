@@ -9,7 +9,7 @@
     <h3><u class="w3-text-teal">{{module_name|capitalize}}</u></h3>
     <span class="w3-text-teal">Module Code: {{module_code}}</span><br>
     <span class="text-muted w3-small">Module Tutor: {{module_tutor_id}}</span><br>
-    <span class="text-muted w3-small">Module Code: {{module_id}}</span>
+    <span class="text-muted w3-small">Module ID: {{module_id}}</span>
     <br>
     <div class="">
         {% if current_user == module_tutor_id %}
@@ -18,7 +18,7 @@
             <button class="w3-button w3-teal w3-round btn-default notika-gp-default" data-toggle="modal"
                 data-target="#editModule">Edit</button>
             <button id="decline_module_btn" data-toggle="modal" class="w3-button w3-teal w3-round 
-                btn-default notika-gp-default" data-target="#addStudent">Add Student</button></button>
+                btn-default notika-gp-default" data-target="#addStudent">Add Student</button>
         </div>
         {% endif %}
     </div>
@@ -67,7 +67,7 @@
                         <div id="Assessment" class="Tabb" style="display:none">
                             <h2>Assessment</h2>
                             <hr>
-                            <p>123</p>
+                            {% include 'assessment/index.html' %}
                         </div>
 
                         <div id="Calendar" class="Tabb" style="display:none">
@@ -186,9 +186,6 @@
                     sidebarDisplayDefault: true,
                     eventListToggler: true,
                     eventDisplayDefault: true,
-                    onSelectDate: function () {
-                        console.log('onSelectDate!');
-                    }
                 });
             },
             'error': function (res) {
@@ -217,6 +214,34 @@
                         <div class="website-traffic-ctn w3-code"><h2>
                         <a href="/module/{{module_id}}/sub/${res.data[i].sub_id}/">
                         ${res.data[i].sub_name}</a></h2></div></div></div><hr>`);
+                }
+            },
+            'error': function (res) {
+                alert("Error Occurred");
+            }
+        });
+
+
+
+         // Get Assessments
+         $.ajax({
+            'url': '/assessment/list/{{module_id}}/',
+            'method': 'GET',
+            'success': function (res) {
+                if (res.data.length == 0) {
+                    $('#assessments_list').append(`
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                        <div class="website-traffic-ctn"><p>No Assessment Available</p></div>
+                        </div></div>`);
+                }
+                
+                for (var i = 0; i < res.data.length; i++) {
+                    $('#assessments_list').append(`<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                        <div class="website-traffic-ctn w3-code"><h2>
+                        <a href="/assessment/${res.data[i]}/">
+                        ${res.data[i]}</a></h2></div></div></div><hr>`);
                 }
             },
             'error': function (res) {
