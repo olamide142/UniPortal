@@ -27,11 +27,15 @@ def index():
 @flask_login.login_required
 def dashboard():
     create_form = CreateModuleForm()
+    current_user=str(flask_login.current_user)
+    mdoule_in_as_student, mdoule_in_as_tutor = get_number_of_module_in(current_user)
     
     return render_template(
         'dashboard/index.html',
         create_form=create_form,
         modules = get_modules(),
+        mdoule_in_as_student = mdoule_in_as_student or 0,
+        mdoule_in_as_tutor = mdoule_in_as_tutor or 0,
         current_user = str(flask_login.current_user),
         random_quote = get_quotes())
 

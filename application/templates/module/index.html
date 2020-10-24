@@ -239,9 +239,11 @@
                 for (var i = 0; i < res.data.length; i++) {
                     $('#assessments_list').append(`<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                         <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
-                        <div class="website-traffic-ctn w3-code"><h2>
-                        <a href="/assessment/${res.data[i]}/">
-                        ${res.data[i]}</a></h2></div></div></div><hr>`);
+                        <div class="website-traffic-ctn w3-code">
+                        <a href="/assessment/view/${res.data[i][0]}/"><h2><u>
+                        ${res.data[i][1]}</u></h2></a>
+                        <p>Due Date: ${res.data[i][2]}</p>
+                        </div></div></div><hr>`);
                 }
             },
             'error': function (res) {
@@ -250,6 +252,5 @@
         });
 
     });
-
 </script>
 {% endblock %}

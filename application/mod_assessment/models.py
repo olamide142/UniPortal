@@ -42,17 +42,19 @@ class Assessment(db.Model):
     __tablename__ = 'assessment'
 
     assessment_id    = db.Column(db.String(40),  nullable=False, primary_key=True)
+    aq_id            = db.Column(db.String(40),  nullable=False)
     username         = db.Column(db.String(15), nullable=False)
-    file_id          = db.Column(db.String(10),  nullable=False, unique=True)
-    module_id        = db.Column(db.String(10),  nullable=False, unique=True)
+    file_id          = db.Column(db.String(10),  nullable=False)
+    module_id        = db.Column(db.String(10),  nullable=False)
     score            = db.Column(db.Integer,  nullable=True)
     remark           = db.Column(db.Text, nullable=True)
     created_on       = db.Column(db.DateTime, nullable=False)
 
 
-    def __init__(self, username, file_id, module_id):
+    def __init__(self, aq_id, username, file_id, module_id):
 
         self.assessment_id        = str(uuid.uuid4()) 
+        self.aq_id                = aq_id
         self.username             = username
         self.file_id              = file_id
         self.module_id            = module_id

@@ -15,7 +15,7 @@ mod_file = Blueprint('mod_file', __name__, url_prefix='/file',\
      template_folder='templates/')
 
 UPLOAD_FOLDER = 'application/file_bank/'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pptx', 'zip', 'mp4', 'md'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'pptx', 'zip', 'mp4', 'md', 'csv', 'xlsx', 'tar'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -69,7 +69,7 @@ def get_file_type(filename):
     ext = filename.split('.')
     return ext[-1]
 
-
+@app.template_filter('get_file_name')
 def get_file_name(file_id):
     f = FileSystem.query.filter_by(\
         file_id=file_id).first()

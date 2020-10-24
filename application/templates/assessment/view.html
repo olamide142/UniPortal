@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %} Chat {% endblock %}
+{% block content %}
+{% include 'dashboard/nav.html' %}
+<div class="container w3-round jumbotron w3-card w3-pale-green w3-padding">
+    <h3 class="w3-text-teal">Title: <u>{{title}}</u></h3>
+    <span class="text-muted w3-small"><b>Due Date:</b> {{due_date}}</span><br>
+    <span class="text-muted w3-small w3-justify"><b>Description:</b> {{description}}</span>
+</div>
+
+<div class="container w3-row w3-border w3-padding-16">
+
+    {% if can_submit %}
+    <form action="/assessment/upload_assessment/{{aq_id}}/" method="POST" enctype=multipart/form-data>
+        {{form.csrf_token}}
+        <p>File Upload:</p>
+        <input type="file" name="file" id="file">
+        <input type="hidden" name="module_id" value="{{module_id}}">
+        <button class="w3-button w3-teal w3-round w3-margin" type="submit">Upload</button>
+    </form>
+    {% else %}
+    <span class="w3-gray w3-small w3-justify w3-padding
+     w3-card w3-round">Dead line for submission has passed or you already submitted</span>
+     <hr>
+    
+
+        <p>Submissions</p>
+        {% if owner %}
+            <div class="w3-container w3-card w3-padding">
+            
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 w3-padding " id="">
+                    <table class="w3-card w3-text-black w3-table-all w3-center">
+                        <tr class="w3-pale-green w3-center">
+                            <td>Name</td>
+                            <td>File Name</td>
+                            <td>---------</td>
+                            <td>Score</td>
+                            <td>Remark</td>
+                            <td>---------</td>
+                        </tr>
+                        {% for i in bbb %}
+                        <tr class="w3-pale-green">
+                            <td>{{i.username|fullname}}</td>
+                            <td>{{(i.file_id | get_file_name)[1]}}.{{(i.file_id | get_file_name)[2]}}</td>
+                            <td><a href="/file/uploads/{{(i.file_id | get_file_name)[0]}}{{(i.file_id | get_file_name)[1]}}.{{(i.file_id | get_file_name)[2]}}"
+                                class="w3-button w3-round w3-pale-green w3-card w3-border">Download</a></td>
+                                <form action="/assessment/{{i.assessment_id}}/update_score/" method="GET">
+                                    <td><input class="form-control" type="text" name="score" value="{{i.score}}" placeholder="Score"></td>
+                                    <td><textarea class="form-control" name="remark" id="" cols="30" rows="10">{{i.remark}}</textarea></td>
+                                    <td><button type="submit" class="w3-button w3-teal w3-round">Submit</button></td>
+                                </form>
+                        </tr>
+                        {% endfor %}
+                    </table>
+            
+                </div>
+            </div>
+        {% else %}
+        <div class="w3-container w3-card w3-padding">
+        
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 w3-padding " id="">
+                <table class="w3-card w3-text-black w3-table-all w3-center">
+                    <tr class="w3-pale-green">
+                        <td>{{aaa.username|fullname}}</td>
+                        <td>{{(aaa.file_id | get_file_name)[1]}}.{{(aaa.file_id | get_file_name)[2]}}</td>
+                        <td><a href="/file/uploads/{{(aaa.file_id | get_file_name)[0]}}{{(aaa.file_id | get_file_name)[1]}}.{{(aaa.file_id | get_file_name)[2]}}"
+                             class="w3-button w3-round w3-pale-green w3-card w3-border">Download</a></td>
+                        {% if aaa.remark == None %}
+                        <td><button class="w3-button w3-round w3-red w3-border">Delete</button></td>
+                        {% endif %}
+                        <td>{{aaa.score or 0}}</td>
+                        <td>{{aaa.remark or "No remark"}}</td>
+                    </tr>
+                </table>
+        
+            </div>
+        </div>
+        {% endif %}
+
+    {% endif %}
+    <hr>
+    
+</div>
+{% endblock %}

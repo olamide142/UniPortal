@@ -8,3 +8,8 @@ class AssessmentForm(FlaskForm):
     file        = FileField('file', validators=[DataRequired()])
     due_date    = DateField('due_date', validators=[DataRequired()])
     due_time    = TimeField('due_time', validators=[DataRequired()])
+
+
+class AssessmentForm2(FlaskForm):
+    file        = FileField('file', validators=[DataRequired()])
+    module_id    = StringField('module_id', validators=[DataRequired()])
