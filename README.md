@@ -3,5 +3,5 @@
 
 
 ## Code
-    A simple School Portal / E-learning System...
+    A simple School Portal / E-learning System
     
