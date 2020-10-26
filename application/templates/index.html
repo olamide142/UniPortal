@@ -32,7 +32,7 @@
     <!-- Custom styles for this template -->
 </head>
 
-<body class="w3-gray">
+<body class="">
 
     {% for message in get_flashed_messages() %}
     <div class="alert w3-light-gray w3-small w3-center alert-dismissible" role="alert">
@@ -43,7 +43,7 @@
     </div>
     {% endfor %}
 
-    <section class="jumbotron text-center">
+    <!-- <section class="jumbotron text-center">
         <div class="container">
             <h1 class="w3-text-teal">Welcome to UniPortal</h1>
             <p class="lead text-muted w3-small">Description of the platform goes here, Lorem ipsum dolor sit amet,
@@ -54,7 +54,70 @@
                 <a href="{{url_for('mod_auth.index')}}" class="w3-left w3-padding w3-text-gray w3-small"><u>Register an account</u></a>
             </p>
         </div>
-    </section>
+    </section> -->
+
+    <header class="w3-display-container w3-content" style="max-width:1500px">
+        <!-- <img class="w3-image" src="https://ks-kentico-prod-cdn-endpoint.azureedge.net/netxstoreviews/webImageStandardLarge/141962.jpg" alt="London" width="1500" height="700"> -->
+        <div class="mySlides w3-display-container w3-center" style="display: block;">
+            <img src="https://ks-kentico-prod-cdn-endpoint.azureedge.net/netxstoreviews/webImageStandardLarge/141962.jpg"
+                style="width:100%;">
+        </div>
+
+        <div class="mySlides w3-display-container w3-center" style="display: block;">
+            <img src="https://www.amgriffiths.co.uk/wp-content/uploads/2019/10/CU1.jpg"
+                style="width:100%;">
+        </div>
+
+        <div class="mySlides w3-display-container w3-center" style="display: block;">
+            <img src="https://ks-kentico-prod-cdn-endpoint.azureedge.net/netxstoreviews/webImageStandardLarge/141962.jpg"
+                style="width:100%;">
+        </div>
+
+        <div class="w3-display-middle" style="width:30%">
+            <div class="w3-bar w3-black">
+
+                <h1 class="w3-center">Welcome to UniPortal</h1>
+
+            </div>
+
+            <!-- Tabs -->
+            <div id="Flight" class="w3-container w3-white w3-padding-32 myLink" style="display: block;">
+
+                <div class="w3-row-padding" style="margin:0 -16px;">
+                    <div class="w3-center">
+
+
+                        <a href="{{url_for('mod_auth.index')}}" class="w3-button w3-teal w3-padding">Login</a>
+                        <a href="{{url_for('mod_auth.index')}}" class="w3-button w3-teal w3-padding">Register</a>
+                    </div>
+                    <div class="">
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
 </body>
+
+<script>
+    // Automatic Slideshow - change image every 4 seconds
+    var myIndex = 0;
+    carousel();
+
+    function carousel() {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        myIndex++;
+        if (myIndex > x.length) { myIndex = 1 }
+        x[myIndex - 1].style.display = "block";
+        setTimeout(carousel, 4000);
+    }
+</script>
 
 </html>
