@@ -17,3 +17,5 @@ shellsetup.py
 .gif
 .doc
 .docx
+
+static/images/uploads/*
