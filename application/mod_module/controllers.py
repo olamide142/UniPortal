@@ -375,7 +375,6 @@ def get_classroom_object(module_id):
     return ClassRoom.query.filter_by(module_id=module_id)
 
 
-
 def is_student_in_classroom(module_id, username):
     c = ClassRoom.query.filter_by(\
         module_id=module_id, member_username=username).first()
