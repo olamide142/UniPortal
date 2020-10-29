@@ -2,6 +2,7 @@
 {% block title %} Profile {% endblock %}
 {% block content %}
 {% include 'dashboard/nav.html' %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <div class="container">
         <div class="breadcomb-area">
             <div class="container">
@@ -29,7 +30,7 @@
 
         <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="sale-statistic-inner notika-shadow mg-tb-30" id="notification_list">
-                
+              
             </div>
         </div>
     </div>
@@ -38,6 +39,7 @@
 {% block js_content %}
     <script> 
         $(document).ready(function(){
+
             $.ajax({
             'url': '/notification/get_notifications/',
             'type': 'GET',
@@ -45,7 +47,7 @@
                 $("#notification_list").empty();
                 if (res.notifications.length == 0) {
                     $('#notification_list').append(
-                        `<div class="w3-small wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
+                        `<div class="w3-large wb-traffic-inner sm-res-mg-t-30 tb-res-mg-t-30 w3-round">
                             <div>
                                 <p class="w3-text-teal w3-center">No Notification</p>
                             </div>
@@ -56,6 +58,9 @@
                 }
 
                 
+            },
+            'error' : function(res){
+                alert('error');
             }
             });
         });
@@ -75,6 +80,7 @@
                 }
             }
         });
+        }
         
         
 

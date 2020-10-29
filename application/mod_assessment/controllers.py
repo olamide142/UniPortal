@@ -68,14 +68,12 @@ def view(aq_id):
 
     if (datetime.now() < ass.due_date) and (aaa is None):
         can_submit = True
-
     # is current user the owner of this module
     owner = False
-    m = get_module_object(aaa.module_id)
+    m = get_module_object(ass.module_id)
     bbb = Assessment.query.filter_by(module_id=ass.module_id, aq_id = aq_id)
     if m.module_tutor_id == username:
         owner = True
-    
 
     return render_template('assessment/view.html',
     title = ass.title,

@@ -212,6 +212,7 @@
         $.ajax({
             'url': '/chat/get_messages/', 'type': 'GET',
             'data': { room: room }, 'success': function (res) {
+                
                 display_messages(res.data);
             }
         });
