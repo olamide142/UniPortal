@@ -29,9 +29,7 @@ def create_event():
 
         e = Event(
             str(flask_login.current_user),
-            title, 
-            module_id, 
-            dateNtime)
+            title, module_id, dateNtime)
         db.session.add(e)
         db.session.commit()
         flash('Event Created Successfully')

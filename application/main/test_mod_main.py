@@ -5,8 +5,13 @@ from application import db, app
 from flask_wtf.csrf import generate_csrf
 
 
-def test_aaa(client):
-    assert 'aaa' in 'aaa'
+def test_profile(client):
+    # when everything is done right
+    res = client.get('/profile/', data=payload)  
+    import flask_login  
+    assert str(flask_login.current_user) in str(res.data)
+
+
 
 # def test_signup(client):
 #     # when everything is done right

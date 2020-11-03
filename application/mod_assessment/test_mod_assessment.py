@@ -5,24 +5,40 @@ from application import db, app
 from flask_wtf.csrf import generate_csrf
 
 
-# def test_signup(client):
-#     # when everything is done right
-#     payload = {'username':'test', 'email':'tes@portal.com', \
-#         'first_name':'test', 'last_name':'test', 'password':'123'}
-#     res = client.post('/auth/signup/', data=payload)    
-#     assert 'Account Created Successfully' in str(res.data)
-#     # if form is incorrect
-#     payload = {'username':'test', 'first_name':'test', \
-#         'last_name':'test', 'password':'123'}
-#     res = client.post('/auth/signup/', data=payload)    
-#     assert 'Form submitted was invalid' in str(res.data)
-#     # if user tries to sign up with a already existing user's info
-#     payload = {'username':'test', 'email':'tes@portal.com', \
-#         'first_name':'test', 'last_name':'test', 'password':'123'}
-#     res = client.post('/auth/signup/', data=payload)    
-#     assert 'Account Creation was Unsuccessfull' in str(res.data)
-    
+def test_create_assessment(client):
+    # when everything is done right
+    file = open("demofile.pdf", "r")
+    payload = {'title':'Test Assessment Title', 'description':'lorem ipsum blah blah blah', \
+        'file':file, 'due_date':'(2020, 10, 30)', 'due_time':'(8, 48, 7, 189496)'}
+    res = client.post('/assessment/create/xyz123/', data=payload)    
+    assert 'Assessment Created Successfully' in str(res.data)
+    # if form is incorrect
+    file = open("demofile.pdf", "r")
+    payload = {'title':'Test Assessment Title', 'file':file, \
+    'due_date':'(2020, 10, 30)', 'due_time':'(8, 48, 7, 189496)'}
+    res = client.post('/create/xyz123/', data=payload)    
+    assert 'Form is Invalid Successfully' in str(res.data)
 
+
+def test_get_assessments(client):
+    # when everything is done right
+    res = client.get('/assessment/list/xyz123/')    
+    assert 'Test Assessment Title' in str(res.data)
+
+def test_update_score(client):
+    payload = {'score': 70, 'remark':'Great Job Keep it up'}
+    res = client.post('/assessment/erf456/update_score/', data=payload)    
+    assert 'Scores Updated' in str(res.data)
+    # if form is incorrect
+    payload = {'score': 70}
+    res = client.post('/assessment/erf456/update_score/', data=payload)    
+    assert 'Form is Invalid Updated' in str(res.data)
+
+
+
+
+
+    
 
 # def test_signin(client):
 #     # when everything is done right

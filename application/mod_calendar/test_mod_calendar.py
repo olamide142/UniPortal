@@ -4,8 +4,15 @@ from application.test_setup import client
 from application import db, app
 from flask_wtf.csrf import generate_csrf
 
-def test_aaa(client):
-    'aaa' in 'aaa'
+def test_calendar(client):
+    # when everything is done right
+    payload = {'title':'Lecture One', 'date':'(2020, 10, 30)', 'time':'(8, 48, 7, 189496)'}
+    res = client.post('/calendar/create/', data=payload)    
+    assert 'Event Created Successfully' in str(res.data)
+    # if form is incorrect
+    payload = {'title':'Lecture One'}
+    res = client.post('/calendar/create/', data=payload)    
+    assert 'Form is Invalid Successfully' in str(res.data)
 
 # def test_signup(client):
 #     # when everything is done right

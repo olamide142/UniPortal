@@ -19,6 +19,7 @@ def index():
         todos=todos)
 
 
+
 @mod_todo.route('/add/', methods=['GET'])
 @flask_login.login_required
 def add():

@@ -123,13 +123,3 @@ def update_score(assessment_id):
 
 
 
-
-# for i in FileSystem.query.all():
-#     db.session.delete(i)
-#     db.session.commit()
-
-
-
-# for i in AssessmentQuestion.query.all():
-#     db.session.delete(i)
-#     db.session.commit()

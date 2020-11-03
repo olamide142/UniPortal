@@ -1,8 +1,8 @@
-import pytest
-from application.mod_auth.models import User
-from application.test_setup import client
-from application import db, app
-from flask_wtf.csrf import generate_csrf
+# import pytest
+# from application.mod_auth.models import User
+# from application.test_setup import client
+# from application import db, app
+# from flask_wtf.csrf import generate_csrf
 
 
 def test_signup(client):
@@ -21,7 +21,7 @@ def test_signup(client):
         'first_name':'test', 'last_name':'test', 'password':'123'}
     res = client.post('/auth/signup/', data=payload)    
     assert 'Account Creation was Unsuccessfull' in str(res.data)
-    
+     
 
 
 def test_signin(client):
@@ -42,17 +42,17 @@ def test_signin(client):
 
 
 
-# def test_signout(client):
-#     # when everything is done right
-#     res = client.post('/auth/signin/', \
-#         data={'username':'test', 'password':'123'})    
-#     assert 'Logged in Successfully.' in str(res.data)
+# # def test_signout(client):
+# #     # when everything is done right
+# #     res = client.post('/auth/signin/', \
+# #         data={'username':'test', 'password':'123'})    
+# #     assert 'Logged in Successfully.' in str(res.data)
     
-#     res = client.get('/auth/signout/')  
-#     assert 'Successfully Logged Out' in str(res.data)
+# #     res = client.get('/auth/signout/')  
+# #     assert 'Successfully Logged Out' in str(res.data)
 
-#     # prevent an un-authenticated user from 
-#     # login_required protected views 
-#     res = client.get('/auth/see/', follow_redirects=True)  
-#     assert 'Please log in to access this page' in str(res.data)
+# #     # prevent an un-authenticated user from 
+# #     # login_required protected views 
+# #     res = client.get('/auth/see/', follow_redirects=True)  
+# #     assert 'Please log in to access this page' in str(res.data)
 

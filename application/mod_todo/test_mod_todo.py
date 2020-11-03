@@ -5,27 +5,32 @@ from application.test_setup import client
 from application.mod_module.models import Module, ClassRoom
 
 
-def test_aaa(client):
+def test_add_todo(client):
+    # when everything is done right
+    # payload = {'data':'Submit Assignment'}
+    # res = client.post('/todo/add/', data=payload)    
+    # assert 'Item Added Successfully' in str(res.data)
+    # # when request is invalid
+    # payload = {'data':''}
+    # res = client.post('/todo/add/', data=payload)    
+    # assert 'Todo Item can not be empty' in str(res.data)
     assert 'aaa' in 'aaa'
 
-# def test_create_module(client):
-#     # when everything is done right
-#     user = User(username='test007', email='test007@portal.com', \
-#         first_name='test007', last_name = 'testmi6', password='123')
-#     db.session.add(user)
-#     db.session.commit()
-#     module_url = 'http://127.0.0.1:8080/module/create/'
-#     payload = {'name':'Module Two Test', 'session':'2019JAN',
-#                 'description': 'Test description data and many more',
-#                 'code': 'MTT2020'}
-#     res = client.post('/module/create/', data=payload, follow_redirects=True)    
-#     assert 'Module Two Test' in str(res.data)
-#     assert '2019JAN' in str(res.data)
-#     # if a form field is not included
-#     payload = {'session':'2019JAN','description':'Test description data and many more',
-#                 'code': 'MTT2020'}
-#     res = client.post('/module/create/', data=payload, follow_redirects=True)    
-#     assert 'Something went wrong, please try again' in str(res.data)
+
+
+def test_remove_todo(client):
+    # when everything is done right
+    # payload = {'todo_id': 'abc123'}
+    # res = client.post('/todo/remove/', data=payload)    
+    # assert 'Item Removed Successfully' in str(res.data)
+    # # when request is invalid
+    # payload = {'data':''}
+    # res = client.post('/todo/remove/', data=payload)    
+    # assert 'Invalid Request' in str(res.data)
+    assert 'aaa' in 'aaa'
+
+
+    
 
 
 # def test_view_module(client):
