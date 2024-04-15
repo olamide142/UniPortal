@@ -10,7 +10,7 @@ Flask-SQLAlchemy==2.4.4
 Flask-Uploads==0.2.1
 Flask-WTF==0.14.3
 humanize==3.0.0
-idna==2.10
+idna==3.7
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
